@@ -907,7 +907,7 @@ a.theme-btn {
     top: 0;
     left: 0;
     opacity: 0.95;
-    background-color: #1D231F; }
+    background-color: #1d1d23; }
 
 /* Backgruond Size */
 .bgs-cover {
@@ -4068,10 +4068,10 @@ h6, .h6, blockquote {
     content: '';
     width: 100%;
     height: 100%;
-    background: -webkit-gradient(linear, left top, left bottom, from(#1D231F), to(rgba(29, 35, 31, 0)));
-    background: -webkit-linear-gradient(top, #1D231F 0%, rgba(29, 35, 31, 0) 100%);
-    background: -o-linear-gradient(top, #1D231F 0%, rgba(29, 35, 31, 0) 100%);
-    background: linear-gradient(180deg, #1D231F 0%, rgba(29, 35, 31, 0) 100%); }
+    background: -webkit-gradient(linear, left top, left bottom, from(#1d1d23), to(rgba(29, 35, 31, 0)));
+    background: -webkit-linear-gradient(top, #1d1d23 0%, rgba(29, 35, 31, 0) 100%);
+    background: -o-linear-gradient(top, #1d1d23 0%, rgba(29, 35, 31, 0) 100%);
+    background: linear-gradient(180deg, #1d1d23 0%, rgba(29, 35, 31, 0) 100%); }
 
 .search-filter-inner {
   display: -webkit-box;
@@ -4337,10 +4337,10 @@ h6, .h6, blockquote {
     content: '';
     width: 100%;
     height: 100%;
-    background: -webkit-gradient(linear, left top, left bottom, from(rgba(29, 35, 31, 0)), to(#1D231F));
-    background: -webkit-linear-gradient(top, rgba(29, 35, 31, 0) 0%, #1D231F 100%);
-    background: -o-linear-gradient(top, rgba(29, 35, 31, 0) 0%, #1D231F 100%);
-    background: linear-gradient(180deg, rgba(29, 35, 31, 0) 0%, #1D231F 100%); }
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(29, 35, 31, 0)), to(#1d1d23));
+    background: -webkit-linear-gradient(top, rgba(29, 35, 31, 0) 0%, #1d1d23 100%);
+    background: -o-linear-gradient(top, rgba(29, 35, 31, 0) 0%, #1d1d23 100%);
+    background: linear-gradient(180deg, rgba(29, 35, 31, 0) 0%, #1d1d23 100%); }
 
 .banner-inner {
   display: -webkit-box;
@@ -5923,9 +5923,9 @@ h6, .h6, blockquote {
   content: '';
   width: 100%;
   height: 100%;
-  background: -webkit-linear-gradient(88.59deg, rgba(29, 35, 31, 0.3) 1.2%, #1D231F 98.81%);
-  background: -o-linear-gradient(88.59deg, rgba(29, 35, 31, 0.3) 1.2%, #1D231F 98.81%);
-  background: linear-gradient(1.41deg, rgba(29, 35, 31, 0.3) 1.2%, #1D231F 98.81%); }
+  background: -webkit-linear-gradient(88.59deg, rgba(29, 35, 31, 0.3) 1.2%, #1d1d23 98.81%);
+  background: -o-linear-gradient(88.59deg, rgba(29, 35, 31, 0.3) 1.2%, #1d1d23 98.81%);
+  background: linear-gradient(1.41deg, rgba(29, 35, 31, 0.3) 1.2%, #1d1d23 98.81%); }
 
 .team-item {
   margin-bottom: 30px; }
@@ -8132,9 +8132,9 @@ blockquote {
 /******************* ## Main Footer *******************/
 /*******************************************************/
 .main-footer {
-  color: #B6CABC; }
+  color: #b6b6ca; }
   .main-footer a {
-    color: #B6CABC; }
+    color: #b6b6ca; }
     .main-footer a:hover {
       color: white;
       text-decoration: underline; }
