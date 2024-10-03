@@ -927,7 +927,7 @@ a.theme-btn {
   background-color: black; }
 
 .bgc-black {
-  background-color: var(--heading-color); }
+  background-color: #09253c; }
 
 .bgc-lighter {
   background-color: var(--lighter-color); }
@@ -3773,7 +3773,7 @@ h6, .h6, blockquote {
   background: #222222; }
 
 .main-header.white-menu.header-one .main-menu .navbar-collapse {
-  background: #24232c;
+  background: #1c374e;
   border-color: rgba(255, 255, 255, 0.1); }
 
 /* Menu Sidebar */
@@ -4464,7 +4464,7 @@ h6, .h6, blockquote {
 .destination-item {
   color: #92A498;
   margin-bottom: 30px;
-  background: #24232c;
+  background: #1c374e;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1); }
   .destination-item .image {

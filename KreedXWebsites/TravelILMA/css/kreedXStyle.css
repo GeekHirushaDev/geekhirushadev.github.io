@@ -1,0 +1,221 @@
+.heroxx {
+  background-size: 200%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      rgba(0, 0, 0, 0.566),
+      #071e30bc,
+      #09253ccb,
+      #09253c
+    ),
+    url("../images/image1.jpg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  /* adjust the height to your needs */
+}
+
+.herosectionX {
+  margin-top: 1%;
+}
+
+.item {
+  border-radius: 20px;
+  border: solid 2px rgba(255, 255, 255, 0.368);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease, color 0.3s ease;
+}
+
+.item:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(5, 5, 5, 0.597), 0 16px 32px rgba(0, 0, 0, 0.3);
+}
+
+.item:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+@font-face {
+  font-family: "Merienda";
+  src: url("../fonts/Merienda/Merienda-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Acme";
+  src: url("../fonts/Acme/Acme-Regular.ttf");
+}
+
+.font1 {
+  font-family: "Acme";
+  font-size: 60px;
+  color: white;
+  font-weight: bold;
+}
+
+.font2 {
+  font-family: "Poppins";
+  font-size: 20px;
+  color: rgb(215, 215, 215);
+  font-weight: bold;
+}
+
+.font3 {
+  font-family: "Acme";
+  font-size: 45px;
+  color: rgb(215, 215, 215);
+  font-weight: bold;
+}
+
+.font4 {
+  font-family: "Poppins";
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+}
+
+.font5 {
+  font-family: "Acme";
+  font-size: 35px;
+  color: rgb(121, 154, 237);
+  font-weight: bold;
+}
+
+.cardX {
+  background-color: rgba(255, 255, 255, 0.019);
+  /* semi-transparent white background */
+  backdrop-filter: blur(4px);
+  /* frosted glass effect */
+  border-radius: 10px;
+  border: solid 2px rgba(255, 255, 255, 0.163);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  /* Add transition effect to smoothly change styles on hover */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cardX:hover {
+  /* Scale up the card on hover */
+  transform: scale(1.5);
+  /* Increase the box shadow to create a pop-up effect */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.section2 {
+  background-color: #09253c;
+}
+
+.buttonX {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease, color 0.3s ease;
+}
+
+.buttonX:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(5, 5, 5, 0.597), 0 16px 32px rgba(0, 0, 0, 0.3);
+}
+
+.buttonX:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1034px) {
+  .herosectionX {
+    margin-top: 10%;
+  }
+}
+
+/* Adjust .heroxx for mobile and tablet screens */
+@media (max-width: 778px) {
+  .font1 {
+    font-family: "Acme";
+    font-size: 60px;
+    margin-top: 10%;
+  }
+}
+
+/* Extra small devices (smaller than 576px) */
+@media (max-width: 576px) {
+  .heroxx {
+    background-size: 400%;
+  }
+
+  .font1 {
+    margin-top: 40%;
+    font-family: "Acme";
+    font-size: 33px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .font2 {
+    font-family: "Poppins";
+    font-size: 15px;
+    color: rgb(215, 215, 215);
+    font-weight: bold;
+  }
+
+  .font3 {
+    font-family: "Acme";
+    font-size: 25px;
+    color: rgb(215, 215, 215);
+    font-weight: bold;
+  }
+
+  .font4 {
+    font-family: "Poppins";
+    font-size: 15px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+  }
+
+  .font5 {
+    font-family: "Acme";
+    font-size: 30px;
+    color: rgb(121, 154, 237);
+    font-weight: bold;
+  }
+}
+
+.owl-carousel {
+  position: relative;
+}
+
+.owl-carousel .item {
+  height: 20vh;
+  /* Adjust height as needed */
+  overflow: hidden;
+  /* Hide overflow */
+}
+
+.owl-carousel .item img {
+  height: 100%;
+  /* Ensure images fill the height */
+  width: auto;
+  /* Maintain aspect ratio */
+  object-fit: cover;
+  /* Cover the item area */
+}
