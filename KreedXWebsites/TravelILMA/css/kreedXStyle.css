@@ -26,6 +26,34 @@
   /* adjust the height to your needs */
 }
 
+.heroxx2 {
+  background-size: 200%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      rgb(0 0 0 / 28%),
+      #ffffff00,
+      #28a5dec2,
+      #28a5de
+    ),
+    url(../images/image1.jpg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  /* adjust the height to your needs */
+}
+
 .herosectionX {
   margin-top: 1%;
 }
