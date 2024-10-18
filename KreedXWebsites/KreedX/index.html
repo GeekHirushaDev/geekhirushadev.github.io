@@ -1,121 +1,109 @@
-<script type="text/javascript">
-  <!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Distribution Calculator (Rs.) | KreedX Developer Club</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+            border-radius: 8px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
 
-  function get_password() {
-    var orig_pass = prompt("Please enter password", "");
-    if (orig_pass != null && orig_pass != "")
-      var password = new Array(orig_pass.length);
-    for (i = 0; i < orig_pass.length; i++) {
-      password[i] = orig_pass.charCodeAt(i);
-    }
-    return password;
-  }
+<div class="container">
+    <h1 class="text-center mb-4">KreedX Salary Distribution Calculator</h1>
+    <form id="salaryForm">
+        <div class="mb-3">
+            <label for="totalProfit" class="form-label">Total Profit (Rs.):</label>
+            <input type="number" class="form-control" id="totalProfit" placeholder="Enter total profit" required>
+        </div>
+        <div class="mb-3">
+            <label for="foundersCount" class="form-label">Number of Founders:</label>
+            <input type="number" class="form-control" id="foundersCount" placeholder="Enter number of founders" required>
+        </div>
+        <div class="mb-3">
+            <label for="founderSalary" class="form-label">Founder Salary (fixed, Rs.):</label>
+            <input type="number" class="form-control" id="founderSalary" placeholder="Enter founder salary" required>
+        </div>
+        <div class="mb-3">
+            <label for="employeeHours" class="form-label">Employee Hours (comma-separated, e.g., 40,60):</label>
+            <input type="text" class="form-control" id="employeeHours" placeholder="Enter hours worked by employees" required>
+        </div>
+        <button type="button" class="btn btn-danger w-100" id="calculateButton">Calculate Salaries</button>
+    </form>
 
-  function zubrag_decode() {
-    var password = get_password();
-    var orig = unescape(
-      "".concat(
-        "Tdtw%22tnmicedtOmThiwahmmini%22mwhls-%20lcn%3E.1en%3D%3E%20%20myh%3Da%3Etiim-%20%20al%20e%20abtsarleCois%3C%3D-tucrPm%20.%28%20e%3Ette%20%7Crma%3Dv%20X/%3Dio%20pommtYtbu%3C%3Ellmelr%20rtl%20%20tc%20ge",
-        "%20kd%3Ddmph%22l%22ldn//t%20l%20idso%20t%20/n.pv%20to/m/tn8@rtse%3D%20d.3s%21%3Aas/tiEj%22too%20mrrn.ptlptrsse%22siy%22%3Dem.vths%22msdgni-%3CbisytjhacQ83v%22c0pZKO%3El%205Ij6%20elFURDn%20rYopTiirrYn0",
-        "%22an2lNhnTlJXjIDERWYjs%20aKHELnmRDsrcy%20te%3Dgimep%3Cmon%3C%3CR%3Em%22smmh%20s%20%20%20mAhmelya%20t%20%20%20%20Urc%20ob%20mae%20mmk%3Cue%20%20%20-a%20bgab%20eyacnua%20%203%23ro%20t%20c%3B9fmhmt%20%2",
-        "0m%20e%20mm%20%20n%2C%20%22%20%20%20%20aostc.%20ele%7Ben%20m8t%20%20mw%3Cm%3D%20%20%206S%204ixamD%20y0%3Ah%20u%20Sm%3Bxmai9%20%20%20tomka%20%20p%29%20moni%20emyx5%20%20eth%20mmdCp6%20%20%200i%20wiap%2",
-        "0m%20op%20%3A%20igi%20mmcf%3An%20%20%20dsm%3Ekb%20%3A.%20%20-uomv%20%3E%20ol%20ng%20mff%20t%3Bd%20%20%20a5%20%20b%20%20%20i%20%20ds-x/rc4%20%3A0rod%208%20%2C.f%3A%2Cabme%20f%20%20%2C%20l%20%20m%291%20",
-        "%22x%7D%20%20%20-rw%20b%20%20%3AhxoredmWgr%20ui%20P0%20m%3Bx%20W.%20%20%20%20%20e%20-%20mmtc%20%20.%20%20%205rm%20us%20bd%20%20mmgMp%20%20%20%20%3A+%20-iamm%22%7D0%20ot%20o%20%20mxp%20%22e%20%20%20%20",
-        "gomdp%20%20%3Bm%202%3Aid%20t%20mmp5%20m-%20%20%20%20r%200a%20%20%20o%7B%20nokcf%20%20rl-dm%20d%3B8%20%3A%20r1%20mad%20om%20%20%20%20%20f%20hc%20%209ma0%23ro%20%20np%3B02%20mr%28%20%20me%2070%20%20%20%",
-        "20a%20%3Brro%23m%20%20sp1%3B%20l%20fdi%20%204rmc2%20dms%20%20%20r0%20m%20%20%20s%20b%20-drm%20%20m%3Aid%20rl%20mxpmpcl%20%20%20%20%3Bm%20%20m%7Dr%20%20%20%20%20%20%20%20or%20to%20nap%20mmgx8%3B%20%20%",
-        "20%3A%20%20%20iamm%20%20%20%20ot%20g%20nmxp%20cox%20%20%20l%23m%20t%20%20em%20%20i-tm%20%20gn%20%3A%20o-cm%3Brfo0%23%20%20%20zp%20%3Bo%20%20xr%20%20es-%20%20x%20%3B41%200n%3A%20%20mrme2%20%20%205%20%2",
-        "0%20%3Alo%20o%20%207c6%20atd%20mm%208%20x%7D%20%20l%20m%20%20%20m/%20%207etsm%20c%20hmm%20r%23%20m%3Ede%7B%3Beodo%3D%20%20uxnon%20m%3B%22ne%3Bn/%20%20uty2mm%22slrma%20dknp%20bee%3DnKac%20rnre%20m%20en",
-        "emmerne%28i%20apm%3E%22sbo%3Bv%3Cmauw%20%3Dalmou%20ino%3Cdvam%22rsmsch%20%20t%20%29mslcrom%20-et%3E8c%20%20tn%20mciK4-%20%20epSdeb%20%20%20DraC%3A%20%20urtto%22oano%3E5e7olu%20mbmmh/i%20e%20%3C%20%20a",
-        "bl%20dmr%22rsyras%20%20i%3C%3Erodmcm%20%20ms%20%3Cyi%20%203%20mtslc%20fou%22bm%20%7B%22r%20mmb%20Fe%20%20%20%3D%20meel%3CPn%20%22%22of%204%20%20rat%22m%22tctia%20mvfssoe%20mb-mog%20dt%3E%22st%20sfP%20",
-        "a%20ot.%28%20m%20f%3Eb/%3C%20na%20%20m%3Ei%3Ara%20%20%20ymlxn%20%20m%20lep%20tl%20t%22bn%22o%20%3AXa%20%22tdlyr%22%3Dd%20%20iroclm%20%20%3D%20%22%22%3CuaPtoh%3E%3D1%20if%22er%20ocat%3Cs%20Erern-lorert",
-        "lmo%20ldrt%20e%22t%20fo%3C%3Eri/%20la%20%20mmod-d%20%20%20tt%20%20m%3Ecea%20%20%20%20myialvimturb%3Ds%20mmlm%3E%22%3C%20%20%22%20%20%20f%22v%3Dl%20%20un%20loleomdTnf%22l1srusro%3D3Ra%20%22ec%20lr%22%3",
-        "Dbm%20mlalFrb%20euNsa%3D%3Cofoeiet%3Aed%20ttulal%20lsc%20mmpr-f%20%20%20em%3Enui%3Cef%20i%3Dyts%3Dnarmumy/tslcomme-of%22%20%20%3Dltnrv%20%20fdi%22%3D%20psdnh%3En%20%20nu%22%20%20eocan%20%22%20Ereolo%3",
-        "Curedt%20mfreeou%20euo%3Elo%20q%20%22%20ol%22merdedm%20%20%20%20at%20i%3C%20%20ib%20%20mml%29f%20%3C%20%20besoa%20vm%20iC-%22%3D%20%20mc%20m%3Elp%20f%20%20%20oe%3Eba%20%20ne%20mr%20lasi%20dofamsrraSro",
-        "%22bsc%20l%22%20%20mf%22dr%20%20%22baapeneuoxl%22praS.nrbef%28bt%22a%29R%20%20f%3Drel/%20qlr%20mmnmF%3D%20%20%20p%20%20ep%3C%20bi%20tet%20a%20%2Ceeunr%3C%3C%3Dsc%20ra%3E%20mf%22%3D-%20%20onoe%20%20n%2",
-        "2i%20y%20trrnuea%22d%22al%3Dr%22%20hal%20d%3D/%22edrncmfetys%22%20%20dnimoc%22alm%22amrqe%20rpm%20m%3E%3Eul%20%20%20%20%20%3Cn%3Cmidi%3Euf%20%20%20s%20auv%3C%20%22%20rl%3Dal%20tdl%3E-b%20%22%20o%20%20",
-        "me%22/e%20%20%20%22%3Dmnlalec%20lero%22%22cieol%3Doms%20rulCma%22saEp%20mamrel%3C%20m%22l%20nfi%20yo-mpy%28rut%20omsmmgrllera6uoo.e%20amet004m%20ldb/%3C%20vod%20m%3Ei%20or%20%20%20ydpcn%20%20xs%2Crp%2",
-        "0ts3%20rtt%22m%20%3Aeslco%20lr-of%22b%20ultne%3D%20medi%22eu%20eolhy%3Dv%20ru%22s%20%20ocah-%22dEreo%3Eosoreyr%203r%20syyp%20%20%20dedo%20elp%3E%3Albq%20%22%20ld%3Dmerd%20ty%20%20%20%20%20rsi%3C%20%20",
-        "ues%20mm%20%3Dm-m%20%20urs%3E%20%20%20ysiet%3C%20t-msp%20nll%20atb%22tf%3Eaa%20%22dS%20.n%22%3Dw%20m%2Cantio%20l-recEomd%220uo%3D%20uacCsn%3Ctett%20sta%22nrebeeluu%20gailam%3C0rt/%3C/m%22rm%3Enm%20a%3",
-        "Df%20%20%20%20oym%3Emc%22cs%20%20mrmSelvim%20s%3De%3Dsd%20o%20ttll%20%20w%3D%20%22imrbtse/Hmov/%3Cmcdrdmmofsdmm%3Embu%20tf%3C%3Ep4/%20m%3EpHrmD%3C%20Gc%3E%20eleuem%20eybvdvbsiHe%2Cmt%20D%20e%29rudrKCe",
-        "%20cleD%3E%20vblreo%20%20-m/%3Cmpk%20o/%3Ccea%20m%3Erm%22%20lr%3Cmu%3D%20Bm%3Et%20cp%3En%20%20t%22bapoivmmaKevmHebe%28s%20pmmm%20%29Plp%3C%20%20%20%20n%20mr//cut%20rnenke%20lthmey%22d%20k%20et%20m21eu",
-        "%20i%20%20%20em%20uv%20f%22%20vdy.t%7Cvg%3CF%3D%3Dt%20cm%20%20%22emFo.evv%20%20mylrytipe%20%26ueno%20k.mo%3D%20%22%20%3D%20s2rm%7B%20e%20ee%20%20%20rntev%20%20e1%26ve.t%29%3Dt%20ftn%20l%3Dp%3Btlmt%29f",
-        "%20%20m%7Dl%20mm%20%20%20%20%20sm%20%20uenm%20mmetefmodn%20unt.t%27omntmeam%20ecdIo%3C%20%7Btucdam%20ntuis%20%20Ea.%28-ntstn%27%22l-%27ent%22ya%2Cci%7B%3Elminu%20iB%20m%29%28nm%29%28%20%20%20aeeksc%20",
-        "t%20e%20lotsel%7C%20fo%28dfneapnenKdaolhmetmuy%7C%20eetetX%20%22Itniormat%27lu%20%20tormml%20uv.%20tcp%20m%3B%20mgD%20%20%20rie%28fsn%20%20%28%20sdnecP%7D%3Dnucr%29%20Irage%29mud%28en%20cetn%28mognele",
-        "%20ue%27Iyteo%28rnuuipl%27uo%20itteav%20%20ed%20mmf%20ELc%20%20S%20Brots%3DeokaedF%20Cc%20yro1.%20lsr.%28%3B%20c%28tmc%20ogned%20ntelEdnni%28yBr%3Dareuol%29atylam%20aeuv.%20%20mE%20m%3B%20etB%20%20%20",
-        "evtoesnIaffeol%20mSanrun%20%29md%20tlm%29%20tmuym%20tetep%20oeItnoeptle%27vEosueemBuoa%29%27%20ac.m%3Beoegm%20%20mp%27edn%20%20%20v%28dic%20rtynt%20l%20cslolam%20um0%20t%20om%20m%3B0tm%20%20%20%20%20y",
-        "%20tr%20no%20ta%20PalrPtet%20l%20%3DidolamF2t0%20t%20o%20em%3B0t.cI%20%20%20Fman%20nosdoaoat%20ltaSedd%27im%3Drane8%20euou%20%20ttoClccynf%20moosaSr%20Cn%3D%20m%3B%20%20le%20%20%20PnfEssnEmsBoraet*mmo",
-        "FlteHsyolfy.as%20as%20m%20oPe%29o%20lotr%29lcrnu%20%20laylacol%3D%20mmmu%3DPo%20%20Hly*p%20t%20p%20moeyeoo%20e%20sIuSseolpemrnru%27n%20%3Dl.tN%27sP%29%27%28%3Bro*upa%20%27rmmrenep%20%20%20%20a%20ossc%",
-        "20ycullotsmtrelplHmy%20uoupbnomeuomurHe%20.%20oceram%20aba%280dmm%20%3E%3D%20oH%20%29%2Cbcr%20t%20mmaleyo%20%20rm.rs%20t%3D%20%28eylays%20a%20etrt%20oPaleomtEFlof%20deoll.sat%20/u%20S%20omE%20%20a%20r",
-        "He%20sae%20mmeooec%20%20eop%3Dmtsef%20ySyop.lssrao%20esle%20p%20%3B%2Cuee%20t%20%28%28m.hun%29%3Dru%28al%20.aMl%20lobnuer%3DtaSer%20yo%20aR0dsrsoh0rop%291%20%20%20%20o%291%20ccod%20mmoas%2Co%20%20noy%",
-        "20t%20tap%20%20doR%20%20/%20raSer*%20e%20si-mbeoluF%20aeal%20ss%20cera%3Blrba%280%20do%20%3E%3D%20ney%29%2Cbclpt%20mmeuapo%20%20gm.om%20t%3DH%28mFinyp%20%20%20sdri%20%20Pale.meEFlom%20ieolnmsmt%20-a%2",
-        "0iHdoRmtnaraS%20Easm%3Bsteot%20%20%20e%3Dpd%20noay%20adadpsltlip%20eduic%20i%29e0r%20ls+%200niam%3Bc%20%3Bnu%20%20p%20%20mmenat%20%20%20me%3Dus%20thRallHtlsm%3D3%60%203oFytse%20mmr%3E/%3C%20s%20d%20mm",
-        "Hae%2Cr%20%20%20yl%20tlups%3D%20%60+%20a%20R%20iC%3Eso%3A%20v%20lpp%3Br.%20%3Aoa%20nic%7B2%20s%20F.l%60olr%29de%20rpo%3Bp/ehay%20%20mm%3Edts%20%20%3Cr%24ulHtlaalp%20%3Dyrxm%20to%20*%3C%20%20als%20msRl",
-        "oo%20%20ta%24%20i%3Bltoyr%7D%20+axotmnT+%3C2%28%20aanm%60%3Eueod%20%20%20%20i.mler%3Ema%20+mtFS.rT%3C%60ssdtolayep%3C%20ed%24%29%20u%3AalF+%20h%7B.ss%3BHmoat.%20%20%20Seddntttrapan%3D%28xi%20uaa%3E%3C",
-        "%7D%20sRs%20mmHooRr%20%20%20mnatlulslt%60+%20oaF%28aS%3EEe%29%3ElP%20ei%3B%20mro%20%20%20rsyor%20st%24sRoul%60ylayCparloF%20yrelp%29tf%3Ait.%3Bel%7B%7D%28d%20g%20Pm%3EpsmsF%20%20%20l%20o%29ur%20plm%3B",
-        "%20tHSus%20%3E%60%20R%20esaesr%3E/layrysmp%20f%20s%60%20%20elps%20tr.%20%3Aye%3Dreb%7Boma%20Ral2%3CalF.erter%29dememy%3Coh%20%20sem%60%3Eut%24/%20%20%20%20iamler4%7Dt%20+mtimxt%3E%3C%60m%20/%3Ddid%20u",
-        "pap%20le%20%20oSey%3E%3E%20%20sra%20SHe%60h/mP%20.%20mm%20snam%20%20llaF%20%20%20llooomefeloaSe%28/%3C2oseymm%60%28cax%20%20%20%2Calmt%20e%29dn%20%3D%20mm%20%3E%20oe%3C%20%20%20Hui%20r%20%20%20SE%20tl",
-        "up%20ao%60+%20%24tiolE%3E%20u%3DR%7BeeRa%20a+edao%20rs%3A%7Do2stl%7B%242%60l%28F.y%60%20pu%29de%20ey%3B%3Bp/%29mn%20%20%20mm%3C1s%3B%20%20%20r%20l%20mmt%20rh%20%20%20%3DpxvHuso%3A%3CE%20%20lu%7Bmet%3E",
-        "paP%20inR%20%20Em4l%20doe%20%20Peiyxe%20%20%20ds%3Cm%20elptm%3Cp.%20%3Ad%20laat%7Brle.euoF+rhila%29Birit.%3Blme%7D%28d%20ts%7Bm%3EpsE%24%20%20%20%20leR%20ur%20p%20St%20tHnSs%3D%3E%60%20naemiamei/%20dF",
-        "%20a%7DmxddA%20/%20%20p%20ormtsRlan%20%3Dte%24%20.te%28gnid%3Dg%3EtdnpI%20%20%28xi%20ut%7D%3E%3C%7D%20ltm%20mmHa.%20r%20%20%20%3Aaltlud%3Bu+%60+%20a%20FTaU%3E%20m%29op%20du%20%3BSRlaCy%20sp%24%20.rsta",
-        "etdrlotatpspR%28xim%20eo%3E%3C%7D%20%20tnmmmum.a%20%20%20e%20aomodnei2t.t%27mF%60tme%27%3C%29%20rdIro%3Be%29lu%20i%20mHnnH%20%20%3Cr%20Lm.nitlu%3Balu%20m%3Bciydm%7D%20m%7DsCr/%3Ccmi%3Am%3Etr%20M%7Br%3",
-        "Cmpmsic%20td%20lssthrr%20eec/jtm/yuq3%60pmqmoiam%20.yr%3Cdptn.0ta%22%3D/%22sca/p%3EirrEjCr%3Cmpec%3Ac%20tn%20e%7Bsthil.d.c//djlvedoecenen@xm/tb/d%3Cpm5ar/m%22%20i0.r%20/cbj/dlsgast.+.elubsRm%28jimmntt",
-        "c%3C%3Eds3emtp/%20t%3Dyb/miothmm%29s.mm%3Elsm.%20%3AoamF%22mj2%22sliir%60est%3Cmp%20%20tomisetopm%3D.mse/m%3As%3CF/s%20.otm-te.piemnEuese%3EnB6sdpp/e.rpos%3E.smoCsoTm%3E2tt%3Ceit%60%3Cdmm%3D"
-      )
-    );
-    orig = orig.split("");
-
-    var passnum = orig.length % password.length;
-    for (i = orig.length - 1; i >= 0; i--) {
-      passnum--;
-      if (passnum == -1) passnum = password.length - 1;
-
-      var pos1 = i;
-      var pos2 = i + password[passnum];
-
-      if (pos2 >= orig.length) continue;
-
-      char1 = orig[pos1];
-      char2 = orig[pos2];
-
-      orig[pos2] = char1;
-      orig[pos1] = char2;
-    }
-
-    var orig1 = "";
-    for (i = 0; i < orig.length; i++) {
-      orig1 = orig1 + orig[i];
-    }
-    orig1 = orig1.replace(/mmm/g, "\r\n");
-
-    document.getElementById("zubrag-block1").innerHTML = orig1;
-  }
-
-  //-->
-</script>
-<noscript
-  >JavaScript must be enabled in your browser in order to view the protected
-  page.</noscript
->
-<div id="zubrag-block1">
-  <center>
-    <input
-      type="button"
-      value="Bookiya's Unbreakable Protection"
-      onclick="zubrag_decode();"
-      style="
-        padding: 15px 30px;
-        font-size: 18px;
-        color: white;
-        background-color: #4a4a4a;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: transform 0.2s, background-color 0.3s;
-      "
-      onmouseover="this.style.backgroundColor='#333333'; this.style.transform='scale(1.05)';"
-      onmouseout="this.style.backgroundColor='#4a4a4a'; this.style.transform='scale(1)';"
-      onmousedown="this.style.transform='scale(0.95)';"
-      onmouseup="this.style.transform='scale(1)';"
-    />
-  </center>
+    <div class="result mt-4" id="result"></div>
 </div>
+
+<footer>
+    <p>Developed by GeekHirusha Dev | KreedX Developer Club</p>
+</footer>
+
+<script>
+    document.getElementById('calculateButton').addEventListener('click', function() {
+        const totalProfit = parseFloat(document.getElementById('totalProfit').value);
+        const foundersCount = parseInt(document.getElementById('foundersCount').value);
+        const founderSalary = parseFloat(document.getElementById('founderSalary').value);
+        const employeeHoursInput = document.getElementById('employeeHours').value;
+        
+        const capital = totalProfit * 0.20;
+        const salaryPool = totalProfit * 0.80;
+        const totalFoundersSalary = foundersCount * founderSalary;
+        const salaryPoolForEmployees = salaryPool - totalFoundersSalary;
+        const employeeHours = employeeHoursInput.split(',').map(Number);
+        const totalEmployeeHours = employeeHours.reduce((a, b) => a + b, 0);
+        const baseSalaryRate = salaryPoolForEmployees / totalEmployeeHours;
+        const employeeSalaries = employeeHours.map(hours => Math.round(baseSalaryRate * hours / 100) * 100);
+        const totalRoundedSalaries = employeeSalaries.reduce((a, b) => a + b, 0);
+        const remainingFunds = salaryPoolForEmployees - totalRoundedSalaries;
+        const updatedCapital = capital + remainingFunds;
+
+        let resultHtml = `<h3>Results:</h3>`;
+        resultHtml += `<p>Capital saved: Rs. ${capital.toFixed(2)}</p>`;
+        resultHtml += `<p>Total Salary Pool: Rs. ${salaryPool.toFixed(2)}</p>`;
+        resultHtml += `<p>Total Founders Salary: Rs. ${totalFoundersSalary.toFixed(2)}</p>`;
+        resultHtml += `<p>Salary Pool for Employees: Rs. ${salaryPoolForEmployees.toFixed(2)}</p>`;
+        resultHtml += `<p>Base Salary Rate for Employees: Rs. ${baseSalaryRate.toFixed(2)}/hour</p>`;
+        resultHtml += `<h4>Individual Employee Salaries:</h4>`;
+        
+        employeeSalaries.forEach((salary, index) => {
+            resultHtml += `<p>Employee ${index + 1}: Rs. ${salary.toFixed(2)}</p>`;
+        });
+
+        resultHtml += `<p>Total Rounded Salaries Paid to Employees: Rs. ${totalRoundedSalaries.toFixed(2)}</p>`;
+        resultHtml += `<p>Remaining Funds Added to Capital: Rs. ${remainingFunds.toFixed(2)}</p>`;
+        resultHtml += `<p>Updated Capital: Rs. ${updatedCapital.toFixed(2)}</p>`;
+
+        document.getElementById('result').innerHTML = resultHtml;
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
