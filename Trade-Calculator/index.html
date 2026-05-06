@@ -75,7 +75,7 @@
                     <div class="flex flex-col">
                         <label class="text-[10px] font-semibold text-binance-muted">Total Wallet Balance</label>
                         <div class="flex items-center gap-1 mt-0.5">
-                            <input type="number" step="any" id="global-wallet" value="10000" oninput="updateWalletInput(this.value)" class="w-full bg-transparent text-lg font-bold text-binance-text focus:outline-none placeholder-binance-muted font-mono" placeholder="10000" />
+                            <input type="number" step="any" id="global-wallet" value="100" oninput="updateWalletInput(this.value)" class="w-full bg-transparent text-lg font-bold text-binance-text focus:outline-none placeholder-binance-muted font-mono" placeholder="100" />
                         </div>
                     </div>
                     <span class="text-sm font-semibold text-binance-muted">USDT</span>
@@ -137,7 +137,7 @@
     <!-- JavaScript Logic -->
     <script>
         // State Management
-        let walletBalance = "10000";
+        let walletBalance = "100";
         let tradeIdCounter = 0;
         let trades = [];
 
@@ -171,10 +171,10 @@
                 symbol: `BTCUSDT`,
                 mode: 'cross', // cross | isolated
                 type: 'long',  // long | short
-                cost: "1000",
+                cost: "10",
                 leverage: "10",
-                entry: "65000",
-                exit: "70000"
+                entry: "1.5",
+                exit: "2"
             });
             renderAll(); // Re-render DOM because a new element was added
         }
