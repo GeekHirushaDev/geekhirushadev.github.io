@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futures Liquidation & PNL Calculator</title>
+    <!-- Tailwind CSS for styling exactly like the React version -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
+    <div class="p-4 md:p-8">
+        <div class="max-w-7xl mx-auto space-y-8">
+            
+            <!-- Header -->
+            <div class="text-center md:text-left border-b border-gray-800 pb-6">
+                <h1 class="text-3xl font-bold text-white flex items-center justify-center md:justify-start gap-3">
+                    <i data-lucide="calculator" class="text-yellow-500 w-8 h-8"></i>
+                    Futures Liquidation & PNL Calculator
+                </h1>
+                <p class="text-gray-400 mt-2 max-w-2xl">
+                    Calculate your liquidation price, potential profit/loss, and return on equity based on standard futures exchange formulas. 
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Form Section -->
+                <div class="lg:col-span-8 bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                        Configure Trade Parameters
+                    </h2>
+
+                    <!-- Error Message -->
+                    <div id="error-message" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-lg mb-6 flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+                        <p id="error-text"></p>
+                    </div>
+
+                    <div class="space-y-6">
+                        
+                        <!-- Row 1: Types -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300">Step 6: Contract Type</label>
+                                <div class="flex bg-gray-900 rounded-lg p-1">
+                                    <button id="btn-usd-m" class="flex-1 py-2 text-sm rounded-md transition-colors bg-yellow-500 text-gray-900 font-bold">USDⓈ-M</button>
+                                    <button id="btn-coin-m" class="flex-1 py-2 text-sm rounded-md transition-colors text-gray-400 hover:text-white">COIN-M</button>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300">Step 2: Position Type</label>
+                                <div class="flex bg-gray-900 rounded-lg p-1">
+                                    <button id="btn-long" class="flex-1 py-2 text-sm rounded-md transition-colors flex justify-center items-center gap-1 bg-emerald-500 text-white font-bold">
+                                        <i data-lucide="trending-up" class="w-4 h-4"></i> Long
+                                    </button>
+                                    <button id="btn-short" class="flex-1 py-2 text-sm rounded-md transition-colors flex justify-center items-center gap-1 text-gray-400 hover:text-white">
+                                        <i data-lucide="trending-down" class="w-4 h-4"></i> Short
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300">Step 3: Margin Mode</label>
+                                <div class="flex bg-gray-900 rounded-lg p-1">
+                                    <button id="btn-isolated" class="flex-1 py-2 text-sm rounded-md transition-colors bg-blue-500 text-white font-bold">Isolated</button>
+                                    <button id="btn-cross" class="flex-1 py-2 text-sm rounded-md transition-colors text-gray-400 hover:text-white">Cross</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Core Financials -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300 flex items-center justify-between">
+                                    Step 1: Cost / Margin 
+                                    <span id="label-cost-unit" class="text-xs text-gray-500">(USDT)</span>
+                                </label>
+                                <input type="number" id="input-cost" placeholder="e.g., 6500" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300 flex items-center justify-between">
+                                    Step 4: Leverage 
+                                    <span class="text-xs text-gray-500">(x)</span>
+                                </label>
+                                <input type="number" id="input-leverage" placeholder="e.g., 7" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500" />
+                            </div>
+                        </div>
+
+                        <!-- Cross Margin Conditional Field -->
+                        <div id="field-cross-margin" class="hidden p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg space-y-2">
+                            <label class="text-sm font-medium text-blue-300 flex items-center gap-2">
+                                <i data-lucide="wallet" class="w-4 h-4"></i> Step 5: Wallet Balance
+                            </label>
+                            <p class="text-xs text-blue-400/80 mb-2">Enter your total <span id="label-wallet-type">USDⓈ-M</span> Futures wallet balance since you are using Cross Margin.</p>
+                            <input type="number" id="input-wallet" placeholder="e.g., 7500" class="w-full bg-gray-900 border border-blue-500/50 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500" />
+                        </div>
+
+                        <!-- COIN-M Conditional Fields -->
+                        <div id="field-coin-m" class="hidden p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-purple-300">Step 6b: Contracts (Size)</label>
+                                <input type="number" id="input-contracts" placeholder="e.g., 50" class="w-full bg-gray-900 border border-purple-500/50 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-purple-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-purple-300">Contract Value (USD)</label>
+                                <input type="number" id="input-contract-value" value="100" placeholder="e.g., 100 for BTC" class="w-full bg-gray-900 border border-purple-500/50 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-purple-500" />
+                            </div>
+                        </div>
+
+                        <!-- Row 3: Prices -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300">Step 7: Entry Price</label>
+                                <input type="number" id="input-entry" placeholder="e.g., 65000" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-300">Step 8: Exit Price (Optional)</label>
+                                <input type="number" id="input-exit" placeholder="Leave blank to ignore PNL" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500" />
+                            </div>
+                        </div>
+
+                        <!-- Row 4: Maintenance Config -->
+                        <div class="p-4 bg-gray-900/50 border border-gray-700 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-400 flex items-center justify-between">
+                                    Step 9: Maintenance Margin Rate (%)
+                                </label>
+                                <div class="relative">
+                                    <input type="number" step="0.01" id="input-mmr" value="0.50" placeholder="e.g., 0.50" class="w-full bg-gray-800 border border-gray-600 rounded-lg pl-4 pr-10 py-2 text-white focus:outline-none focus:border-yellow-500" />
+                                    <i data-lucide="percent" class="absolute right-3 top-2.5 w-4 h-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-400">
+                                    Maintenance Amount
+                                </label>
+                                <input type="number" id="input-maint" value="0" placeholder="e.g., 0 or 15" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-yellow-500" />
+                            </div>
+                        </div>
+
+                        <button onclick="handleCalculate()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold text-lg py-4 rounded-xl transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:shadow-[0_0_25px_rgba(234,179,8,0.5)] flex items-center justify-center gap-2">
+                            Step 10: Calculate Results <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-xl sticky top-6">
+                        <h2 class="text-xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Results</h2>
+                        
+                        <!-- Empty State Placeholder -->
+                        <div id="results-placeholder" class="text-center py-12 text-gray-500">
+                            <i data-lucide="calculator" class="w-12 h-12 mx-auto mb-3 opacity-20"></i>
+                            <p>Enter your details and click calculate to see results here.</p>
+                        </div>
+                        
+                        <!-- Active Results -->
+                        <div id="results-content" class="hidden space-y-6">
+                            
+                            <!-- Liquidation Price -->
+                            <div class="bg-gray-900 rounded-xl p-5 border border-gray-700">
+                                <p class="text-sm text-gray-400 mb-1">Estimated Liquidation Price</p>
+                                <p id="res-liq" class="text-3xl font-bold text-yellow-500">None</p>
+                                <p class="text-xs text-gray-500 mt-2 flex items-start gap-1">
+                                    <i data-lucide="info" class="w-3 h-3 shrink-0 mt-0.5"></i>
+                                    Actual price may vary slightly based on real-time exchange spread and exact pair mechanics.
+                                </p>
+                            </div>
+
+                            <!-- PNL and ROE Container -->
+                            <div id="res-pnl-container" class="hidden rounded-xl p-5 border bg-emerald-500/10 border-emerald-500/30">
+                                <div class="flex justify-between items-end mb-4">
+                                    <div>
+                                        <p class="text-sm text-gray-400 mb-1">PNL (<span id="res-currency">USDT</span>)</p>
+                                        <p id="res-pnl" class="text-2xl font-bold text-emerald-400">+0.0000</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-gray-400 mb-1">ROE</p>
+                                        <p id="res-roe" class="text-xl font-bold text-emerald-400">+0.00%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Supplemental Stats -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-900 rounded-xl p-4 border border-gray-700">
+                                    <p class="text-xs text-gray-400 mb-1">Position Size (<span id="res-size-label">Crypto</span>)</p>
+                                    <p id="res-size" class="text-lg font-semibold text-white">0.00000</p>
+                                </div>
+                                <div class="bg-gray-900 rounded-xl p-4 border border-gray-700">
+                                    <p class="text-xs text-gray-400 mb-1">Notional Value</p>
+                                    <p id="res-notional" class="text-lg font-semibold text-white">$0</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // State variables
+        let state = {
+            contractType: 'usd-m',
+            positionType: 'long',
+            marginMode: 'isolated'
+        };
+
+        // Styling classes for toggle buttons
+        const classes = {
+            activeYellow: "bg-yellow-500 text-gray-900 font-bold",
+            activeEmerald: "bg-emerald-500 text-white font-bold",
+            activeRose: "bg-rose-500 text-white font-bold",
+            activeBlue: "bg-blue-500 text-white font-bold",
+            inactive: "text-gray-400 hover:text-white"
+        };
+
+        // DOM Elements
+        const el = {
+            btnUsdM: document.getElementById('btn-usd-m'),
+            btnCoinM: document.getElementById('btn-coin-m'),
+            btnLong: document.getElementById('btn-long'),
+            btnShort: document.getElementById('btn-short'),
+            btnIsolated: document.getElementById('btn-isolated'),
+            btnCross: document.getElementById('btn-cross'),
+            
+            fieldCrossMargin: document.getElementById('field-cross-margin'),
+            fieldCoinM: document.getElementById('field-coin-m'),
+            labelCostUnit: document.getElementById('label-cost-unit'),
+            labelWalletType: document.getElementById('label-wallet-type'),
+            
+            inputCost: document.getElementById('input-cost'),
+            inputLeverage: document.getElementById('input-leverage'),
+            inputWallet: document.getElementById('input-wallet'),
+            inputContracts: document.getElementById('input-contracts'),
+            inputContractValue: document.getElementById('input-contract-value'),
+            inputEntry: document.getElementById('input-entry'),
+            inputExit: document.getElementById('input-exit'),
+            inputMmr: document.getElementById('input-mmr'),
+            inputMaint: document.getElementById('input-maint'),
+
+            errorContainer: document.getElementById('error-message'),
+            errorText: document.getElementById('error-text'),
+
+            resultsPlaceholder: document.getElementById('results-placeholder'),
+            resultsContent: document.getElementById('results-content'),
+            resLiq: document.getElementById('res-liq'),
+            resPnlContainer: document.getElementById('res-pnl-container'),
+            resCurrency: document.getElementById('res-currency'),
+            resPnl: document.getElementById('res-pnl'),
+            resRoe: document.getElementById('res-roe'),
+            resSizeLabel: document.getElementById('res-size-label'),
+            resSize: document.getElementById('res-size'),
+            resNotional: document.getElementById('res-notional')
+        };
+
+        // Helper to swap classes
+        function setBtnClass(element, activeClasses, isActive) {
+            element.className = element.className.replace(activeClasses, '').replace(classes.inactive, '').trim();
+            element.className += ' ' + (isActive ? activeClasses : classes.inactive);
+        }
+
+        function updateUI() {
+            // Update Buttons
+            setBtnClass(el.btnUsdM, classes.activeYellow, state.contractType === 'usd-m');
+            setBtnClass(el.btnCoinM, classes.activeYellow, state.contractType === 'coin-m');
+            setBtnClass(el.btnLong, classes.activeEmerald, state.positionType === 'long');
+            setBtnClass(el.btnShort, classes.activeRose, state.positionType === 'short');
+            setBtnClass(el.btnIsolated, classes.activeBlue, state.marginMode === 'isolated');
+            setBtnClass(el.btnCross, classes.activeBlue, state.marginMode === 'cross');
+
+            // Update Labels and Placeholders
+            if (state.contractType === 'usd-m') {
+                el.labelCostUnit.innerText = '(USDT)';
+                el.inputCost.placeholder = 'e.g., 6500';
+                el.inputWallet.placeholder = 'e.g., 7500';
+                el.labelWalletType.innerText = 'USDⓈ-M';
+                el.fieldCoinM.classList.add('hidden');
+            } else {
+                el.labelCostUnit.innerText = '(Crypto)';
+                el.inputCost.placeholder = 'e.g., 0.085';
+                el.inputWallet.placeholder = 'e.g., 0.15';
+                el.labelWalletType.innerText = 'COIN-M';
+                el.fieldCoinM.classList.remove('hidden');
+            }
+
+            if (state.marginMode === 'cross') {
+                el.fieldCrossMargin.classList.remove('hidden');
+            } else {
+                el.fieldCrossMargin.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            el.errorText.innerText = msg;
+            el.errorContainer.classList.remove('hidden');
+        }
+
+        function hideError() {
+            el.errorContainer.classList.add('hidden');
+        }
+
+        // Event Listeners for State Toggles
+        el.btnUsdM.addEventListener('click', () => { state.contractType = 'usd-m'; updateUI(); });
+        el.btnCoinM.addEventListener('click', () => { state.contractType = 'coin-m'; updateUI(); });
+        el.btnLong.addEventListener('click', () => { state.positionType = 'long'; updateUI(); });
+        el.btnShort.addEventListener('click', () => { state.positionType = 'short'; updateUI(); });
+        el.btnIsolated.addEventListener('click', () => { state.marginMode = 'isolated'; updateUI(); });
+        el.btnCross.addEventListener('click', () => { state.marginMode = 'cross'; updateUI(); });
+
+        // Calculation Logic (Identical to React version)
+        function handleCalculate() {
+            hideError();
+            
+            const cost = parseFloat(el.inputCost.value);
+            const lev = parseFloat(el.inputLeverage.value);
+            const entPrice = parseFloat(el.inputEntry.value);
+            const exPrice = el.inputExit.value ? parseFloat(el.inputExit.value) : null;
+            const mmrDec = parseFloat(el.inputMmr.value) / 100;
+            const mAmnt = parseFloat(el.inputMaint.value);
+            const wb = parseFloat(el.inputWallet.value);
+            const conts = parseFloat(el.inputContracts.value);
+            const cVal = parseFloat(el.inputContractValue.value);
+
+            // Validations
+            if (isNaN(cost) || cost <= 0) return showError("Please enter a valid Cost/Margin.");
+            if (isNaN(lev) || lev <= 0) return showError("Please enter a valid Leverage.");
+            if (state.marginMode === 'cross' && (isNaN(wb) || wb <= 0)) return showError("Please enter Wallet Balance for Cross Margin.");
+            if (isNaN(entPrice) || entPrice <= 0) return showError("Please enter a valid Entry Price.");
+            if (state.contractType === 'coin-m' && (isNaN(conts) || isNaN(cVal))) return showError("Please enter valid Contract Size and Value for COIN-M.");
+            if (isNaN(mmrDec) || isNaN(mAmnt)) return showError("Please enter valid Maintenance Margin Rate and Amount.");
+
+            let marginToUse = state.marginMode === 'cross' ? wb : cost;
+            let liqPrice = 0;
+            let pnl = null;
+            let roe = null;
+            let positionSize = 0;
+            let notional = 0;
+
+            try {
+                if (state.contractType === 'usd-m') {
+                    notional = cost * lev; // Notional value in USD
+                    positionSize = notional / entPrice; // Size in Crypto
+
+                    if (state.positionType === 'long') {
+                        // Liq Price = (Entry Price * Size - Margin + MaintAmount) / (Size * (1 - MMR))
+                        liqPrice = (entPrice * positionSize - marginToUse + mAmnt) / (positionSize * (1 - mmrDec));
+                    } else {
+                        // Liq Price = (Entry Price * Size + Margin - MaintAmount) / (Size * (1 + MMR))
+                        liqPrice = (entPrice * positionSize + marginToUse - mAmnt) / (positionSize * (1 + mmrDec));
+                    }
+
+                    if (exPrice !== null) {
+                        pnl = state.positionType === 'long' 
+                            ? (exPrice - entPrice) * positionSize 
+                            : (entPrice - exPrice) * positionSize;
+                        roe = (pnl / cost) * 100;
+                    }
+
+                } else {
+                    // COIN-M Calculations
+                    notional = conts * cVal; // Notional in USD
+                    positionSize = notional / entPrice; // Initial Size in Crypto (approx)
+                    
+                    // Binance approximate formula for COIN-M Liquidation
+                    if (state.positionType === 'long') {
+                        let denominator = (notional / entPrice) + marginToUse - mAmnt;
+                        liqPrice = denominator > 0 ? (notional * (1 - mmrDec)) / denominator : 0;
+                    } else {
+                        let denominator = (notional / entPrice) - marginToUse + mAmnt;
+                        liqPrice = denominator > 0 ? (notional * (1 + mmrDec)) / denominator : 0;
+                    }
+
+                    if (exPrice !== null) {
+                        pnl = state.positionType === 'long'
+                            ? notional * (1 / entPrice - 1 / exPrice)
+                            : notional * (1 / exPrice - 1 / entPrice);
+                        roe = (pnl / cost) * 100;
+                    }
+                }
+
+                renderResults(liqPrice, pnl, roe, positionSize, notional, conts);
+
+            } catch (err) {
+                showError("Calculation error. Please check your inputs.");
+            }
+        }
+
+        function renderResults(liqPrice, pnl, roe, positionSize, notional, conts) {
+            // Hide placeholder, show content
+            el.resultsPlaceholder.classList.add('hidden');
+            el.resultsContent.classList.remove('hidden');
+
+            // Set Liq Price
+            if (liqPrice > 0) {
+                el.resLiq.innerText = liqPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            } else {
+                el.resLiq.innerText = 'None';
+            }
+
+            // PNL & ROE logic
+            if (pnl !== null && roe !== null) {
+                el.resPnlContainer.classList.remove('hidden');
+                
+                // Color formatting
+                el.resPnlContainer.className = `rounded-xl p-5 border ${pnl >= 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30'}`;
+                const textColorClass = pnl >= 0 ? 'text-emerald-400' : 'text-rose-400';
+                
+                el.resPnl.className = `text-2xl font-bold ${textColorClass}`;
+                el.resRoe.className = `text-xl font-bold ${textColorClass}`;
+                
+                el.resCurrency.innerText = state.contractType === 'usd-m' ? 'USDT' : 'Crypto';
+                el.resPnl.innerText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4);
+                el.resRoe.innerText = (roe >= 0 ? '+' : '') + roe.toFixed(2) + '%';
+            } else {
+                el.resPnlContainer.classList.add('hidden');
+            }
+
+            // Stats
+            if (state.contractType === 'usd-m') {
+                el.resSizeLabel.innerText = 'Crypto';
+                el.resSize.innerText = positionSize.toFixed(5);
+            } else {
+                el.resSizeLabel.innerText = 'Contr.';
+                el.resSize.innerText = conts;
+            }
+            
+            el.resNotional.innerText = '$' + notional.toLocaleString();
+        }
+
+        // Initial setup
+        updateUI();
+
+    </script>
+</body>
+</html>
