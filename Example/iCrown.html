@@ -59,12 +59,15 @@
     [style*="grid-template-columns: 1.5fr 1fr;"],
     [style*="grid-template-columns: 1.4fr 1fr;"],
     [style*="grid-template-columns: 1.25fr 1fr;"],
-    [style*="grid-template-columns: 210px 1fr;"] { grid-template-columns: minmax(0, 1fr) !important; }
+    [style*="grid-template-columns: 210px 1fr;"],
+    [style*="grid-template-columns: 236px minmax(0, 1fr);"] { grid-template-columns: minmax(0, 1fr) !important; }
     [style*="grid-template-columns: repeat(4, 1fr);"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     [style*="grid-template-columns: 1fr 1fr 1fr;"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     [style*="position: sticky"] { position: static !important; }
     [style*="border-radius: 14px"][style*="overflow: hidden"] { overflow-x: auto !important; }
     [style*="border-radius: 14px"][style*="overflow: hidden"] > [style*="display: grid"] { min-width: 720px; }
+    [style*="border-radius: 14px"][style*="overflow: hidden"] > [data-wide="1080"] { min-width: 1080px; }
+    [style*="border-radius: 14px"][style*="overflow: hidden"] > [data-wide="1360"] { min-width: 1360px; }
   }
 
   /* Mobile — single column everywhere, comfortable tap targets */
@@ -1949,6 +1952,269 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ isRoles }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 40px 28px 56px;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px;">
+            <div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 600; letter-spacing: -.028em;">Roles &amp; Permissions</h1>
+              <p style="margin: 10px 0 0; font-size: 13.5px; color: var(--muted);">8 roles · 41 employees · last change 27/07/2026 08:42</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button style="height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); color: var(--text); font: 500 12.5px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2); border-color: var(--muted-3);">Duplicate role</button>
+              <button style="height: 36px; padding: 0 16px; border: none; border-radius: 10px; background: #2563EB; color: #fff; font: 600 12.5px Inter, sans-serif; cursor: pointer; box-shadow: 0 1px 2px rgba(9,9,11,.16), 0 4px 12px rgba(37,99,235,.22);" style-hover="background: #1D4ED8;">New role</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 20px; align-items: start;">
+            <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 8px;">
+              <div style="padding: 9px 12px 6px; font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-3);">Role templates</div>
+              <sc-for list="{{ roleList }}" as="r" hint-placeholder-count="8">
+                <div onClick="{{ r.pick }}" onKeyDown="{{ r.keyPick }}" tabindex="0" role="button" style="{{ r.style }}">
+                  <span style="{{ r.dotStyle }}"></span>
+                  <span style="display: block; flex: 1; min-width: 0;">
+                    <span style="display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.name }}</span>
+                    <span style="display: block; font-size: 10.5px; color: var(--muted-3); margin-top: 2px;">{{ r.people }}</span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 22px;">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                  <div>
+                    <div style="font-size: 15px; font-weight: 600;">{{ selectedRole }}</div>
+                    <div style="font-size: 11.5px; color: var(--muted-2); margin-top: 4px;">{{ selectedRoleNote }}</div>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <span style="{{ selectedRoleTagStyle }}">{{ selectedRoleTag }}</span>
+                    <span style="padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 500; color: var(--muted); background: var(--line); white-space: nowrap;">{{ selectedRoleGrants }} grants</span>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 18px;">
+                  <div><div style="font-size: 10.5px; color: var(--muted-2);">Employees</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 15px; margin-top: 5px;">{{ selectedRoleCount }}</div></div>
+                  <div><div style="font-size: 10.5px; color: var(--muted-2);">Branch scope</div><div style="font-size: 12.5px; margin-top: 6px;">{{ selectedRoleScope }}</div></div>
+                  <div><div style="font-size: 10.5px; color: var(--muted-2);">Approval ceiling</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-top: 6px;">{{ selectedRoleCeiling }}</div></div>
+                  <div><div style="font-size: 10.5px; color: var(--muted-2);">Last edited</div><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; margin-top: 6px;">{{ selectedRoleEdited }}</div></div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;">
+                <div style="padding: 18px 20px 14px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                  <div><div style="font-size: 13px; font-weight: 600;">Permission matrix</div><div style="font-size: 11.5px; color: var(--muted-2); margin-top: 3px;">{{ selectedRole }} · view · create · edit · delete · approve · export · print · assign · manage</div></div>
+                  <div style="display: flex; gap: 12px; font-size: 11px; color: var(--muted-2);">
+                    <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 3px; background: #2563EB;"></span>Granted</span>
+                    <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 3px; background: var(--warn);"></span>Temporary</span>
+                    <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 3px; background: var(--line-2);"></span>Denied</span>
+                  </div>
+                </div>
+                <div style="{{ matrixHeadStyle }}">
+                  <span>Module</span>
+                  <sc-for list="{{ permTypes }}" as="t" hint-placeholder-count="9">
+                    <span style="text-align: center;">{{ t.short }}</span>
+                  </sc-for>
+                </div>
+                <sc-for list="{{ matrixRows }}" as="m" hint-placeholder-count="17">
+                  <div style="{{ m.rowStyle }}" style-hover="background: var(--line);">
+                    <span style="font-size: 12.5px;">{{ m.module }}</span>
+                    <sc-for list="{{ m.cells }}" as="c" hint-placeholder-count="9">
+                      <span style="display: flex; justify-content: center;"><span onClick="{{ c.toggle }}" onKeyDown="{{ c.keyToggle }}" tabindex="0" role="checkbox" aria-checked="{{ c.checked }}" aria-label="{{ c.aria }}" style="{{ c.style }}">{{ c.mark }}</span></span>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; align-items: start;">
+                <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 22px;">
+                  <div style="font-size: 13px; font-weight: 600;">Branch access</div>
+                  <div style="font-size: 11.5px; color: var(--muted-2); margin-top: 3px; margin-bottom: 16px;">Where this role may operate</div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <sc-for list="{{ branchAccess }}" as="b" hint-placeholder-count="5">
+                      <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--surface-2);">
+                        <span style="display: block; flex: 1; min-width: 0;">
+                          <span style="display: block; font-size: 12.5px;">{{ b.name }}</span>
+                          <span style="display: block; font-size: 10.5px; color: var(--muted-3); margin-top: 2px;">{{ b.note }}</span>
+                        </span>
+                        <span onClick="{{ b.toggle }}" onKeyDown="{{ b.keyToggle }}" tabindex="0" role="switch" aria-checked="{{ b.on }}" aria-label="{{ b.aria }}" style="{{ b.switchStyle }}"><span style="{{ b.knobStyle }}"></span></span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 22px;">
+                  <div style="font-size: 13px; font-weight: 600;">Temporary permissions</div>
+                  <div style="font-size: 11.5px; color: var(--muted-2); margin-top: 3px; margin-bottom: 16px;">Auto-expire · no manual revoke needed</div>
+                  <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <sc-for list="{{ tempGrants }}" as="t" hint-placeholder-count="3">
+                      <div style="border: 1px solid rgba(245,158,11,.28); border-radius: 12px; background: rgba(245,158,11,.07); padding: 12px 14px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                          <span style="font-size: 12.5px; font-weight: 500;">{{ t.title }}</span>
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--warn); white-space: nowrap;">{{ t.expires }}</span>
+                        </div>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5;">{{ t.detail }}</div>
+                      </div>
+                    </sc-for>
+                    <button style="height: 36px; border: 1px dashed var(--line-2); border-radius: 10px; background: transparent; color: var(--muted); font: 500 12px Inter, sans-serif; cursor: pointer;" style-hover="color: var(--text); border-color: var(--muted-3);">Grant temporary permission</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;">
+                <div style="padding: 18px 20px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <div><div style="font-size: 13px; font-weight: 600;">Permission audit history</div><div style="font-size: 11.5px; color: var(--muted-2); margin-top: 3px;">Changes to this role</div></div>
+                  <span onClick="{{ goAudit }}" style="font-size: 11.5px; color: var(--link); cursor: pointer; white-space: nowrap;">Open audit log</span>
+                </div>
+                <sc-for list="{{ permHistory }}" as="h" hint-placeholder-count="5">
+                  <div style="display: flex; gap: 12px; padding: 12px 20px; border-top: 1px solid var(--surface-2);">
+                    <span style="{{ h.dotStyle }}"></span>
+                    <span style="display: block; flex: 1; min-width: 0;">
+                      <span style="display: block; font-size: 12.5px;">{{ h.text }}</span>
+                      <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted-2); margin-top: 4px;">{{ h.meta }}</span>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isApprovals }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 40px 28px 56px;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px;">
+            <div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 600; letter-spacing: -.028em;">Approvals</h1>
+              <p style="margin: 10px 0 0; font-size: 13.5px; color: var(--muted);">{{ approvalSubtitle }}</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button style="height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); color: var(--text); font: 500 12.5px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2); border-color: var(--muted-3);">Escalation rules</button>
+              <button onClick="{{ approveAllPending }}" style="height: 36px; padding: 0 16px; border: none; border-radius: 10px; background: #2563EB; color: #fff; font: 600 12.5px Inter, sans-serif; cursor: pointer; box-shadow: 0 1px 2px rgba(9,9,11,.16), 0 4px 12px rgba(37,99,235,.22);" style-hover="background: #1D4ED8;">Approve all low risk</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;">
+            <sc-for list="{{ approvalKpis }}" as="k" hint-placeholder-count="4">
+              <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 18px 20px;">
+                <div style="font-size: 11.5px; color: var(--muted-2);">{{ k.label }}</div>
+                <div style="{{ k.valueStyle }}">{{ k.value }}</div>
+                <div style="font-size: 11.5px; color: var(--muted-2); margin-top: 6px;">{{ k.note }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <sc-for list="{{ approvalTabs }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;">
+            <div data-wide="1080" style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.9fr) minmax(0, 1.15fr) minmax(0, 1.1fr) minmax(0, 1.05fr) minmax(0, 1fr) 178px; align-items: center; gap: 12px; padding: 10px 20px; background: var(--surface-2); border-bottom: 1px solid var(--line); font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted-2);">
+              <span>Request</span><span>Detail</span><span>Requested by</span><span>Branch</span><span>Created</span><span>Assigned to</span><span style="text-align: right;">Action</span>
+            </div>
+            <sc-for list="{{ approvalRows }}" as="a" hint-placeholder-count="8">
+              <div data-wide="1080" style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.9fr) minmax(0, 1.15fr) minmax(0, 1.1fr) minmax(0, 1.05fr) minmax(0, 1fr) 178px; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--surface-2); transition: background .12s ease-out;" style-hover="background: var(--line);">
+                <span style="display: block; min-width: 0;">
+                  <span style="display: flex; align-items: center; gap: 8px;">
+                    <span style="{{ a.priorityStyle }}"></span>
+                    <span style="font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.type }}</span>
+                  </span>
+                  <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted-2); margin-top: 4px;">{{ a.ref }} · {{ a.priority }}</span>
+                </span>
+                <span style="display: block; min-width: 0;">
+                  <span style="display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.detail }}</span>
+                  <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted-2); margin-top: 4px;">{{ a.value }}</span>
+                </span>
+                <span style="font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.requester }}</span>
+                <span style="font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.branch }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);">{{ a.created }}</span>
+                <span style="font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ a.assignee }}</span>
+                <span style="display: flex; gap: 6px; justify-content: flex-end;">
+                  <sc-if value="{{ a.actionable }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ a.approve }}" style="height: 28px; padding: 0 11px; border: none; border-radius: 8px; background: #2563EB; color: #fff; font: 600 11.5px Inter, sans-serif; cursor: pointer;" style-hover="background: #1D4ED8;">Approve</button>
+                    <button onClick="{{ a.reject }}" style="height: 28px; padding: 0 11px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--surface); color: var(--text); font: 500 11.5px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2);">Reject</button>
+                  </sc-if>
+                  <sc-if value="{{ a.resolved }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ a.statusStyle }}">{{ a.status }}</span>
+                  </sc-if>
+                  <button onClick="{{ a.view }}" aria-label="View request details" style="height: 28px; width: 28px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--surface); color: var(--muted); font: 500 12px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2);">›</button>
+                </span>
+              </div>
+            </sc-for>
+            <div style="{{ approvalEmptyStyle }}">
+              <div style="font-size: 13px; color: var(--muted);">Nothing waiting in this queue</div>
+              <div style="font-size: 11.5px; color: var(--muted-3); margin-top: 6px;">Requests appear here the moment staff submit them.</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 40px 28px 56px;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px;">
+            <div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 600; letter-spacing: -.028em;">Audit Log</h1>
+              <p style="margin: 10px 0 0; font-size: 13.5px; color: var(--muted);">{{ auditSubtitle }}</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button style="height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); color: var(--text); font: 500 12.5px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2); border-color: var(--muted-3);">Export CSV</button>
+              <button style="height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); color: var(--text); font: 500 12.5px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2); border-color: var(--muted-3);">Export Excel</button>
+              <button style="height: 36px; padding: 0 16px; border: none; border-radius: 10px; background: #2563EB; color: #fff; font: 600 12.5px Inter, sans-serif; cursor: pointer; box-shadow: 0 1px 2px rgba(9,9,11,.16), 0 4px 12px rgba(37,99,235,.22);" style-hover="background: #1D4ED8;">Retention policy</button>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;">
+            <div style="height: 36px; flex: 1; min-width: 240px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); display: flex; align-items: center; padding: 0 12px; gap: 9px;">
+              <span style="color: var(--muted-3); font-size: 12px;">⌕</span>
+              <input value="{{ auditQuery }}" onChange="{{ onAuditQuery }}" placeholder="Search user, IMEI, invoice, module…" style="flex: 1; border: none; outline: none; background: transparent; color: var(--text); font: 400 12.5px Inter, sans-serif;" />
+            </div>
+            <sc-for list="{{ auditFilters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.pick }}" style="{{ f.style }}">{{ f.label }}</button>
+            </sc-for>
+            <div style="height: 36px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-2); cursor: pointer;" style-hover="background: var(--line);">01/07/2026 – 27/07/2026<span style="color: var(--muted-3); font-size: 10px;">▾</span></div>
+          </div>
+
+          <div style="border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;">
+            <div data-wide="1360" style="display: grid; grid-template-columns: 108px minmax(0, 1.35fr) minmax(0, 1.05fr) minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.35fr) minmax(0, 1.15fr) 44px; align-items: center; gap: 12px; padding: 10px 20px; background: var(--surface-2); border-bottom: 1px solid var(--line); font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted-2);">
+              <span>Date · time</span><span>User · role</span><span>Branch</span><span>Action</span><span>Module</span><span>Old value</span><span>New value</span><span>IP · device</span><span style="text-align: right;">·</span>
+            </div>
+            <sc-for list="{{ auditRows }}" as="l" hint-placeholder-count="10">
+              <div data-wide="1360" style="display: grid; grid-template-columns: 108px minmax(0, 1.35fr) minmax(0, 1.05fr) minmax(0, 1.55fr) minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.35fr) minmax(0, 1.15fr) 44px; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--surface-2); transition: background .12s ease-out;" style-hover="background: var(--line);">
+                <span style="display: block;">
+                  <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">{{ l.date }}</span>
+                  <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted-2); margin-top: 3px;">{{ l.time }}</span>
+                </span>
+                <span style="display: block; min-width: 0;">
+                  <span style="display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.user }}</span>
+                  <span style="display: block; font-size: 10.5px; color: var(--muted-2); margin-top: 3px;">{{ l.role }}</span>
+                </span>
+                <span style="font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.branch }}</span>
+                <span style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                  <span style="{{ l.statusDot }}"></span>
+                  <span style="font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.action }}</span>
+                </span>
+                <span style="font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.module }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.oldValue }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.newValue }}</span>
+                <span style="display: block; min-width: 0;">
+                  <span style="display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.ip }}</span>
+                  <span style="display: block; font-size: 10.5px; color: var(--muted-3); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ l.device }}</span>
+                </span>
+                <span style="display: flex; justify-content: flex-end;"><button aria-label="View audit entry" style="height: 26px; width: 26px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--surface); color: var(--muted); font: 500 12px Inter, sans-serif; cursor: pointer;" style-hover="background: var(--surface-2);">›</button></span>
+              </div>
+            </sc-for>
+            <div style="{{ auditEmptyStyle }}">
+              <div style="font-size: 13px; color: var(--muted);">No entries match “{{ auditQuery }}”</div>
+              <div style="font-size: 11.5px; color: var(--muted-3); margin-top: 6px;">Try a user, module, IMEI or invoice number.</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 20px; background: var(--surface);">
+              <span style="font-size: 12px; color: var(--muted-2);">{{ auditCountLabel }}</span>
+              <span style="font-size: 12px; color: var(--muted-3);">Retained 24 months · IRD compliant</span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isPlaceholder }}" hint-placeholder-val="{{ false }}">
         <div style="padding: 80px 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px;">
           <div style="width: 56px; height: 56px; border-radius: 16px; border: 1px dashed var(--line-2); background: var(--surface);"></div>
@@ -2023,6 +2289,11 @@ const NAV = [
     ["analytics", "Analytics", ""],
     ["notifications", "Notifications", "6"],
     ["settings", "Settings", ""]
+  ]},
+  { label: "Administration", items: [
+    ["roles", "Roles & Permissions", ""],
+    ["approvals", "Approvals", "5"],
+    ["audit", "Audit Log", ""]
   ]}
 ];
 
@@ -2045,10 +2316,13 @@ const CRUMB = {
   reports: ["Insights", "Reports"],
   analytics: ["Insights", "Analytics"],
   notifications: ["Insights", "Notifications"],
-  settings: ["Insights", "Settings"]
+  settings: ["Insights", "Settings"],
+  roles: ["Administration", "Roles & Permissions"],
+  approvals: ["Administration", "Approvals"],
+  audit: ["Administration", "Audit Log"]
 };
 
-const BUILT = ["dashboard", "inventory", "device", "sales", "invoice", "accessories", "tradein", "repairs", "returns", "bucket", "customers", "suppliers", "branches", "staff", "credit", "reports", "analytics", "notifications", "settings"];
+const BUILT = ["dashboard", "inventory", "device", "sales", "invoice", "accessories", "tradein", "repairs", "returns", "bucket", "customers", "suppliers", "branches", "staff", "credit", "reports", "analytics", "notifications", "settings", "roles", "approvals", "audit"];
 
 const ROLES = {
   "Owner": {
@@ -2059,7 +2333,7 @@ const ROLES = {
   },
   "Branch Manager": {
     user: "Dilshan Silva", initials: "DS", scope: "Colombo · Flagship",
-    allow: ["dashboard", "inventory", "device", "accessories", "sales", "invoice", "tradein", "repairs", "returns", "bucket", "customers", "branches", "staff", "credit", "reports", "notifications"],
+    allow: ["dashboard", "inventory", "device", "accessories", "sales", "invoice", "tradein", "repairs", "returns", "bucket", "customers", "branches", "staff", "credit", "reports", "notifications", "approvals"],
     flags: { cost: true, price: true, profit: false, credit: true, supplierCost: false },
     perms: ["Own branch only — no company-wide profit", "Branch reports and stock transfers", "Inventory, repairs and trade-ins", "Staff roster for this branch", "Approve discounts up to 5%", "No supplier costs or settings"]
   },
@@ -2084,7 +2358,7 @@ const ROLES = {
 };
 
 class Component extends DCLogic {
-  state = { page: "dashboard", paletteOpen: false, vw: typeof window !== "undefined" ? window.innerWidth : 1440, menuOpen: false, theme: "dark", query: "", cursor: 0, branch: "All branches", branchMenu: false, role: "Owner", profileOpen: false, roleTick: 0 };
+  state = { page: "dashboard", paletteOpen: false, vw: typeof window !== "undefined" ? window.innerWidth : 1440, menuOpen: false, theme: "dark", query: "", cursor: 0, roleSel: "Owner", perms: {}, branchAccess: {}, approvalTab: "Pending", approvalActs: {}, auditQuery: "", auditFilter: "All modules", branch: "All branches", branchMenu: false, role: "Owner", profileOpen: false, roleTick: 0 };
 
   componentDidMount() {
     this._key = (e) => {
@@ -2154,6 +2428,14 @@ class Component extends DCLogic {
       ["Go to", "Branches", "G B", "branches", ""],
       ["Go to", "Notifications", "G N", "notifications", ""],
       ["Go to", "Settings", "G T", "settings", ""],
+      ["Go to", "Roles & permissions", "G A", "roles", ""],
+      ["Go to", "Approvals inbox", "G V", "approvals", ""],
+      ["Go to", "Audit log", "G L", "audit", ""],
+      ["Actions", "Review pending approvals", "", "approvals", ""],
+      ["Actions", "Grant temporary permission", "", "roles", ""],
+      ["Actions", "Export audit log", "", "audit", ""],
+      ["Records", "APR-2026-0412 · 9% discount · Colombo", "", "approvals", "Approval"],
+      ["Records", "APR-2026-0410 · Ceylon Mobile payment", "", "approvals", "Approval"],
       ["Actions", "New sale", "N", "sales", ""],
       ["Actions", "New trade-in intake", "T", "tradein", ""],
       ["Actions", "New repair job", "", "repairs", ""],
@@ -2260,6 +2542,269 @@ class Component extends DCLogic {
     }));
   }
 
+  adminVals(p) {
+    if (p !== "roles" && p !== "approvals" && p !== "audit") return {};
+    const st = this.state;
+    const key = (fn) => (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } };
+
+    const MODULES = ["Dashboard", "Inventory", "IMEI", "Accessories", "Sales", "Returns", "Trade-ins", "Repairs", "Customers", "Suppliers", "Branches", "Staff", "Credit Sales", "Reports", "Analytics", "Notifications", "Settings"];
+    const TYPES = [["View", "View"], ["Create", "Crt"], ["Edit", "Edit"], ["Delete", "Del"], ["Approve", "Appr"], ["Export", "Exp"], ["Print", "Prn"], ["Assign", "Asgn"], ["Manage", "Mng"]];
+    // base grant level per role: 9 = all, then module-specific caps
+    const ROLE_DEFS = {
+      "Owner": { note: "Full company control · cannot be deleted", tag: "System", people: 1, scope: "All 5 branches", ceiling: "Unlimited", edited: "12/03/2026 09:10", base: 9, caps: {} },
+      "System Administrator": { note: "Platform configuration and user access", tag: "System", people: 2, scope: "All 5 branches", ceiling: "LKR 0 · no financial approval", edited: "27/07/2026 08:42", base: 9, caps: { "Sales": 6, "Credit Sales": 6, "Trade-ins": 6 } },
+      "Branch Manager": { note: "Runs one branch end to end", tag: "Operational", people: 5, scope: "Assigned branch", ceiling: "LKR 150,000 · 5% discount", edited: "21/07/2026 16:20", base: 7, caps: { "Suppliers": 1, "Settings": 1, "Analytics": 1, "Staff": 5, "Branches": 5 } },
+      "Sales Staff": { note: "Point of sale and customer intake", tag: "Operational", people: 18, scope: "Assigned branch", ceiling: "No approval rights", edited: "19/07/2026 11:05", base: 3, caps: { "Suppliers": 0, "Settings": 0, "Analytics": 0, "Reports": 0, "Staff": 0, "Branches": 1, "Credit Sales": 1, "Repairs": 1, "Inventory": 1, "IMEI": 1 } },
+      "Storekeeper": { note: "Goods receiving, transfers and stock counts", tag: "Operational", people: 6, scope: "Assigned branch", ceiling: "No approval rights", edited: "17/07/2026 14:48", base: 3, caps: { "Sales": 1, "Credit Sales": 0, "Customers": 1, "Reports": 1, "Analytics": 0, "Settings": 0, "Staff": 0, "Inventory": 7, "IMEI": 7 } },
+      "Customer Service": { note: "Repairs, returns and customer care", tag: "Operational", people: 4, scope: "Assigned branch", ceiling: "LKR 25,000 · goodwill only", edited: "15/07/2026 10:32", base: 3, caps: { "Inventory": 1, "IMEI": 1, "Suppliers": 0, "Settings": 0, "Analytics": 0, "Staff": 0, "Branches": 1, "Repairs": 7, "Returns": 6, "Customers": 6 } },
+      "Accountant": { note: "Ledger, VAT and supplier payables", tag: "Financial", people: 3, scope: "All 5 branches", ceiling: "LKR 500,000 · supplier payment", edited: "24/07/2026 09:55", base: 2, caps: { "Reports": 9, "Analytics": 6, "Credit Sales": 7, "Suppliers": 7, "Sales": 6, "Settings": 1, "Staff": 1, "Repairs": 1, "Trade-ins": 2 } },
+      "Repair Technician": { note: "Workshop jobs and parts consumption", tag: "Operational", people: 2, scope: "Assigned branch", ceiling: "No approval rights", edited: "11/07/2026 13:14", base: 1, caps: { "Repairs": 7, "IMEI": 3, "Inventory": 2, "Customers": 1, "Sales": 0, "Credit Sales": 0, "Suppliers": 0, "Settings": 0, "Analytics": 0, "Reports": 0, "Staff": 0, "Branches": 0, "Returns": 2 } }
+    };
+    const TEMP = { "Branch Manager": [["Analytics", 5], ["Suppliers", 0]], "Customer Service": [["Credit Sales", 4]] };
+
+    const role = ROLE_DEFS[st.roleSel] ? st.roleSel : "Owner";
+    const def = ROLE_DEFS[role];
+    const level = (m) => (def.caps[m] === undefined ? def.base : def.caps[m]);
+    const tempFor = (m) => (TEMP[role] || []).filter((t) => t[0] === m).map((t) => t[1]);
+    const overrideKey = (m, i) => role + "|" + m + "|" + i;
+
+    const grantCount = MODULES.reduce((n, m) => {
+      let lv = level(m);
+      return n + TYPES.reduce((k, t, i) => {
+        const ov = st.perms[overrideKey(m, i)];
+        const on = ov === undefined ? i < lv : ov;
+        return k + (on ? 1 : 0);
+      }, 0);
+    }, 0);
+
+    const tagStyle = (t) => t === "System"
+      ? { padding: "3px 9px", borderRadius: "999px", fontSize: "11px", fontWeight: 500, color: "var(--violet)", background: "rgba(168,85,247,.12)", whiteSpace: "nowrap" }
+      : t === "Financial"
+        ? { padding: "3px 9px", borderRadius: "999px", fontSize: "11px", fontWeight: 500, color: "var(--info)", background: "rgba(59,130,246,.12)", whiteSpace: "nowrap" }
+        : { padding: "3px 9px", borderRadius: "999px", fontSize: "11px", fontWeight: 500, color: "var(--pos)", background: "rgba(16,185,129,.12)", whiteSpace: "nowrap" };
+
+    const matrixCols = "minmax(0, 1.55fr) repeat(9, minmax(0, 1fr))";
+    const BR = ["Colombo · Flagship", "Kandy · Main Street", "Negombo · Beach Plaza", "Gampaha · Bauddhaloka", "Kurunegala · Central"];
+    const brNote = ["Head office · 14 staff", "9 staff", "7 staff", "6 staff", "5 staff"];
+    const brDefault = (i) => (def.scope.indexOf("All") === 0 ? true : i === 0);
+
+    // ---------- approvals ----------
+    const APPROVALS = [
+      ["Discount Approval", "APR-2026-0412", "High", "9% off iPhone 16 Pro Max 256GB", "LKR 43,200 discount", "Sanduni Rajapaksa", "Colombo · Flagship", "27/07/2026 11:42", "Kasun Perera", "Pending"],
+      ["Credit Sale", "APR-2026-0411", "High", "12-month plan · Ruwan Gunasekara", "LKR 248,000", "Dilshan Silva", "Kandy · Main Street", "27/07/2026 10:58", "John Perera", "Escalated"],
+      ["Supplier Payment", "APR-2026-0410", "High", "Ceylon Mobile Distributors · overdue", "LKR 1,245,000", "Chamari Wijesinghe", "Head office", "27/07/2026 09:20", "John Perera", "Pending"],
+      ["Purchase Order", "APR-2026-0409", "Medium", "PO-2026-0231 · 60× 16 Pro Max 256GB", "LKR 10,680,000", "Amila Wickramasinghe", "Colombo · Flagship", "27/07/2026 08:36", "John Perera", "Pending"],
+      ["Trade-in Override", "APR-2026-0408", "Medium", "iPhone 13 Pro · valuation +LKR 18,000", "LKR 118,000 offer", "Nadeesha Fernando", "Negombo · Beach Plaza", "26/07/2026 17:14", "Kasun Perera", "Pending"],
+      ["Stock Adjustment", "APR-2026-0407", "High", "Cycle count variance · 3 units short", "LKR 486,000 write-down", "Amila Wickramasinghe", "Colombo · Flagship", "26/07/2026 16:02", "John Perera", "Escalated"],
+      ["Repair Write-off", "APR-2026-0406", "Low", "RPR-2026-0402 · board unrepairable", "LKR 62,000", "Tharindu Bandara", "Kandy · Main Street", "26/07/2026 14:30", "Dilshan Silva", "Pending"],
+      ["Stock Transfer", "APR-2026-0405", "Low", "TRF-2026-0114 · 12 units to Kurunegala", "12 units", "Shehan Jayasinghe", "Colombo · Flagship", "26/07/2026 11:18", "Kasun Perera", "Approved"],
+      ["Return Approval", "APR-2026-0404", "Medium", "INV-2026-000118 · sealed, 6 days", "LKR 386,000 refund", "Nimali Perera", "Gampaha · Bauddhaloka", "25/07/2026 15:44", "Dilshan Silva", "Approved"],
+      ["Discount Approval", "APR-2026-0403", "Low", "4% off AirPods Pro bundle", "LKR 3,120 discount", "Tharindu Bandara", "Kandy · Main Street", "25/07/2026 12:05", "Dilshan Silva", "Rejected"],
+      ["Credit Sale", "APR-2026-0402", "Medium", "6-month plan · Sanduni Rajapaksa", "LKR 142,000", "Nimali Perera", "Colombo · Flagship", "24/07/2026 16:51", "Kasun Perera", "Approved"],
+      ["Purchase Order", "APR-2026-0401", "Low", "PO-2026-0226 · 120× MagSafe chargers", "LKR 1,140,000", "Amila Wickramasinghe", "Head office", "24/07/2026 09:33", "John Perera", "Rejected"]
+    ].map((a) => {
+      const [type, ref, priority, detail, value, requester, branch, created, assignee, base] = a;
+      return { type, ref, priority, detail, value, requester, branch, created, assignee, status: st.approvalActs[ref] || base };
+    });
+
+    const counts = { Pending: 0, Approved: 0, Rejected: 0, Escalated: 0 };
+    APPROVALS.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; });
+    const tab = st.approvalTab;
+    const shown = APPROVALS.filter((a) => a.status === tab);
+
+    const prioColor = { High: "var(--neg)", Medium: "var(--warn)", Low: "var(--muted-3)" };
+    const statusPill = (s) => {
+      const m = { Approved: ["var(--pos)", "rgba(16,185,129,.12)"], Rejected: ["var(--neg)", "rgba(239,68,68,.12)"], Escalated: ["var(--warn)", "rgba(245,158,11,.12)"], Pending: ["var(--muted)", "var(--line)"] }[s];
+      return { padding: "4px 10px", borderRadius: "999px", fontSize: "11px", fontWeight: 500, color: m[0], background: m[1], whiteSpace: "nowrap" };
+    };
+
+    // ---------- audit ----------
+    const AUDIT = [
+      ["27/07/2026", "11:48", "Kasun Perera", "Branch Manager", "Colombo · Flagship", "Approved discount request", "Approvals", "9% requested", "9% approved", "192.168.14.22", "MacBook Pro · Safari", "ok"],
+      ["27/07/2026", "11:42", "Sanduni Rajapaksa", "Sales Staff", "Colombo · Flagship", "Issued invoice INV-2026-000123", "Sales", "—", "LKR 486,000", "192.168.14.41", "iPad · iCrown POS", "ok"],
+      ["27/07/2026", "10:22", "Amila Wickramasinghe", "Repair Technician", "Colombo · Flagship", "Closed repair RPR-2026-0419", "Repairs", "In progress", "Ready for collection", "192.168.14.58", "iPhone 15 · iCrown app", "ok"],
+      ["27/07/2026", "09:15", "Nadeesha Fernando", "Storekeeper", "Negombo · Beach Plaza", "Received 24 units from PO-2026-0229", "Inventory", "196 units", "220 units", "10.14.6.31", "Windows 11 · Chrome", "ok"],
+      ["27/07/2026", "08:42", "Chamari Wijesinghe", "System Administrator", "Head office", "Edited role permissions", "Settings", "Accountant · export off", "Accountant · export on", "203.94.72.18", "MacBook Air · Chrome", "warn"],
+      ["27/07/2026", "08:07", "Unknown", "—", "—", "Failed login · 3rd attempt", "Security", "—", "Account locked 15 min", "45.121.88.204", "Unknown · Firefox", "fail"],
+      ["26/07/2026", "21:00", "System", "Automation", "All branches", "Generated daily Z-report", "Reports", "—", "LKR 512,400 gross", "127.0.0.1", "Server · cron", "ok"],
+      ["26/07/2026", "17:31", "Dilshan Silva", "Branch Manager", "Kandy · Main Street", "Approved trade-in TRD-2026-0088", "Trade-ins", "LKR 100,000", "LKR 118,000", "10.22.3.8", "MacBook Pro · Safari", "ok"],
+      ["26/07/2026", "16:02", "Amila Wickramasinghe", "Storekeeper", "Colombo · Flagship", "Raised stock adjustment", "Inventory", "489 units", "486 units", "192.168.14.58", "Zebra TC22 · scanner", "warn"],
+      ["26/07/2026", "14:30", "Tharindu Bandara", "Sales Staff", "Kandy · Main Street", "Requested repair write-off", "Repairs", "—", "LKR 62,000", "10.22.3.19", "iPad · iCrown POS", "ok"],
+      ["25/07/2026", "15:44", "Nimali Perera", "Customer Service", "Gampaha · Bauddhaloka", "Processed return RTN-2026-0061", "Returns", "Sold", "Refunded LKR 386,000", "10.33.9.14", "Windows 11 · Edge", "ok"],
+      ["25/07/2026", "13:20", "Shehan Jayasinghe", "Storekeeper", "Gampaha · Bauddhaloka", "Received transfer TRF-2026-0111", "Branches", "In transit", "Received · 5 units", "10.33.9.7", "Zebra TC22 · scanner", "ok"],
+      ["24/07/2026", "16:51", "Kasun Perera", "Branch Manager", "Colombo · Flagship", "Approved credit sale", "Credit Sales", "Pending", "Approved · LKR 142,000", "192.168.14.22", "MacBook Pro · Safari", "ok"],
+      ["24/07/2026", "09:33", "John Perera", "Owner", "Head office", "Rejected purchase order PO-2026-0401", "Suppliers", "Pending", "Rejected · budget", "203.94.72.4", "iPhone 16 Pro · iCrown app", "warn"]
+    ].map((r) => {
+      const [date, time, user, roleName, branch, action, module, oldValue, newValue, ip, device, kind] = r;
+      return { date, time, user, role: roleName, branch, action, module, oldValue, newValue, ip, device, kind };
+    });
+
+    const q = st.auditQuery.trim().toLowerCase();
+    const mf = st.auditFilter;
+    const auditShown = AUDIT.filter((r) => {
+      const okF = mf === "All modules" || (mf === "Security only" ? r.kind !== "ok" : r.module === mf);
+      if (!okF) return false;
+      if (!q) return true;
+      return [r.user, r.role, r.branch, r.action, r.module, r.oldValue, r.newValue, r.ip, r.device].join(" ").toLowerCase().indexOf(q) >= 0;
+    });
+
+    const pill = (active) => ({
+      height: "36px", padding: "0 14px", borderRadius: "10px", cursor: "pointer", whiteSpace: "nowrap",
+      font: "500 12.5px Inter, sans-serif",
+      border: active ? "1px solid #2563EB" : "1px solid var(--line-2)",
+      background: active ? "rgba(37,99,235,.16)" : "var(--surface)",
+      color: active ? "var(--text)" : "var(--muted)",
+      transition: "background .12s ease-out, color .12s ease-out"
+    });
+
+    return {
+      isRoles: p === "roles", isApprovals: p === "approvals", isAudit: p === "audit",
+      goAudit: () => this.setState({ page: "audit" }),
+
+      roleList: Object.keys(ROLE_DEFS).map((name) => {
+        const d = ROLE_DEFS[name], active = name === role;
+        const go = () => this.setState({ roleSel: name });
+        return {
+          name, people: d.people + (d.people === 1 ? " person" : " people"), pick: go, keyPick: key(go),
+          style: {
+            display: "flex", alignItems: "center", gap: "10px", padding: "9px 12px", borderRadius: "9px",
+            cursor: "pointer", marginBottom: "2px",
+            background: active ? "rgba(37,99,235,.16)" : "transparent",
+            transition: "background .12s ease-out"
+          },
+          dotStyle: {
+            width: "6px", height: "6px", borderRadius: "999px", flex: "none",
+            background: active ? "#3B82F6" : "var(--muted-3)", opacity: active ? 1 : .55,
+            boxShadow: active ? "0 0 0 3px rgba(59,130,246,.18)" : "none"
+          }
+        };
+      }),
+      selectedRole: role,
+      selectedRoleNote: def.note,
+      selectedRoleTag: def.tag,
+      selectedRoleTagStyle: tagStyle(def.tag),
+      selectedRoleGrants: grantCount,
+      selectedRoleCount: def.people,
+      selectedRoleScope: def.scope,
+      selectedRoleCeiling: def.ceiling,
+      selectedRoleEdited: def.edited,
+      permTypes: TYPES.map(([full, short]) => ({ full, short })),
+      matrixHeadStyle: {
+        display: "grid", gridTemplateColumns: matrixCols, alignItems: "center", gap: "8px",
+        padding: "10px 20px", background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)",
+        fontSize: "10.5px", fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "var(--muted-2)"
+      },
+      matrixRows: MODULES.map((m) => {
+        const lv = level(m), temps = tempFor(m);
+        return {
+          module: m,
+          rowStyle: { display: "grid", gridTemplateColumns: matrixCols, alignItems: "center", gap: "8px", padding: "9px 20px", borderBottom: "1px solid var(--surface-2)", transition: "background .12s ease-out" },
+          cells: TYPES.map(([full], i) => {
+            const k = overrideKey(m, i), ov = st.perms[k];
+            const on = ov === undefined ? i < lv : ov;
+            const temp = temps.indexOf(i) >= 0 && ov === undefined;
+            const toggle = () => this.setState((s2) => {
+              const next = Object.assign({}, s2.perms);
+              next[k] = !on;
+              return { perms: next };
+            });
+            return {
+              checked: on ? "true" : "false",
+              aria: full + " " + m + " for " + role,
+              mark: on ? "✓" : "",
+              toggle, keyToggle: key(toggle),
+              style: {
+                width: "20px", height: "20px", borderRadius: "6px", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "11px", fontWeight: 700, lineHeight: 1,
+                color: on ? "#fff" : "transparent",
+                background: temp ? "var(--warn)" : (on ? "#2563EB" : "transparent"),
+                border: on || temp ? "1px solid transparent" : "1px solid var(--line-2)",
+                transition: "background .12s ease-out, border-color .12s ease-out"
+              }
+            };
+          })
+        };
+      }),
+      branchAccess: BR.map((name, i) => {
+        const k = role + "|br|" + i, ov = st.branchAccess[k];
+        const on = ov === undefined ? brDefault(i) : ov;
+        const toggle = () => this.setState((s2) => {
+          const next = Object.assign({}, s2.branchAccess);
+          next[k] = !on;
+          return { branchAccess: next };
+        });
+        return {
+          name, note: brNote[i], on: on ? "true" : "false", aria: "Branch access " + name,
+          toggle, keyToggle: key(toggle),
+          switchStyle: { width: "36px", height: "20px", borderRadius: "999px", flex: "none", background: on ? "#2563EB" : "var(--line-2)", display: "flex", alignItems: "center", padding: "2px", boxSizing: "border-box", justifyContent: on ? "flex-end" : "flex-start", cursor: "pointer", transition: "background .14s ease-out" },
+          knobStyle: { width: "16px", height: "16px", borderRadius: "999px", background: "#fff", display: "block" }
+        };
+      }),
+      tempGrants: (TEMP[role] || []).length
+        ? (TEMP[role] || []).map(([m, i]) => ({
+            title: TYPES[i][0] + " · " + m,
+            expires: "expires 31/07/2026 18:00",
+            detail: "Granted by John Perera on 24/07/2026 09:12 for the July stock-take. Reverts automatically."
+          }))
+        : [{ title: "No temporary grants", expires: "—", detail: "This role currently runs on its permanent permission set only." }],
+      permHistory: [
+        ["Export enabled for Reports", "Chamari Wijesinghe · 27/07/2026 08:42 · 203.94.72.18", "var(--pos)"],
+        ["Approval ceiling raised to LKR 150,000", "John Perera · 21/07/2026 16:20 · 203.94.72.4", "var(--info)"],
+        ["Delete revoked on Inventory", "John Perera · 19/07/2026 11:05 · 203.94.72.4", "var(--neg)"],
+        ["Branch access added · Kurunegala", "Chamari Wijesinghe · 17/07/2026 14:48 · 203.94.72.18", "var(--pos)"],
+        ["Role created from Branch Manager template", "John Perera · 12/03/2026 09:10 · 203.94.72.4", "var(--muted-3)"]
+      ].map(([text, meta, color]) => ({ text, meta, dotStyle: { width: "7px", height: "7px", borderRadius: "999px", background: color, marginTop: "6px", flex: "none" } })),
+
+      approvalSubtitle: counts.Pending + " pending · " + counts.Escalated + " escalated · LKR 12,431,200 in flight",
+      approvalKpis: [
+        ["Pending", counts.Pending, "Oldest waiting 2 days", "var(--text)"],
+        ["Escalated to owner", counts.Escalated, "Above manager ceiling", "var(--warn)"],
+        ["Approved · July", counts.Approved + 38, "94% within 4 hours", "var(--pos)"],
+        ["Rejected · July", counts.Rejected + 5, "Mostly margin breaches", "var(--neg)"]
+      ].map(([label, value, note, color]) => ({ label, value, note, valueStyle: { fontFamily: "'JetBrains Mono', monospace", fontSize: "22px", marginTop: "8px", color } })),
+      approvalTabs: ["Pending", "Escalated", "Approved", "Rejected"].map((label) => ({
+        label: label + " · " + (counts[label] || 0),
+        pick: () => this.setState({ approvalTab: label }),
+        style: {
+          height: "32px", padding: "0 14px", borderRadius: "999px", cursor: "pointer", whiteSpace: "nowrap",
+          font: "500 12px Inter, sans-serif",
+          border: tab === label ? "1px solid #2563EB" : "1px solid var(--line-2)",
+          background: tab === label ? "rgba(37,99,235,.16)" : "var(--surface)",
+          color: tab === label ? "var(--text)" : "var(--muted)",
+          transition: "background .12s ease-out, color .12s ease-out"
+        }
+      })),
+      approvalRows: shown.map((a) => {
+        const set = (status) => () => this.setState((s2) => {
+          const next = Object.assign({}, s2.approvalActs);
+          next[a.ref] = status;
+          return { approvalActs: next };
+        });
+        return Object.assign({}, a, {
+          actionable: a.status === "Pending" || a.status === "Escalated",
+          resolved: a.status === "Approved" || a.status === "Rejected",
+          statusStyle: statusPill(a.status),
+          priorityStyle: { width: "7px", height: "7px", borderRadius: "999px", flex: "none", background: prioColor[a.priority] },
+          approve: set("Approved"), reject: set("Rejected"), view: () => this.setState({ page: "audit" })
+        });
+      }),
+      approvalEmptyStyle: shown.length ? { display: "none" } : { padding: "56px 20px", textAlign: "center" },
+
+      auditSubtitle: AUDIT.length + " entries · 01/07/2026 – 27/07/2026 · all branches",
+      auditQuery: st.auditQuery,
+      onAuditQuery: (e) => this.setState({ auditQuery: e.target.value }),
+      auditFilters: ["All modules", "Sales", "Inventory", "Repairs", "Security only"].map((label) => ({
+        label, pick: () => this.setState({ auditFilter: label }), style: pill(mf === label)
+      })),
+      auditRows: auditShown.map((r) => Object.assign({}, r, {
+        statusDot: { width: "7px", height: "7px", borderRadius: "999px", flex: "none", background: r.kind === "fail" ? "var(--neg)" : r.kind === "warn" ? "var(--warn)" : "var(--pos)" }
+      })),
+      auditEmptyStyle: auditShown.length ? { display: "none" } : { padding: "56px 20px", textAlign: "center" },
+      auditCountLabel: "Showing " + auditShown.length + " of " + AUDIT.length + " entries"
+    };
+  }
+
   renderVals() {
     const p = this.state.page;
     const crumb = CRUMB[p] || ["iCrown", "Screen"];
@@ -2307,7 +2852,7 @@ class Component extends DCLogic {
       barStyle: { display: "block", height: "100%", width: pct + "%", background: "linear-gradient(90deg,#2563EB,#3B82F6)", borderRadius: "999px" }
     }));
 
-    const invCols = "34px 1.45fr 1.5fr .7fr .8fr 1.15fr" + (this.flag("cost") ? " 1fr" : "") + (this.flag("price") ? " 1fr" : "") + " .95fr";
+    const invCols = "34px 132px minmax(0, 1.5fr) minmax(0, .7fr) minmax(0, .8fr) minmax(0, 1.15fr)" + (this.flag("cost") ? " minmax(0, 1fr)" : "") + (this.flag("price") ? " minmax(0, 1fr)" : "") + " minmax(0, .95fr)";
     const rowBase = {
       display: "grid",
       gridTemplateColumns: invCols,
@@ -2373,7 +2918,7 @@ class Component extends DCLogic {
       lineStyle: hasLine ? { flex: 1, width: "1px", background: "var(--line)" } : { display: "none" }
     }));
 
-    return Object.assign(this.shellVals(), {
+    return Object.assign(this.shellVals(), this.adminVals(p), {
       navGroups: this.navGroups(),
       crumbRoot: crumb[0],
       crumbLeaf: crumb[1],
@@ -2947,7 +3492,7 @@ class Component extends DCLogic {
         : (this.flag("price") ? "1,284 devices in stock · 486 at Colombo · Flagship" : "1,284 devices on hand · 486 at Colombo · Flagship"),
       invHeadStyle: {
         display: "grid",
-        gridTemplateColumns: "34px 1.45fr 1.5fr .7fr .8fr 1.15fr" + (this.flag("cost") ? " 1fr" : "") + (this.flag("price") ? " 1fr" : "") + " .95fr",
+        gridTemplateColumns: "34px 132px minmax(0, 1.5fr) minmax(0, .7fr) minmax(0, .8fr) minmax(0, 1.15fr)" + (this.flag("cost") ? " minmax(0, 1fr)" : "") + (this.flag("price") ? " minmax(0, 1fr)" : "") + " minmax(0, .95fr)",
         alignItems: "center", gap: "12px", padding: "10px 20px",
         background: "var(--surface-2)", borderBottom: "1px solid var(--line)",
         fontSize: "10.5px", fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "var(--muted-2)"
