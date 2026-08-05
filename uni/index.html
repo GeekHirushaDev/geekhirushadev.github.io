@@ -10,7 +10,10 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+  .leaflet-container { font-family: 'Inter', sans-serif; border-radius: 18px; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -52,7 +55,7 @@
         Now live at 4 universities
       </div>
       <h1 style="font-size:clamp(36px,5.2vw,58px); line-height:1.05; font-weight:800; letter-spacing:-0.03em; margin:0 0 20px;">Your campus<br/>delivery partner</h1>
-      <p style="font-size:18px; line-height:1.6; color:#475569; max-width:480px; margin:0 0 32px;">Meals, groceries, medicine, books, printing and parcels — delivered straight to your hostel, faculty or department. Built for Sri Lankan university life.</p>
+      <p style="font-size:18px; line-height:1.6; color:#475569; max-width:480px; margin:0 0 32px;">Meals, groceries, medicine, books, printing and parcels — batched together and delivered on scheduled runs to your hostel, faculty or department. Cheaper for you, greener for campus.</p>
       <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:8px; display:flex; gap:8px; flex-wrap:wrap; box-shadow:0 8px 30px rgba(15,23,42,0.06); max-width:520px;">
         <select value="{{ selectedUniversity }}" onChange="{{ onUniversityChange }}" style="border:none; background:#F8FAFC; border-radius:10px; padding:0 14px; font-weight:600; font-size:14px; color:#0F172A; flex:0 0 auto;">
           <option>Sabaragamuwa University</option>
@@ -401,6 +404,10 @@
             <input value="{{ building }}" onChange="{{ onBuildingChange }}" placeholder="e.g. Room 214" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:13px;"/>
           </div>
         </div>
+        <div style="margin-top:14px; background:#ECFDF5; border-radius:12px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="font-size:12.5px; color:#0F766E; font-weight:600;">Delivery zone: <b>{{ zoneName }}</b></div>
+          <div style="font-size:12.5px; color:#0F766E; font-weight:700;">{{ zoneFeeValue }}</div>
+        </div>
       </div>
 
       <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
@@ -412,13 +419,33 @@
         </div>
       </div>
 
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+        <div style="font-weight:700; font-size:14px; margin-bottom:4px;">Next dispatch</div>
+        <div style="color:#64748B; font-size:12.5px; margin-bottom:14px;">Orders are grouped into batches and dispatched together.</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1 1 130px; background:#F8FAFC; border-radius:12px; padding:12px 14px;">
+            <div style="color:#64748B; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">Batch closes in</div>
+            <div style="font-weight:800; font-size:17px;">{{ dispatchCountdown }}</div>
+          </div>
+          <div style="flex:1 1 130px; background:#F8FAFC; border-radius:12px; padding:12px 14px;">
+            <div style="color:#64748B; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">Expected delivery</div>
+            <div style="font-weight:800; font-size:17px;">{{ expectedWindow }}</div>
+          </div>
+        </div>
+      </div>
+
       <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:24px;">
-        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>Subtotal</span><span>Rs. {{ cartSubtotal }}</span></div>
-        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>Delivery fee</span><span>{{ deliveryFeeLabel }}</span></div>
+        <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Price breakdown</div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>Product price (original)</span><span>Rs. {{ cartSubtotal }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>{{ markupLabel }}</span><span>Rs. {{ markupAmount }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>{{ zoneFeeLabel }}</span><span>{{ zoneFeeValue }}</span></div>
+        <sc-if value="{{ hasExtraDistanceFee }}" hint-placeholder-val="{{false}}">
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:#B45309; margin-bottom:8px;"><span>Extra distance fee (shop outside your zone)</span><span>Rs. {{ extraDistanceFee }}</span></div>
+        </sc-if>
         <sc-if value="{{ couponApplied }}" hint-placeholder-val="{{false}}">
           <div style="display:flex; justify-content:space-between; font-size:13px; color:#0F766E; margin-bottom:8px;"><span>Discount</span><span>−Rs. {{ discount }}</span></div>
         </sc-if>
-        <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:800; margin-top:12px; padding-top:12px; border-top:1px solid #F1F5F9;"><span>Total</span><span>Rs. {{ cartTotal }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:800; margin-top:12px; padding-top:12px; border-top:1px solid #F1F5F9;"><span>Final total</span><span>Rs. {{ cartTotal }}</span></div>
       </div>
 
       <button onClick="{{ placeOrder }}" style="width:100%; background:#0F766E; border:none; color:#fff; font-weight:700; font-size:16px; padding:16px; border-radius:14px; cursor:pointer; box-shadow:0 8px 24px rgba(15,118,110,0.28);">Place order · Rs. {{ cartTotal }}</button>
@@ -438,13 +465,53 @@
 
   <sc-if value="{{isTracking}}" hint-placeholder-val="{{false}}">
   <div style="max-width:720px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 60px;">
-    <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.01em; margin:0 0 4px;">Order on the way</h1>
-    <div style="color:#64748B; font-size:13px; margin-bottom:20px;">Order #UD-8842 · Rs. {{ lastOrderTotal }}</div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px;">
+      <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.01em; margin:0;">{{ batchHeadline }}</h1>
+      <span style="background:#ECFDF5; color:#0F766E; font-weight:700; font-size:11.5px; padding:4px 10px; border-radius:8px; white-space:nowrap; flex-shrink:0;">Batch {{ batchId }}</span>
+    </div>
+    <div style="color:#64748B; font-size:13px; margin-bottom:20px;">Order #UD-8842 · Rs. {{ lastOrderTotal }} · {{ batchSizeLabel }}</div>
 
-    <div style="height:220px; border-radius:18px; background:repeating-linear-gradient(45deg,#ECFDF5,#ECFDF5 14px,#D1FAE5 14px,#D1FAE5 28px); position:relative; overflow:hidden; margin-bottom:20px; border:1px solid #E2E8F0;">
-      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:13px; color:#0F766E; font-weight:600;">live map view</div>
-      <div style="position:absolute; width:14px; height:14px; border-radius:50%; background:#0F766E; left:{{ riderMapLeft }}%; top:52%; box-shadow:0 0 0 6px rgba(15,118,110,0.2); animation:pulseDot 1.4s infinite;"></div>
-      <div style="position:absolute; width:12px; height:12px; border-radius:50%; background:#F59E0B; right:16%; top:38%; box-shadow:0 0 0 5px rgba(245,158,11,0.2);"></div>
+    <div ref="{{ mapRef }}" style="height:240px; border-radius:18px; border:1px solid #E2E8F0; overflow:hidden; margin-bottom:16px; background:#ECFDF5;"></div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px;">
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px;">
+        <div style="color:#64748B; font-size:11.5px; font-weight:600; margin-bottom:4px;">Deliveries before yours</div>
+        <div style="font-weight:800; font-size:20px;">{{ deliveriesBefore }}</div>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px;">
+        <div style="color:#64748B; font-size:11.5px; font-weight:600; margin-bottom:4px;">Estimated arrival</div>
+        <div style="font-weight:800; font-size:20px;">{{ etaMinutes }} min</div>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px;">
+        <div style="color:#64748B; font-size:11.5px; font-weight:600; margin-bottom:4px;">Your delivery code</div>
+        <div style="font-weight:800; font-size:20px; letter-spacing:0.08em; color:#0F766E;">{{ deliveryOtp }}</div>
+      </div>
+    </div>
+
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+      <div style="font-weight:800; font-size:14px; margin-bottom:14px;">Rider progress through the batch</div>
+      <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+        <div style="flex:1 1 160px; background:#F8FAFC; border-radius:12px; padding:12px 14px;">
+          <div style="color:#64748B; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">Current stop</div>
+          <div style="font-weight:700; font-size:13.5px;">{{ currentStopName }}</div>
+        </div>
+        <div style="flex:1 1 160px; background:#F8FAFC; border-radius:12px; padding:12px 14px;">
+          <div style="color:#64748B; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">Next stop</div>
+          <div style="font-weight:700; font-size:13.5px;">{{ nextStopName }}</div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <sc-for list="{{ batchStops }}" as="stop" hint-placeholder-count="6">
+          <div style="display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:10px; background:{{ stop.rowBg }};">
+            <div style="width:22px; height:22px; border-radius:50%; background:{{ stop.dotBg }}; color:{{ stop.dotColor }}; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">{{ stop.marker }}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-weight:700; font-size:13px; color:{{ stop.textColor }};">{{ stop.name }}</div>
+              <div style="color:#94A3B8; font-size:11.5px;">{{ stop.detail }}</div>
+            </div>
+            <div style="font-size:11.5px; font-weight:700; color:{{ stop.statusColor }}; flex-shrink:0;">{{ stop.status }}</div>
+          </div>
+        </sc-for>
+      </div>
     </div>
 
     <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
@@ -458,13 +525,9 @@
       </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
-      <div><div style="color:#64748B; font-size:12px; margin-bottom:2px;">Estimated arrival</div><div style="font-weight:800; font-size:22px;">{{ etaMinutes }} min</div></div>
-      <div style="background:#ECFDF5; color:#0F766E; font-weight:800; font-size:20px; letter-spacing:0.1em; padding:10px 16px; border-radius:10px;">{{ deliveryOtp }}</div>
-    </div>
-
     <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px; margin-bottom:20px;">
-      <sc-for list="{{ trackingSteps }}" as="step" hint-placeholder-count="5">
+      <div style="font-weight:800; font-size:14px; margin-bottom:16px;">Batch timeline</div>
+      <sc-for list="{{ trackingSteps }}" as="step" hint-placeholder-count="6">
         <div style="display:flex; gap:14px; align-items:flex-start;">
           <div style="display:flex; flex-direction:column; align-items:center;">
             <div style="width:22px; height:22px; border-radius:50%; background:{{ step.dotBg }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">{{ step.check }}</div>
@@ -479,7 +542,7 @@
     </div>
 
     <sc-if value="{{ !isDelivered }}" hint-placeholder-val="{{true}}">
-      <button onClick="{{ advanceTracking }}" style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Simulate next update (demo)</button>
+      <button onClick="{{ advanceTracking }}" style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Advance batch (demo)</button>
     </sc-if>
     <sc-if value="{{ isDelivered }}" hint-placeholder-val="{{false}}">
       <button onClick="{{ goHome }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Back to home</button>
@@ -542,7 +605,7 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;showCampusAlert&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;deliveryFeeWaived&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;defaultPaymentMethod&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;card&quot;, &quot;options&quot;: [&quot;card&quot;, &quot;cash&quot;, &quot;wallet&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;showCampusAlert&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;deliveryFeeWaived&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Pricing&quot;}, &quot;markupMode&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;percentage&quot;, &quot;options&quot;: [&quot;percentage&quot;, &quot;fixed&quot;, &quot;catalog&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Pricing&quot;}, &quot;defaultPaymentMethod&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;card&quot;, &quot;options&quot;: [&quot;card&quot;, &quot;cash&quot;, &quot;wallet&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
 const CATS = [
   { key: 'food', label: 'Food', emoji: 'F', bg: '#FEF3C7', fg: '#B45309' },
   { key: 'groceries', label: 'Groceries', emoji: 'G', bg: '#D1FAE5', fg: '#0F766E' },
@@ -624,11 +687,41 @@ const RECENT_ORDERS = [
 const FAQS = [
   { q: 'Which universities are supported?', a: 'UNI Delivery currently operates at Rajarata, Ruhuna, Sabaragamuwa and Uva Wellassa universities, with more campuses being added every semester.' },
   { q: "How do I verify I'm a student?", a: 'Upload a photo of your student ID during sign up — verification usually takes under an hour.' },
+  { q: 'How does batch delivery work?', a: 'Instead of one rider per order, we group nearby campus orders into a batch. At each dispatch window a rider collects from every shop in the batch, then follows an optimised route — so you always see exactly how many deliveries are ahead of yours.' },
   { q: 'Can I pay with cash?', a: 'Yes — pay by cash, card, or your UNI Wallet balance at checkout.' },
   { q: 'Where can my order be delivered?', a: 'Straight to your hostel room, faculty building, or department office — just pick it at checkout.' }
 ];
 
-const TRACK_LABELS = ['Order placed', 'Preparing your order', 'Picked up by rider', 'On the way', 'Delivered'];
+const BATCH_STAGES = [
+  { label: 'In queue', detail: 'Waiting for the next dispatch window' },
+  { label: 'Batch created', detail: 'Grouped with 5 other campus orders' },
+  { label: 'Rider assigned', detail: 'Kasun Perera picked up this batch' },
+  { label: 'Collecting items', detail: 'Rider is collecting from 3 shops' },
+  { label: 'Delivering batch', detail: 'Following the optimised route' },
+  { label: 'Delivered', detail: 'Handed over with your delivery code' }
+];
+
+const ZONES = {
+  'Kudaligama Hostel': { name: 'Zone A — Inner campus', fee: 80 },
+  'Wewalwatta Hostel': { name: 'Zone A — Inner campus', fee: 80 },
+  'Uva Hostel Block A': { name: 'Zone B — Outer campus', fee: 120 },
+  'Uva Hostel Block B': { name: 'Zone B — Outer campus', fee: 120 },
+  'Off-campus – Belihuloya Town': { name: 'Zone C — Belihuloya town', fee: 200 }
+};
+
+const BATCH_STOPS = [
+  { name: 'Kudaligama Hostel — Room 108', detail: 'Tharindu J. · 1 bag' },
+  { name: 'Faculty of Applied Sciences — ICT Dept', detail: 'Ishara P. · 2 bags' },
+  { name: 'Kudaligama Hostel — Room 214', detail: 'Your order · 1 bag', isYou: true },
+  { name: 'Wewalwatta Hostel — Room 32', detail: 'Sanduni W. · 1 bag' },
+  { name: 'Faculty of Management Studies', detail: 'Kavindu R. · 1 bag' },
+  { name: 'Uva Hostel Block A — Room 7', detail: 'Amaya S. · 2 bags' }
+];
+
+const ROUTE_COORDS = [
+  [6.7148, 80.7742], [6.7135, 80.7761], [6.7121, 80.7775],
+  [6.7130, 80.7793], [6.7112, 80.7806], [6.7098, 80.7788]
+];
 
 class Component extends DCLogic {
   state = {
@@ -647,18 +740,59 @@ class Component extends DCLogic {
     department: '',
     building: '',
     payment: null,
-    trackingStep: 1,
+    batchStage: 1,
+    stopIndex: 0,
     lastOrderTotal: 0,
     campusAlertDismissed: false
   };
+
+  mapRef = React.createRef();
 
   componentDidMount() {
     this._onResize = () => this.setState({ isMobile: window.innerWidth < 860 });
     this._onResize();
     window.addEventListener('resize', this._onResize);
     this.setState({ payment: this.props.defaultPaymentMethod || 'card' });
+    this.syncMap();
   }
-  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+  componentDidUpdate() { this.syncMap(); }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    if (this._map) { this._map.remove(); this._map = null; }
+  }
+
+  syncMap() {
+    const el = this.mapRef.current;
+    if (this.state.view !== 'tracking') {
+      if (this._map) { this._map.remove(); this._map = null; }
+      return;
+    }
+    if (!el) return;
+    if (!window.L) { setTimeout(() => this.syncMap(), 200); return; }
+    const L = window.L;
+    if (!this._map) {
+      this._map = L.map(el, { zoomControl: false, attributionControl: false, dragging: true, scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this._map);
+      this._map.fitBounds(ROUTE_COORDS, { padding: [30, 30] });
+      this._layer = L.layerGroup().addTo(this._map);
+    }
+    const idx = Math.min(this.state.stopIndex, ROUTE_COORDS.length - 1);
+    this._layer.clearLayers();
+    L.polyline(ROUTE_COORDS, { color: '#0F766E', weight: 4, opacity: 0.85 }).addTo(this._layer);
+    ROUTE_COORDS.forEach((c, i) => {
+      const you = BATCH_STOPS[i] && BATCH_STOPS[i].isYou;
+      const done = i < idx;
+      L.circleMarker(c, {
+        radius: you ? 9 : 6,
+        color: '#fff', weight: 2,
+        fillColor: you ? '#F59E0B' : done ? '#94A3B8' : '#10B981',
+        fillOpacity: 1
+      }).addTo(this._layer).bindTooltip(you ? 'Your stop' : 'Stop ' + (i + 1), { direction: 'top' });
+    });
+    L.circleMarker(ROUTE_COORDS[idx], { radius: 13, color: '#0F766E', weight: 3, fillColor: '#0F766E', fillOpacity: 0.25 })
+      .addTo(this._layer).bindTooltip('Rider — Kasun P.', { direction: 'top', permanent: true, className: 'rider-tip' });
+    setTimeout(() => { if (this._map) this._map.invalidateSize(); }, 60);
+  }
 
   setView = (view, restId) => {
     window.scrollTo(0, 0);
@@ -723,9 +857,19 @@ class Component extends DCLogic {
       dec: () => this.changeQty(c.itemId, -1)
     }));
 
-    const deliveryFee = this.props.deliveryFeeWaived ? 0 : 150;
+    const zone = ZONES[s.hostel] || ZONES['Kudaligama Hostel'];
+    const zoneFee = this.props.deliveryFeeWaived ? 0 : zone.fee;
+    const markupMode = this.props.markupMode || 'percentage';
+    const fixedMarkup = 25 * cartCount;
+    const pctMarkup = Math.round(cartSubtotal * 0.06);
+    const markupAmount = markupMode === 'fixed' ? fixedMarkup : markupMode === 'catalog' ? 0 : pctMarkup;
+    const markupLabel = markupMode === 'fixed' ? 'Product markup (Rs. 25 / item)'
+      : markupMode === 'catalog' ? 'Product markup (custom catalog price)'
+      : 'Product markup (6%)';
+    const hasExtraDistanceFee = zone.name.indexOf('Zone A') === -1;
+    const extraDistanceFee = hasExtraDistanceFee ? 60 : 0;
     const discount = s.couponApplied ? Math.round(cartSubtotal * 0.1) : 0;
-    const cartTotal = Math.max(cartSubtotal + deliveryFee - discount, 0);
+    const cartTotal = Math.max(cartSubtotal + markupAmount + zoneFee + extraDistanceFee - discount, 0);
 
     const categories = CATS.map(c => ({ ...c, onClick: () => this.setView('home') }));
     const restaurants = RESTAURANTS.map(r => ({ ...r, onClick: () => this.setView('restaurant', r.id) }));
@@ -742,21 +886,40 @@ class Component extends DCLogic {
       return { ...pm, borderColor: active ? '#0F766E' : '#E2E8F0', bg: active ? '#ECFDF5' : '#fff', color: active ? '#0F766E' : '#0F172A', onClick: () => this.setState({ payment: pm.key }) };
     });
 
-    const trackingStep = s.trackingStep;
-    const trackingSteps = TRACK_LABELS.map((label, i) => {
-      const done = i < trackingStep;
-      const current = i === trackingStep;
+    const stage = s.batchStage;
+    const trackingSteps = BATCH_STAGES.map((st, i) => {
+      const done = i < stage;
+      const current = i === stage;
       return {
-        label,
-        time: done ? 'Completed' : current ? 'In progress' : 'Pending',
+        label: st.label,
+        time: done ? 'Completed' : current ? st.detail : 'Pending',
         dotBg: done || current ? '#0F766E' : '#CBD5E1',
         check: done ? '✓' : '',
         textColor: done || current ? '#0F172A' : '#94A3B8',
-        lineBg: i < trackingStep ? '#0F766E' : '#E2E8F0',
-        lineDisplay: i === TRACK_LABELS.length - 1 ? 'none' : 'block'
+        lineBg: i < stage ? '#0F766E' : '#E2E8F0',
+        lineDisplay: i === BATCH_STAGES.length - 1 ? 'none' : 'block'
       };
     });
-    const isDelivered = trackingStep >= TRACK_LABELS.length - 1;
+    const isDelivered = stage >= BATCH_STAGES.length - 1;
+    const yourStopIdx = BATCH_STOPS.findIndex(b => b.isYou);
+    const delivering = stage >= 4;
+    const activeStop = delivering ? Math.min(s.stopIndex, BATCH_STOPS.length - 1) : -1;
+    const deliveriesBefore = isDelivered ? 0 : Math.max(yourStopIdx - Math.max(activeStop, 0), 0);
+    const batchStops = BATCH_STOPS.map((b, i) => {
+      const done = isDelivered ? true : delivering && i < activeStop;
+      const current = delivering && i === activeStop && !isDelivered;
+      return {
+        name: b.name,
+        detail: b.detail,
+        marker: done ? '✓' : String(i + 1),
+        dotBg: current ? '#0F766E' : done ? '#ECFDF5' : '#F1F5F9',
+        dotColor: current ? '#fff' : done ? '#0F766E' : '#94A3B8',
+        rowBg: b.isYou ? '#FFFBEB' : current ? '#F8FAFC' : 'transparent',
+        textColor: done && !b.isYou ? '#94A3B8' : '#0F172A',
+        status: done ? 'Delivered' : current ? 'Current stop' : b.isYou ? 'Your stop' : 'Queued',
+        statusColor: done ? '#94A3B8' : current ? '#0F766E' : b.isYou ? '#B45309' : '#CBD5E1'
+      };
+    });
 
     return {
       isLanding, isHome, isRestaurant, isCart, isTracking, isProfile,
@@ -792,7 +955,13 @@ class Component extends DCLogic {
       applyCoupon: () => this.setState({ couponApplied: true }),
       couponApplied: s.couponApplied,
       discount,
-      deliveryFeeLabel: deliveryFee === 0 ? 'Free' : 'Rs. ' + deliveryFee,
+      markupLabel, markupAmount,
+      zoneName: zone.name,
+      zoneFeeLabel: 'Delivery zone fee (' + zone.name.split(' — ')[0] + ')',
+      zoneFeeValue: zoneFee === 0 ? 'Free' : 'Rs. ' + zoneFee,
+      hasExtraDistanceFee, extraDistanceFee,
+      dispatchCountdown: '12 min',
+      expectedWindow: '4:30 – 5:00 PM',
       notes: s.notes, onNotesChange: e => this.setState({ notes: e.target.value }),
       hostel: s.hostel, onHostelChange: e => this.setState({ hostel: e.target.value }), hostels: HOSTELS,
       faculty: s.faculty, onFacultyChange: e => this.setState({ faculty: e.target.value }), faculties: FACULTIES,
@@ -801,15 +970,25 @@ class Component extends DCLogic {
       paymentMethods,
       placeOrder: () => {
         if (cartTotal <= 0) return;
-        this.setState({ view: 'tracking', trackingStep: 0, lastOrderTotal: cartTotal, cart: [], couponApplied: false, couponCode: '' });
+        this.setState({ view: 'tracking', batchStage: 0, stopIndex: 0, lastOrderTotal: cartTotal, cart: [], couponApplied: false, couponCode: '' });
         window.scrollTo(0, 0);
       },
       lastOrderTotal: s.lastOrderTotal,
-      riderMapLeft: 20 + trackingStep * 15,
-      etaMinutes: Math.max(15 - trackingStep * 3, 2),
+      mapRef: this.mapRef,
+      batchId: 'B-2041',
+      batchHeadline: isDelivered ? 'Batch delivered' : delivering ? 'Your batch is out for delivery' : stage >= 3 ? 'Rider is collecting items' : stage >= 1 ? 'Your order is in a batch' : 'Your order is in the queue',
+      batchSizeLabel: BATCH_STOPS.length + ' deliveries in this batch',
+      deliveriesBefore,
+      currentStopName: isDelivered ? 'Batch complete' : delivering ? BATCH_STOPS[activeStop].name : 'Collecting from shops',
+      nextStopName: isDelivered ? '—' : delivering ? (BATCH_STOPS[activeStop + 1] ? BATCH_STOPS[activeStop + 1].name : 'Final stop') : BATCH_STOPS[0].name,
+      etaMinutes: isDelivered ? 0 : delivering ? 4 + deliveriesBefore * 6 : 18 + deliveriesBefore * 6,
       deliveryOtp: '4821',
-      trackingSteps, isDelivered,
-      advanceTracking: () => this.setState(st => ({ trackingStep: Math.min(st.trackingStep + 1, TRACK_LABELS.length - 1) }))
+      trackingSteps, isDelivered, batchStops,
+      advanceTracking: () => this.setState(st => {
+        if (st.batchStage < 4) return { batchStage: st.batchStage + 1 };
+        if (st.stopIndex < yourStopIdx) return { stopIndex: st.stopIndex + 1 };
+        return { batchStage: BATCH_STAGES.length - 1 };
+      })
     };
   }
 }

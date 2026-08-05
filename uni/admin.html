@@ -10,7 +10,10 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+  .leaflet-container { font-family: 'Inter', sans-serif; cursor: crosshair; }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Inter', -apple-system, sans-serif; background: #F8FAFC; }
   input, select, button { font-family: 'Inter', sans-serif; }
@@ -256,6 +259,154 @@
     </div>
     </sc-if>
 
+    <sc-if value="{{ isZones }}" hint-placeholder-val="{{false}}">
+    <div style="display:grid; grid-template-columns:minmax(0,1.6fr) minmax(300px,1fr); gap:16px; align-items:start;">
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div style="font-weight:800; font-size:15px;">Zone map — Sabaragamuwa University</div>
+            <div style="color:#64748B; font-size:12.5px;">Click the map to place polygon points, then save.</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onClick="{{ toggleDraw }}" style="background:{{ drawBtnBg }}; border:none; color:#fff; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:9px; cursor:pointer; white-space:nowrap;">{{ drawLabel }}</button>
+            <sc-if value="{{ canSaveZone }}" hint-placeholder-val="{{false}}">
+              <button onClick="{{ saveZone }}" style="background:#10B981; border:none; color:#fff; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:9px; cursor:pointer; white-space:nowrap;">Save polygon ({{ draftCount }})</button>
+            </sc-if>
+            <sc-if value="{{ drawing }}" hint-placeholder-val="{{false}}">
+              <button onClick="{{ clearDraft }}" style="background:#F1F5F9; border:none; color:#334155; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:9px; cursor:pointer;">Cancel</button>
+            </sc-if>
+          </div>
+        </div>
+        <div ref="{{ mapRef }}" style="height:430px; border-radius:14px; overflow:hidden; border:1px solid #E2E8F0; background:#ECFDF5;"></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Zones &amp; fees</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ zones }}" as="z" hint-placeholder-count="3">
+              <div onClick="{{ z.onSelect }}" style="border:1.5px solid {{ z.rowBorder }}; background:{{ z.rowBg }}; border-radius:13px; padding:13px; cursor:pointer;">
+                <div style="display:flex; align-items:center; gap:9px; margin-bottom:11px;">
+                  <span style="width:11px; height:11px; border-radius:3px; background:{{ z.color }}; flex-shrink:0;"></span>
+                  <span style="font-weight:700; font-size:13.5px;">{{ z.name }}</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <div>
+                    <label style="font-size:10.5px; color:#64748B; font-weight:700; display:block; margin-bottom:4px;">Zone fee (Rs.)</label>
+                    <input value="{{ z.fee }}" onChange="{{ z.onFee }}" style="width:100%; border:1px solid #E2E8F0; background:#fff; border-radius:9px; padding:8px 10px; font-size:13px; font-weight:600;"/>
+                  </div>
+                  <div>
+                    <label style="font-size:10.5px; color:#64748B; font-weight:700; display:block; margin-bottom:4px;">Outside-zone fee</label>
+                    <input value="{{ z.outsideFee }}" onChange="{{ z.onOutsideFee }}" style="width:100%; border:1px solid #E2E8F0; background:#fff; border-radius:9px; padding:8px 10px; font-size:13px; font-weight:600;"/>
+                  </div>
+                  <div style="grid-column:span 2;">
+                    <label style="font-size:10.5px; color:#64748B; font-weight:700; display:block; margin-bottom:4px;">Max delivery radius (km)</label>
+                    <input value="{{ z.radius }}" onChange="{{ z.onRadius }}" style="width:100%; border:1px solid #E2E8F0; background:#fff; border-radius:9px; padding:8px 10px; font-size:13px; font-weight:600;"/>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Dispatch &amp; batching</div>
+          <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Dispatch interval — every {{ dispatchInterval }} min</label>
+          <input type="range" min="15" max="120" step="15" value="{{ dispatchInterval }}" onChange="{{ onDispatchInterval }}" style="width:100%; accent-color:#0F766E; margin-bottom:14px;"/>
+          <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Max orders per batch — {{ maxOrders }}</label>
+          <input type="range" min="3" max="15" step="1" value="{{ maxOrders }}" onChange="{{ onMaxOrders }}" style="width:100%; accent-color:#0F766E; margin-bottom:14px;"/>
+          <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Platform max delivery radius — {{ maxRadius }} km</label>
+          <input type="range" min="2" max="15" step="1" value="{{ maxRadius }}" onChange="{{ onMaxRadius }}" style="width:100%; accent-color:#0F766E; margin-bottom:16px;"/>
+          <div style="background:#F8FAFC; border-radius:12px; padding:13px;">
+            <div style="font-size:11px; color:#64748B; font-weight:700; margin-bottom:8px;">Today's dispatch windows · ~{{ batchesPerDay }} runs/day</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <sc-for list="{{ dispatchWindows }}" as="w" hint-placeholder-count="7">
+                <span style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:5px 9px; font-size:11.5px; font-weight:700; color:#334155;">{{ w }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isPricing }}" hint-placeholder-val="{{false}}">
+    <div style="display:grid; grid-template-columns:minmax(0,1fr) minmax(300px,1fr); gap:16px; align-items:start;">
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">Pricing rule</div>
+        <div style="color:#64748B; font-size:12.5px; margin-bottom:16px;">Choose how vendor prices are transformed into student-facing prices.</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;">
+          <sc-for list="{{ priceModes }}" as="m" hint-placeholder-count="4">
+            <div onClick="{{ m.onClick }}" style="padding:9px 15px; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; background:{{ m.bg }}; color:{{ m.color }};">{{ m.label }}</div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px;">
+          <div>
+            <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Vendor price (Rs.)</label>
+            <input value="{{ basePrice }}" onChange="{{ onBasePrice }}" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:11px 13px; font-size:14px; font-weight:600;"/>
+          </div>
+          <div>
+            <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Markup value — {{ markupUnitLabel }}</label>
+            <input value="{{ markupValue }}" onChange="{{ onMarkupValue }}" disabled="{{ markupDisabled }}" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:11px 13px; font-size:14px; font-weight:600;"/>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:end;">
+          <div>
+            <label style="font-size:11px; color:#64748B; font-weight:700; display:block; margin-bottom:6px;">Customer delivery zone</label>
+            <select value="{{ priceZoneId }}" onChange="{{ onPriceZone }}" style="width:100%; border:1px solid #E2E8F0; background:#fff; border-radius:10px; padding:11px 13px; font-size:13.5px; font-weight:600;">
+              <sc-for list="{{ zones }}" as="z" hint-placeholder-count="3"><option value="{{ z.id }}">{{ z.name }}</option></sc-for>
+            </select>
+          </div>
+          <div onClick="{{ toggleShopOutside }}" style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#F8FAFC; border-radius:10px; padding:12px 14px; cursor:pointer;">
+            <span style="font-size:12.5px; font-weight:600; color:#334155;">Shop outside customer zone</span>
+            <div style="width:40px; height:22px; border-radius:11px; background:{{ outsideToggleBg }}; position:relative; flex-shrink:0;"><div style="width:18px; height:18px; border-radius:50%; background:#fff; position:absolute; top:2px; right:{{ outsideKnobRight }};"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+        <div style="font-weight:800; font-size:15px; margin-bottom:16px;">Pricing engine preview</div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:10px; gap:12px;"><span>{{ productPriceLabel }}</span><span style="font-weight:700; color:#0F172A; white-space:nowrap;">Rs. {{ productPriceOut }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:10px; gap:12px;"><span>+ {{ markupOutLabel }}</span><span style="font-weight:700; color:#0F172A; white-space:nowrap;">Rs. {{ markupOut }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:10px; gap:12px;"><span>+ Delivery zone fee — {{ priceZoneName }}</span><span style="font-weight:700; color:#0F172A; white-space:nowrap;">Rs. {{ priceZoneFee }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; gap:12px;"><span>+ Extra distance fee</span><span style="font-weight:700; color:#0F172A; white-space:nowrap;">Rs. {{ extraFeeOut }}</span></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:16px; border-top:1px solid #F1F5F9; gap:12px;">
+          <span style="font-weight:800; font-size:15px;">Final total</span>
+          <span style="font-weight:800; font-size:24px; color:#0F766E; white-space:nowrap;">Rs. {{ finalTotal }}</span>
+        </div>
+        <div style="background:#F8FAFC; border-radius:12px; padding:13px; margin-top:16px; color:#64748B; font-size:12px; line-height:1.6;">Students see the final total only. Vendor payout stays at the vendor price; markup and fees settle to the platform.</div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isBatches }}" hint-placeholder-val="{{false}}">
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #F1F5F9; gap:12px; flex-wrap:wrap;">
+        <div style="font-weight:800; font-size:15px;">Dispatch queue</div>
+        <div style="color:#64748B; font-size:12.5px;">Every {{ dispatchInterval }} min · max {{ maxOrders }} orders per batch</div>
+      </div>
+      <div style="display:grid; grid-template-columns:90px 90px 1.2fr 1fr 80px 130px 110px; gap:10px; padding:12px 20px; font-size:11.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.03em; border-bottom:1px solid #F1F5F9;">
+        <span>Batch</span><span>Window</span><span>Rider</span><span>Zone</span><span>Shops</span><span>Batch fill</span><span>Status</span>
+      </div>
+      <sc-for list="{{ batches }}" as="b" hint-placeholder-count="6">
+        <div style="display:grid; grid-template-columns:90px 90px 1.2fr 1fr 80px 130px 110px; gap:10px; padding:14px 20px; border-bottom:1px solid #F1F5F9; align-items:center; font-size:13px;">
+          <span style="font-weight:700;">{{ b.id }}</span>
+          <span style="color:#64748B;">{{ b.window }}</span>
+          <span>{{ b.rider }}</span>
+          <span style="color:#64748B;">{{ b.zone }}</span>
+          <span style="color:#64748B;">{{ b.shops }}</span>
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748B; font-weight:700; margin-bottom:4px;"><span>{{ b.stops }}/{{ maxOrders }}</span></div>
+            <div style="height:6px; border-radius:3px; background:#F1F5F9; overflow:hidden;"><div style="height:100%; width:{{ b.fill }}%; background:#0F766E; border-radius:3px;"></div></div>
+          </div>
+          <span style="background:{{ b.statusBg }}; color:{{ b.statusColor }}; font-weight:700; font-size:11.5px; padding:4px 9px; border-radius:7px; display:inline-block; text-align:center;">{{ b.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
     <sc-if value="{{ isComingSoon }}" hint-placeholder-val="{{false}}">
     <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:80px 20px; text-align:center;">
       <div style="width:52px; height:52px; border-radius:14px; background:#F1F5F9; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#94A3B8; font-size:18px;">···</div>
@@ -271,7 +422,7 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;chartDensity&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;standard&quot;, &quot;options&quot;: [&quot;standard&quot;, &quot;compact&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
 const NAV_STRUCTURE = [
   { label: 'Overview', items: [{ key: 'dashboard', label: 'Dashboard' }, { key: 'analytics', label: 'Analytics' }] },
-  { label: 'Operations', items: [{ key: 'orders', label: 'Orders' }, { key: 'universities', label: 'Universities' }, { key: 'branches', label: 'Branches' }] },
+  { label: 'Operations', items: [{ key: 'orders', label: 'Orders' }, { key: 'batches', label: 'Batches' }, { key: 'zones', label: 'Delivery zones' }, { key: 'pricing', label: 'Pricing rules' }, { key: 'universities', label: 'Universities' }, { key: 'branches', label: 'Branches' }] },
   { label: 'People', items: [{ key: 'students', label: 'Students' }, { key: 'lecturers', label: 'Lecturers' }, { key: 'riders', label: 'Riders' }, { key: 'vendors', label: 'Vendors' }] },
   { label: 'Business', items: [{ key: 'products', label: 'Products' }, { key: 'payments', label: 'Payments' }, { key: 'promotions', label: 'Promotions' }, { key: 'reports', label: 'Reports' }] },
   { label: 'System', items: [{ key: 'support', label: 'Support' }, { key: 'settings', label: 'Settings' }, { key: 'audit', label: 'Audit logs' }] }
@@ -281,6 +432,9 @@ const PAGE_META = {
   dashboard: ['Dashboard', 'Real-time overview across all campuses'],
   analytics: ['Analytics', 'Revenue, growth and performance trends'],
   orders: ['Orders', 'Live and historical order activity'],
+  batches: ['Batches', 'Dispatch windows, batch composition and riders'],
+  zones: ['Delivery zones', 'Draw polygon zones, set fees and dispatch rules'],
+  pricing: ['Pricing rules', 'Product markup, zone fees and the pricing engine'],
   universities: ['Universities', 'Manage campuses on the platform'],
   branches: ['Branches', 'Hostel, faculty and department zones'],
   students: ['Students', 'Verified student accounts'],
@@ -299,8 +453,8 @@ const PAGE_META = {
 const KPIS = [
   { label: 'Revenue (30d)', value: 'Rs. 4.82M', trend: '+18.2% vs last month' },
   { label: 'Total orders', value: '12,480', trend: '+9.4% vs last month' },
-  { label: 'Active riders', value: '312', trend: '+14 this week' },
-  { label: 'Avg. delivery time', value: '19.4 min', trend: '−1.8 min improved' }
+  { label: 'Batches dispatched', value: '2,140', trend: '5.8 orders per batch avg.' },
+  { label: 'Cost per delivery', value: 'Rs. 94', trend: '−38% vs single-order runs' }
 ];
 
 const REVENUE_SERIES = [2.1, 2.6, 2.9, 3.4, 3.1, 4.0, 4.82];
@@ -384,8 +538,81 @@ const RIDERS_LIST = [
   { name: 'Chathura Wijesinghe', uni: 'Ruhuna', vehicle: 'Scooter', rating: 4.6, trips: 264, status: 'Online' }
 ].map(r => { const st = r.status === 'Online' ? ['#ECFDF5', '#0F766E'] : ['#F1F5F9', '#64748B']; return { ...r, statusBg: st[0], statusColor: st[1] }; });
 
+const ZONE_SEED = [
+  { id: 'z1', name: 'Zone A — Inner campus', color: '#0F766E', fee: 80, outsideFee: 0, radius: 2,
+    coords: [[6.7160, 80.7725], [6.7158, 80.7772], [6.7118, 80.7778], [6.7115, 80.7728]] },
+  { id: 'z2', name: 'Zone B — Outer campus', color: '#10B981', fee: 120, outsideFee: 60, radius: 4,
+    coords: [[6.7116, 80.7780], [6.7112, 80.7828], [6.7072, 80.7822], [6.7076, 80.7776]] },
+  { id: 'z3', name: 'Zone C — Belihuloya town', color: '#F59E0B', fee: 200, outsideFee: 90, radius: 7,
+    coords: [[6.7178, 80.7788], [6.7172, 80.7846], [6.7126, 80.7840], [6.7130, 80.7784]] }
+];
+
+const BATCHES = [
+  { id: 'B-2041', window: '4:00 PM', rider: 'Kasun Perera', zone: 'Zone A', stops: 6, shops: 3, status: 'Delivering' },
+  { id: 'B-2040', window: '4:00 PM', rider: 'Dilani Fernando', zone: 'Zone B', stops: 5, shops: 2, status: 'Collecting' },
+  { id: 'B-2039', window: '3:30 PM', rider: 'Unassigned', zone: 'Zone C', stops: 4, shops: 3, status: 'Queued' },
+  { id: 'B-2038', window: '3:30 PM', rider: 'Ruwan Bandara', zone: 'Zone A', stops: 6, shops: 4, status: 'Completed' },
+  { id: 'B-2037', window: '3:00 PM', rider: 'Nimal Silva', zone: 'Zone B', stops: 7, shops: 3, status: 'Completed' },
+  { id: 'B-2036', window: '3:00 PM', rider: 'Chathura W.', zone: 'Zone A', stops: 5, shops: 2, status: 'Completed' }
+];
+
+const BATCH_STATUS_STYLE = {
+  Delivering: ['#FEF3C7', '#B45309'], Collecting: ['#DBEAFE', '#1D4ED8'],
+  Queued: ['#F1F5F9', '#64748B'], Completed: ['#ECFDF5', '#0F766E']
+};
+
 class Component extends DCLogic {
-  state = { page: 'dashboard', uniFilter: 'All universities', orderFilter: 'All' };
+  state = {
+    page: 'dashboard', uniFilter: 'All universities', orderFilter: 'All',
+    zones: ZONE_SEED, activeZoneId: 'z1', draft: [], drawing: false,
+    dispatchInterval: 30, maxOrders: 8, maxRadius: 7,
+    priceMode: 'percentage', markupValue: 6, basePrice: 650, priceZoneId: 'z1', shopOutside: false
+  };
+
+  mapRef = React.createRef();
+
+  componentDidUpdate() { this.syncMap(); }
+  componentDidMount() { this.syncMap(); }
+  componentWillUnmount() { if (this._map) { this._map.remove(); this._map = null; } }
+
+  syncMap() {
+    const el = this.mapRef.current;
+    if (this.state.page !== 'zones') {
+      if (this._map) { this._map.remove(); this._map = null; }
+      return;
+    }
+    if (!el) return;
+    if (!window.L) { setTimeout(() => this.syncMap(), 200); return; }
+    const L = window.L;
+    if (!this._map) {
+      this._map = L.map(el, { attributionControl: false }).setView([6.7125, 80.7785], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(this._map);
+      this._layer = L.layerGroup().addTo(this._map);
+      this._map.on('click', e => {
+        if (!this.state.drawing) return;
+        this.setState(st => ({ draft: st.draft.concat([[e.latlng.lat, e.latlng.lng]]) }));
+      });
+    }
+    this._layer.clearLayers();
+    this.state.zones.forEach(z => {
+      const active = z.id === this.state.activeZoneId;
+      L.polygon(z.coords, { color: z.color, weight: active ? 3 : 2, fillColor: z.color, fillOpacity: active ? 0.22 : 0.1 })
+        .addTo(this._layer).bindTooltip(z.name + ' · Rs. ' + z.fee, { direction: 'center' });
+    });
+    if (this.state.draft.length) {
+      if (this.state.draft.length > 2) {
+        L.polygon(this.state.draft, { color: '#EF4444', weight: 2, dashArray: '6 5', fillColor: '#EF4444', fillOpacity: 0.12 }).addTo(this._layer);
+      } else {
+        L.polyline(this.state.draft, { color: '#EF4444', weight: 2, dashArray: '6 5' }).addTo(this._layer);
+      }
+      this.state.draft.forEach(c => L.circleMarker(c, { radius: 5, color: '#fff', weight: 2, fillColor: '#EF4444', fillOpacity: 1 }).addTo(this._layer));
+    }
+    setTimeout(() => { if (this._map) this._map.invalidateSize(); }, 60);
+  }
+
+  updateZone(id, patch) {
+    this.setState(st => ({ zones: st.zones.map(z => z.id === id ? Object.assign({}, z, patch) : z) }));
+  }
 
   render() {}
 
@@ -400,7 +627,44 @@ class Component extends DCLogic {
     }));
 
     const [title, subtitle] = PAGE_META[s.page] || ['', ''];
-    const knownPages = ['dashboard', 'orders', 'universities', 'vendors', 'riders'];
+    const knownPages = ['dashboard', 'orders', 'universities', 'vendors', 'riders', 'zones', 'pricing', 'batches'];
+
+    const zones = s.zones.map(z => {
+      const active = z.id === s.activeZoneId;
+      return Object.assign({}, z, {
+        onSelect: () => this.setState({ activeZoneId: z.id }),
+        rowBg: active ? '#ECFDF5' : '#fff',
+        rowBorder: active ? '#0F766E' : '#E2E8F0',
+        onFee: e => this.updateZone(z.id, { fee: Number(e.target.value) || 0 }),
+        onOutsideFee: e => this.updateZone(z.id, { outsideFee: Number(e.target.value) || 0 }),
+        onRadius: e => this.updateZone(z.id, { radius: Number(e.target.value) || 0 })
+      });
+    });
+    const activeZone = s.zones.find(z => z.id === s.activeZoneId) || s.zones[0];
+
+    const priceZone = s.zones.find(z => z.id === s.priceZoneId) || s.zones[0];
+    const base = Number(s.basePrice) || 0;
+    const mv = Number(s.markupValue) || 0;
+    const markup = s.priceMode === 'fixed' ? mv : s.priceMode === 'catalog' ? 0 : Math.round(base * mv / 100);
+    const catalogPrice = s.priceMode === 'catalog' ? Math.round(base * 1.08) : base;
+    const productPrice = s.priceMode === 'catalog' ? catalogPrice : base;
+    const extraFee = s.shopOutside ? priceZone.outsideFee : 0;
+    const finalTotal = productPrice + markup + priceZone.fee + extraFee;
+
+    const priceModes = [
+      { key: 'original', label: 'Original price' },
+      { key: 'fixed', label: 'Fixed markup' },
+      { key: 'percentage', label: '% markup' },
+      { key: 'catalog', label: 'Custom catalog' }
+    ].map(m => {
+      const active = s.priceMode === m.key;
+      return Object.assign({}, m, { onClick: () => this.setState({ priceMode: m.key }), bg: active ? '#0F766E' : '#F1F5F9', color: active ? '#fff' : '#334155' });
+    });
+
+    const batches = BATCHES.map(b => {
+      const st = BATCH_STATUS_STYLE[b.status];
+      return Object.assign({}, b, { statusBg: st[0], statusColor: st[1], fill: Math.round((b.stops / s.maxOrders) * 100) });
+    });
 
     const maxRev = Math.max(...REVENUE_SERIES);
     const maxOrd = Math.max(...ORDERS_SERIES);
@@ -431,7 +695,58 @@ class Component extends DCLogic {
       isUniversities: s.page === 'universities',
       isVendors: s.page === 'vendors',
       isRiders: s.page === 'riders',
+      isZones: s.page === 'zones',
+      isPricing: s.page === 'pricing',
+      isBatches: s.page === 'batches',
       isComingSoon: !knownPages.includes(s.page) && s.page !== 'analytics',
+      mapRef: this.mapRef,
+      zones, activeZoneName: activeZone.name,
+      drawing: s.drawing,
+      draftCount: s.draft.length,
+      drawLabel: s.drawing ? 'Drawing — click the map to add points' : 'Draw new zone',
+      drawBtnBg: s.drawing ? '#EF4444' : '#0F172A',
+      toggleDraw: () => this.setState(st => ({ drawing: !st.drawing, draft: st.drawing ? [] : st.draft })),
+      canSaveZone: s.draft.length > 2,
+      saveZone: () => this.setState(st => {
+        if (st.draft.length < 3) return {};
+        const id = 'z' + (st.zones.length + 1);
+        const palette = ['#7C3AED', '#1D4ED8', '#DC2626'];
+        return {
+          zones: st.zones.concat([{ id, name: 'Zone ' + String.fromCharCode(64 + st.zones.length + 1) + ' — new zone', color: palette[st.zones.length % 3], fee: 150, outsideFee: 60, radius: 5, coords: st.draft }]),
+          draft: [], drawing: false, activeZoneId: id
+        };
+      }),
+      clearDraft: () => this.setState({ draft: [], drawing: false }),
+      dispatchInterval: s.dispatchInterval,
+      onDispatchInterval: e => this.setState({ dispatchInterval: Number(e.target.value) }),
+      maxOrders: s.maxOrders,
+      onMaxOrders: e => this.setState({ maxOrders: Number(e.target.value) }),
+      maxRadius: s.maxRadius,
+      onMaxRadius: e => this.setState({ maxRadius: Number(e.target.value) }),
+      dispatchWindows: ['8:00 AM', '10:30 AM', '12:00 PM', '3:30 PM', '4:00 PM', '6:30 PM', '8:00 PM'],
+      batchesPerDay: Math.round((14 * 60) / s.dispatchInterval),
+      priceModes,
+      basePrice: s.basePrice,
+      onBasePrice: e => this.setState({ basePrice: e.target.value }),
+      markupValue: s.markupValue,
+      onMarkupValue: e => this.setState({ markupValue: e.target.value }),
+      markupUnitLabel: s.priceMode === 'fixed' ? 'Rs. per item' : s.priceMode === 'percentage' ? '% of product price' : 'not used in this mode',
+      markupDisabled: s.priceMode === 'original' || s.priceMode === 'catalog',
+      priceZoneId: s.priceZoneId,
+      onPriceZone: e => this.setState({ priceZoneId: e.target.value }),
+      priceZoneName: priceZone.name,
+      priceZoneFee: priceZone.fee,
+      shopOutside: s.shopOutside,
+      toggleShopOutside: () => this.setState(st => ({ shopOutside: !st.shopOutside })),
+      outsideToggleBg: s.shopOutside ? '#0F766E' : '#CBD5E1',
+      outsideKnobRight: s.shopOutside ? '2px' : '19px',
+      productPriceOut: productPrice,
+      markupOut: markup,
+      extraFeeOut: extraFee,
+      finalTotal,
+      productPriceLabel: s.priceMode === 'catalog' ? 'Custom catalog price' : 'Original product price',
+      markupOutLabel: s.priceMode === 'fixed' ? 'Fixed product markup' : s.priceMode === 'percentage' ? 'Percentage product markup (' + mv + '%)' : 'Product markup (none in this mode)',
+      batches,
       kpis: KPIS.map(k => ({ ...k, trendColor: k.trend.startsWith('+') || k.trend.startsWith('−') ? '#0F766E' : '#64748B' })),
       revenuePoints, revenueAreaPoints, ordersPoints, revenueDots, monthLabels: MONTHS,
       uniShare: UNI_SHARE,
