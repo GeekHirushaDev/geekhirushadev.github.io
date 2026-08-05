@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', -apple-system, sans-serif; background: #F8FAFC; }
+  input, select, button { font-family: 'Inter', sans-serif; }
+  input:focus, select:focus { outline: none; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 4px; }
+</style>
+</helmet>
+
+<div style="display:flex; min-height:100vh; background:#F8FAFC; color:#0F172A;">
+
+  <aside style="width:240px; flex-shrink:0; background:#fff; border-right:1px solid #E2E8F0; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto;">
+    <div style="padding:22px 20px 18px; display:flex; align-items:center; gap:10px;">
+      <div style="width:32px; height:32px; border-radius:9px; background:#0F766E; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">U</div>
+      <span style="font-weight:800; font-size:16px; letter-spacing:-0.02em;">UNI Delivery</span>
+    </div>
+    <div style="padding:0 20px 16px;">
+      <div style="background:#F1F5F9; border-radius:10px; padding:9px 12px; font-size:12px; font-weight:600; color:#334155;">Admin · All universities</div>
+    </div>
+    <nav style="flex:1; padding:4px 12px; display:flex; flex-direction:column; gap:2px;">
+      <sc-for list="{{ navGroups }}" as="group" hint-placeholder-count="4">
+        <div style="margin-top:14px; margin-bottom:4px; padding:0 10px; font-size:11px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.04em;">{{ group.label }}</div>
+        <sc-for list="{{ group.items }}" as="item" hint-placeholder-count="3">
+          <div onClick="{{ item.onClick }}" style="display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:9px; cursor:pointer; background:{{ item.bg }}; color:{{ item.color }}; font-weight:600; font-size:13.5px;">
+            <span style="width:6px; height:6px; border-radius:2px; background:{{ item.color }}; flex-shrink:0; opacity:0.7;"></span>
+            {{ item.label }}
+          </div>
+        </sc-for>
+      </sc-for>
+    </nav>
+    <div style="padding:16px 20px; border-top:1px solid #F1F5F9; display:flex; align-items:center; gap:10px;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#CCFBF1; color:#0F766E; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;">SA</div>
+      <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:12.5px;">Sachini A.</div><div style="color:#94A3B8; font-size:11px;">Super admin</div></div>
+    </div>
+  </aside>
+
+  <main style="flex:1; min-width:0; padding:24px 32px 60px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; gap:16px; flex-wrap:wrap;">
+      <div>
+        <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.01em; margin:0 0 4px;">{{ pageTitle }}</h1>
+        <div style="color:#64748B; font-size:13px;">{{ pageSubtitle }}</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <select value="{{ uniFilter }}" onChange="{{ onUniFilterChange }}" style="border:1px solid #E2E8F0; background:#fff; border-radius:10px; padding:9px 14px; font-size:13px; font-weight:600;">
+          <option>All universities</option>
+          <option>Rajarata University</option>
+          <option>Ruhuna University</option>
+          <option>Sabaragamuwa University</option>
+          <option>Uva Wellassa University</option>
+        </select>
+        <button style="background:#0F766E; border:none; color:#fff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">Export report</button>
+      </div>
+    </div>
+
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{true}}">
+    <div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px;">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+          <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+            <div style="color:#64748B; font-size:12px; font-weight:600; margin-bottom:8px;">{{ k.label }}</div>
+            <div style="font-size:24px; font-weight:800; margin-bottom:6px;">{{ k.value }}</div>
+            <div style="font-size:12px; font-weight:700; color:{{ k.trendColor }};">{{ k.trend }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:16px;">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="font-weight:800; font-size:15px;">Revenue &amp; orders</div>
+            <div style="display:flex; gap:14px; font-size:12px;">
+              <span style="display:flex; align-items:center; gap:6px; color:#334155;"><span style="width:8px;height:8px;border-radius:2px;background:#0F766E;"></span>Revenue</span>
+              <span style="display:flex; align-items:center; gap:6px; color:#334155;"><span style="width:8px;height:8px;border-radius:2px;background:#F59E0B;"></span>Orders</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 560 180" style="width:100%; height:180px;">
+            <polyline points="{{ revenuePoints }}" fill="none" stroke="#0F766E" stroke-width="2.5"/>
+            <polygon points="{{ revenueAreaPoints }}" fill="#0F766E" opacity="0.06"/>
+            <polyline points="{{ ordersPoints }}" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+            <sc-for list="{{ revenueDots }}" as="d" hint-placeholder-count="7">
+              <circle cx="{{ d.x }}" cy="{{ d.y }}" r="3.5" fill="#0F766E"/>
+            </sc-for>
+          </svg>
+          <div style="display:flex; justify-content:space-between; margin-top:6px;">
+            <sc-for list="{{ monthLabels }}" as="m" hint-placeholder-count="7"><span style="font-size:11px; color:#94A3B8; font-weight:600;">{{ m }}</span></sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:16px;">Orders by university</div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <sc-for list="{{ uniShare }}" as="u" hint-placeholder-count="4">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600; margin-bottom:6px;"><span>{{ u.name }}</span><span style="color:#64748B;">{{ u.pct }}%</span></div>
+                <div style="height:8px; border-radius:4px; background:#F1F5F9; overflow:hidden;"><div style="height:100%; width:{{ u.pct }}%; background:{{ u.color }}; border-radius:4px;"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:16px;">Peak order hours</div>
+          <div style="display:flex; align-items:flex-end; gap:4px; height:110px;">
+            <sc-for list="{{ peakHours }}" as="h" hint-placeholder-count="12">
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                <div style="width:100%; border-radius:3px; background:{{ h.color }}; height:{{ h.height }}px;"></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:6px;">
+            <span style="font-size:10.5px; color:#94A3B8; font-weight:600;">8 AM</span>
+            <span style="font-size:10.5px; color:#94A3B8; font-weight:600;">2 PM</span>
+            <span style="font-size:10.5px; color:#94A3B8; font-weight:600;">8 PM</span>
+            <span style="font-size:10.5px; color:#94A3B8; font-weight:600;">12 AM</span>
+          </div>
+        </div>
+
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Top vendors</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <sc-for list="{{ topVendors }}" as="v" hint-placeholder-count="5">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                  <div style="width:26px; height:26px; border-radius:8px; background:{{ v.bg }}; color:{{ v.fg }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px; flex-shrink:0;">{{ v.rank }}</div>
+                  <span style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ v.name }}</span>
+                </div>
+                <span style="font-size:12.5px; font-weight:700; color:#64748B; flex-shrink:0;">Rs. {{ v.revenue }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="font-weight:800; font-size:15px; margin-bottom:14px;">Top riders</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <sc-for list="{{ topRiders }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                  <div style="width:26px; height:26px; border-radius:50%; background:#FEF3C7; color:#B45309; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px; flex-shrink:0;">{{ r.initials }}</div>
+                  <span style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</span>
+                </div>
+                <span style="font-size:12.5px; font-weight:700; color:#64748B; flex-shrink:0;">{{ r.trips }} trips</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-weight:800; font-size:15px;">Delivery zones — live activity</div>
+          <span style="font-size:12px; color:#64748B;">Sabaragamuwa University campus</span>
+        </div>
+        <div style="height:220px; border-radius:14px; background:repeating-linear-gradient(45deg,#ECFDF5,#ECFDF5 16px,#D1FAE5 16px,#D1FAE5 32px); position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:12px; color:#0F766E; font-weight:600;">campus delivery heatmap</div>
+          <sc-for list="{{ mapDots }}" as="md" hint-placeholder-count="8">
+            <div style="position:absolute; width:10px; height:10px; border-radius:50%; background:{{ md.color }}; left:{{ md.x }}%; top:{{ md.y }}%; box-shadow:0 0 0 5px {{ md.ring }};"></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isOrders }}" hint-placeholder-val="{{false}}">
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden;">
+      <div style="display:flex; gap:10px; padding:16px 20px; border-bottom:1px solid #F1F5F9; flex-wrap:wrap;">
+        <sc-for list="{{ orderFilters }}" as="f" hint-placeholder-count="4">
+          <div onClick="{{ f.onClick }}" style="padding:8px 14px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; background:{{ f.bg }}; color:{{ f.color }};">{{ f.label }}</div>
+        </sc-for>
+      </div>
+      <div style="display:grid; grid-template-columns:100px 1.3fr 1fr 1fr 90px 100px 110px; gap:10px; padding:12px 20px; font-size:11.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.03em; border-bottom:1px solid #F1F5F9;">
+        <span>Order</span><span>Customer</span><span>Vendor</span><span>University</span><span>Total</span><span>Status</span><span>Time</span>
+      </div>
+      <sc-for list="{{ orders }}" as="o" hint-placeholder-count="8">
+        <div style="display:grid; grid-template-columns:100px 1.3fr 1fr 1fr 90px 100px 110px; gap:10px; padding:14px 20px; border-bottom:1px solid #F1F5F9; align-items:center; font-size:13px;">
+          <span style="font-weight:700; color:#0F172A;">{{ o.id }}</span>
+          <span>{{ o.customer }}</span>
+          <span style="color:#64748B;">{{ o.vendor }}</span>
+          <span style="color:#64748B;">{{ o.uni }}</span>
+          <span style="font-weight:700;">Rs. {{ o.total }}</span>
+          <span style="background:{{ o.statusBg }}; color:{{ o.statusColor }}; font-weight:700; font-size:11.5px; padding:4px 9px; border-radius:7px; display:inline-block; text-align:center;">{{ o.status }}</span>
+          <span style="color:#94A3B8; font-size:12px;">{{ o.time }}</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isUniversities }}" hint-placeholder-val="{{false}}">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px;">
+      <sc-for list="{{ universities }}" as="u" hint-placeholder-count="4">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+            <div><div style="font-weight:800; font-size:16px; margin-bottom:2px;">{{ u.name }}</div><div style="color:#64748B; font-size:12.5px;">{{ u.location }}</div></div>
+            <span style="background:#ECFDF5; color:#0F766E; font-weight:700; font-size:11px; padding:4px 9px; border-radius:7px;">Live</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+            <div><div style="color:#94A3B8; font-size:11px; margin-bottom:2px;">Students</div><div style="font-weight:700; font-size:15px;">{{ u.students }}</div></div>
+            <div><div style="color:#94A3B8; font-size:11px; margin-bottom:2px;">Vendors</div><div style="font-weight:700; font-size:15px;">{{ u.vendors }}</div></div>
+            <div><div style="color:#94A3B8; font-size:11px; margin-bottom:2px;">Riders</div><div style="font-weight:700; font-size:15px;">{{ u.riders }}</div></div>
+            <div><div style="color:#94A3B8; font-size:11px; margin-bottom:2px;">Monthly orders</div><div style="font-weight:700; font-size:15px;">{{ u.orders }}</div></div>
+          </div>
+          <button style="width:100%; background:#F1F5F9; border:none; color:#0F172A; font-weight:700; font-size:12.5px; padding:10px; border-radius:10px; cursor:pointer;">Manage branches</button>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isVendors }}" hint-placeholder-val="{{false}}">
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden;">
+      <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 100px 110px 90px; gap:10px; padding:12px 20px; font-size:11.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.03em; border-bottom:1px solid #F1F5F9;">
+        <span>Vendor</span><span>Category</span><span>University</span><span>Rating</span><span>Revenue</span><span>Status</span>
+      </div>
+      <sc-for list="{{ vendorsList }}" as="v" hint-placeholder-count="6">
+        <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 100px 110px 90px; gap:10px; padding:14px 20px; border-bottom:1px solid #F1F5F9; align-items:center; font-size:13px;">
+          <span style="font-weight:700;">{{ v.name }}</span>
+          <span style="color:#64748B;">{{ v.category }}</span>
+          <span style="color:#64748B;">{{ v.uni }}</span>
+          <span>★ {{ v.rating }}</span>
+          <span style="font-weight:700;">Rs. {{ v.revenue }}</span>
+          <span style="background:{{ v.statusBg }}; color:{{ v.statusColor }}; font-weight:700; font-size:11.5px; padding:4px 9px; border-radius:7px; display:inline-block; text-align:center;">{{ v.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isRiders }}" hint-placeholder-val="{{false}}">
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden;">
+      <div style="display:grid; grid-template-columns:1.4fr 1fr 90px 90px 110px 100px; gap:10px; padding:12px 20px; font-size:11.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.03em; border-bottom:1px solid #F1F5F9;">
+        <span>Rider</span><span>University</span><span>Vehicle</span><span>Rating</span><span>Trips</span><span>Status</span>
+      </div>
+      <sc-for list="{{ ridersList }}" as="r" hint-placeholder-count="6">
+        <div style="display:grid; grid-template-columns:1.4fr 1fr 90px 90px 110px 100px; gap:10px; padding:14px 20px; border-bottom:1px solid #F1F5F9; align-items:center; font-size:13px;">
+          <span style="font-weight:700;">{{ r.name }}</span>
+          <span style="color:#64748B;">{{ r.uni }}</span>
+          <span style="color:#64748B;">{{ r.vehicle }}</span>
+          <span>★ {{ r.rating }}</span>
+          <span style="font-weight:700;">{{ r.trips }}</span>
+          <span style="background:{{ r.statusBg }}; color:{{ r.statusColor }}; font-weight:700; font-size:11.5px; padding:4px 9px; border-radius:7px; display:inline-block; text-align:center;">{{ r.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isComingSoon }}" hint-placeholder-val="{{false}}">
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:80px 20px; text-align:center;">
+      <div style="width:52px; height:52px; border-radius:14px; background:#F1F5F9; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#94A3B8; font-size:18px;">···</div>
+      <div style="font-weight:800; font-size:16px; margin-bottom:6px;">{{ pageTitle }} coming soon</div>
+      <div style="color:#64748B; font-size:14px;">This section follows the same design system — ask and I'll build it out.</div>
+    </div>
+    </sc-if>
+
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;chartDensity&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;standard&quot;, &quot;options&quot;: [&quot;standard&quot;, &quot;compact&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+const NAV_STRUCTURE = [
+  { label: 'Overview', items: [{ key: 'dashboard', label: 'Dashboard' }, { key: 'analytics', label: 'Analytics' }] },
+  { label: 'Operations', items: [{ key: 'orders', label: 'Orders' }, { key: 'universities', label: 'Universities' }, { key: 'branches', label: 'Branches' }] },
+  { label: 'People', items: [{ key: 'students', label: 'Students' }, { key: 'lecturers', label: 'Lecturers' }, { key: 'riders', label: 'Riders' }, { key: 'vendors', label: 'Vendors' }] },
+  { label: 'Business', items: [{ key: 'products', label: 'Products' }, { key: 'payments', label: 'Payments' }, { key: 'promotions', label: 'Promotions' }, { key: 'reports', label: 'Reports' }] },
+  { label: 'System', items: [{ key: 'support', label: 'Support' }, { key: 'settings', label: 'Settings' }, { key: 'audit', label: 'Audit logs' }] }
+];
+
+const PAGE_META = {
+  dashboard: ['Dashboard', 'Real-time overview across all campuses'],
+  analytics: ['Analytics', 'Revenue, growth and performance trends'],
+  orders: ['Orders', 'Live and historical order activity'],
+  universities: ['Universities', 'Manage campuses on the platform'],
+  branches: ['Branches', 'Hostel, faculty and department zones'],
+  students: ['Students', 'Verified student accounts'],
+  lecturers: ['Lecturers', 'Staff and lecturer accounts'],
+  riders: ['Riders', 'Delivery rider roster and performance'],
+  vendors: ['Vendors', 'Restaurants, shops and service providers'],
+  products: ['Products', 'Menus, items and catalogue'],
+  payments: ['Payments', 'Transactions and payouts'],
+  promotions: ['Promotions', 'Discounts and campaigns'],
+  reports: ['Reports', 'Exportable operational reports'],
+  support: ['Support', 'Tickets and escalations'],
+  settings: ['Settings', 'Platform configuration'],
+  audit: ['Audit logs', 'System and admin activity trail']
+};
+
+const KPIS = [
+  { label: 'Revenue (30d)', value: 'Rs. 4.82M', trend: '+18.2% vs last month' },
+  { label: 'Total orders', value: '12,480', trend: '+9.4% vs last month' },
+  { label: 'Active riders', value: '312', trend: '+14 this week' },
+  { label: 'Avg. delivery time', value: '19.4 min', trend: '−1.8 min improved' }
+];
+
+const REVENUE_SERIES = [2.1, 2.6, 2.9, 3.4, 3.1, 4.0, 4.82];
+const ORDERS_SERIES = [6200, 7100, 7900, 9200, 8700, 10800, 12480];
+const MONTHS = ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+
+const UNI_SHARE = [
+  { name: 'Sabaragamuwa University', pct: 34, color: '#0F766E' },
+  { name: 'Ruhuna University', pct: 27, color: '#10B981' },
+  { name: 'Rajarata University', pct: 22, color: '#F59E0B' },
+  { name: 'Uva Wellassa University', pct: 17, color: '#94A3B8' }
+];
+
+const PEAK_RAW = [10, 18, 30, 55, 62, 48, 70, 95, 88, 60, 42, 25];
+
+const TOP_VENDORS = [
+  { rank: 1, name: 'Green Leaf Kottu House', revenue: '412,000' },
+  { rank: 2, name: 'FreshMart Grocery', revenue: '388,500' },
+  { rank: 3, name: 'Riverside Rice & Curry', revenue: '301,200' },
+  { rank: 4, name: 'Campus Pharmacy', revenue: '276,900' },
+  { rank: 5, name: 'Uni Book Nook', revenue: '198,400' }
+].map(v => ({ ...v, bg: v.rank === 1 ? '#FEF3C7' : '#F1F5F9', fg: v.rank === 1 ? '#B45309' : '#64748B' }));
+
+const TOP_RIDERS = [
+  { name: 'Kasun Perera', initials: 'KP', trips: 412 },
+  { name: 'Nimal Silva', initials: 'NS', trips: 388 },
+  { name: 'Dilani Fernando', initials: 'DF', trips: 355 },
+  { name: 'Ruwan Bandara', initials: 'RB', trips: 320 },
+  { name: 'Amaya Jayasuriya', initials: 'AJ', trips: 298 }
+];
+
+const MAP_DOTS = [
+  { x: 20, y: 30, color: '#0F766E', ring: 'rgba(15,118,110,0.15)' },
+  { x: 45, y: 55, color: '#10B981', ring: 'rgba(16,185,129,0.15)' },
+  { x: 65, y: 25, color: '#F59E0B', ring: 'rgba(245,158,11,0.15)' },
+  { x: 30, y: 70, color: '#0F766E', ring: 'rgba(15,118,110,0.15)' },
+  { x: 75, y: 60, color: '#10B981', ring: 'rgba(16,185,129,0.15)' },
+  { x: 55, y: 40, color: '#0F766E', ring: 'rgba(15,118,110,0.15)' },
+  { x: 15, y: 55, color: '#F59E0B', ring: 'rgba(245,158,11,0.15)' },
+  { x: 85, y: 35, color: '#10B981', ring: 'rgba(16,185,129,0.15)' }
+];
+
+const ORDERS = [
+  { id: '#8842', customer: 'Nadeesha Perera', vendor: 'Green Leaf Kottu House', uni: 'Sabaragamuwa', total: '750', status: 'Delivered', time: '2 min ago' },
+  { id: '#8841', customer: 'Tharindu Jayawardena', vendor: 'FreshMart Grocery', uni: 'Sabaragamuwa', total: '2,340', status: 'On the way', time: '6 min ago' },
+  { id: '#8840', customer: 'Ishara Peiris', vendor: 'Campus Pharmacy', uni: 'Ruhuna', total: '465', status: 'Preparing', time: '11 min ago' },
+  { id: '#8839', customer: 'Sanduni Wickramasinghe', vendor: 'Uni Book Nook', uni: 'Rajarata', total: '3,200', status: 'Delivered', time: '18 min ago' },
+  { id: '#8838', customer: 'Kavindu Ranasinghe', vendor: 'QuickPrint Studio', uni: 'Uva Wellassa', total: '180', status: 'Delivered', time: '24 min ago' },
+  { id: '#8837', customer: 'Amaya Silva', vendor: 'Riverside Rice & Curry', uni: 'Sabaragamuwa', total: '600', status: 'Cancelled', time: '31 min ago' },
+  { id: '#8836', customer: 'Dilshan Kumara', vendor: 'Hilltop Bakers', uni: 'Ruhuna', total: '210', status: 'Delivered', time: '40 min ago' },
+  { id: '#8835', customer: 'Piumi Rathnayake', vendor: 'FreshMart Grocery', uni: 'Rajarata', total: '1,890', status: 'Delivered', time: '52 min ago' }
+];
+
+const ORDER_STATUS_STYLE = {
+  Delivered: ['#ECFDF5', '#0F766E'], 'On the way': ['#FEF3C7', '#B45309'],
+  Preparing: ['#DBEAFE', '#1D4ED8'], Cancelled: ['#FEE2E2', '#DC2626']
+};
+
+const UNIVERSITIES = [
+  { name: 'Sabaragamuwa University', location: 'Belihuloya', students: '8,420', vendors: 62, riders: 94, orders: '4,120' },
+  { name: 'Ruhuna University', location: 'Matara', students: '11,200', vendors: 58, riders: 87, orders: '3,640' },
+  { name: 'Rajarata University', location: 'Mihintale', students: '9,850', vendors: 41, riders: 71, orders: '2,980' },
+  { name: 'Uva Wellassa University', location: 'Badulla', students: '6,300', vendors: 24, riders: 45, orders: '1,740' }
+];
+
+const VENDORS_LIST = [
+  { name: 'Green Leaf Kottu House', category: 'Food', uni: 'Sabaragamuwa', rating: 4.7, revenue: '412,000', status: 'Active' },
+  { name: 'FreshMart Grocery', category: 'Groceries', uni: 'Sabaragamuwa', rating: 4.6, revenue: '388,500', status: 'Active' },
+  { name: 'Campus Pharmacy', category: 'Pharmacy', uni: 'Ruhuna', rating: 4.6, revenue: '276,900', status: 'Active' },
+  { name: 'Uni Book Nook', category: 'Books', uni: 'Rajarata', rating: 4.9, revenue: '198,400', status: 'Active' },
+  { name: 'QuickPrint Studio', category: 'Printing', uni: 'Uva Wellassa', rating: 4.4, revenue: '112,700', status: 'Pending' },
+  { name: 'Riverside Rice & Curry', category: 'Food', uni: 'Sabaragamuwa', rating: 4.5, revenue: '301,200', status: 'Active' }
+].map(v => { const st = v.status === 'Active' ? ['#ECFDF5', '#0F766E'] : ['#FEF3C7', '#B45309']; return { ...v, statusBg: st[0], statusColor: st[1] }; });
+
+const RIDERS_LIST = [
+  { name: 'Kasun Perera', uni: 'Sabaragamuwa', vehicle: 'Scooter', rating: 4.9, trips: 412, status: 'Online' },
+  { name: 'Nimal Silva', uni: 'Ruhuna', vehicle: 'Tuk-tuk', rating: 4.8, trips: 388, status: 'Online' },
+  { name: 'Dilani Fernando', uni: 'Rajarata', vehicle: 'Scooter', rating: 4.9, trips: 355, status: 'Offline' },
+  { name: 'Ruwan Bandara', uni: 'Sabaragamuwa', vehicle: 'Bicycle', rating: 4.7, trips: 320, status: 'Online' },
+  { name: 'Amaya Jayasuriya', uni: 'Uva Wellassa', vehicle: 'Scooter', rating: 4.8, trips: 298, status: 'Offline' },
+  { name: 'Chathura Wijesinghe', uni: 'Ruhuna', vehicle: 'Scooter', rating: 4.6, trips: 264, status: 'Online' }
+].map(r => { const st = r.status === 'Online' ? ['#ECFDF5', '#0F766E'] : ['#F1F5F9', '#64748B']; return { ...r, statusBg: st[0], statusColor: st[1] }; });
+
+class Component extends DCLogic {
+  state = { page: 'dashboard', uniFilter: 'All universities', orderFilter: 'All' };
+
+  render() {}
+
+  renderVals() {
+    const s = this.state;
+    const navGroups = NAV_STRUCTURE.map(g => ({
+      label: g.label,
+      items: g.items.map(it => {
+        const active = s.page === it.key;
+        return { ...it, onClick: () => this.setState({ page: it.key }), bg: active ? '#ECFDF5' : 'transparent', color: active ? '#0F766E' : '#334155' };
+      })
+    }));
+
+    const [title, subtitle] = PAGE_META[s.page] || ['', ''];
+    const knownPages = ['dashboard', 'orders', 'universities', 'vendors', 'riders'];
+
+    const maxRev = Math.max(...REVENUE_SERIES);
+    const maxOrd = Math.max(...ORDERS_SERIES);
+    const W = 560, H = 180, PAD = 10;
+    const n = REVENUE_SERIES.length;
+    const stepX = (W - PAD * 2) / (n - 1);
+    const revenuePoints = REVENUE_SERIES.map((v, i) => `${PAD + i * stepX},${H - PAD - (v / maxRev) * (H - PAD * 2)}`).join(' ');
+    const revenueAreaPoints = revenuePoints + ` ${PAD + (n - 1) * stepX},${H - PAD} ${PAD},${H - PAD}`;
+    const ordersPoints = ORDERS_SERIES.map((v, i) => `${PAD + i * stepX},${H - PAD - (v / maxOrd) * (H - PAD * 2) * 0.9}`).join(' ');
+    const revenueDots = REVENUE_SERIES.map((v, i) => ({ x: PAD + i * stepX, y: H - PAD - (v / maxRev) * (H - PAD * 2) }));
+
+    const maxPeak = Math.max(...PEAK_RAW);
+    const peakHours = PEAK_RAW.map((v, i) => ({ height: Math.round((v / maxPeak) * 90) + 6, color: v === maxPeak ? '#0F766E' : '#CCFBF1' }));
+
+    const orderFilters = ['All', 'Delivered', 'On the way', 'Preparing', 'Cancelled'].map(f => {
+      const active = s.orderFilter === f;
+      return { label: f, onClick: () => this.setState({ orderFilter: f }), bg: active ? '#0F766E' : '#F1F5F9', color: active ? '#fff' : '#334155' };
+    });
+    const filteredOrders = ORDERS.filter(o => s.orderFilter === 'All' || o.status === s.orderFilter)
+      .map(o => { const st = ORDER_STATUS_STYLE[o.status]; return { ...o, statusBg: st[0], statusColor: st[1] }; });
+
+    return {
+      navGroups,
+      pageTitle: title, pageSubtitle: subtitle,
+      uniFilter: s.uniFilter, onUniFilterChange: e => this.setState({ uniFilter: e.target.value }),
+      isDashboard: s.page === 'dashboard' || s.page === 'analytics',
+      isOrders: s.page === 'orders',
+      isUniversities: s.page === 'universities',
+      isVendors: s.page === 'vendors',
+      isRiders: s.page === 'riders',
+      isComingSoon: !knownPages.includes(s.page) && s.page !== 'analytics',
+      kpis: KPIS.map(k => ({ ...k, trendColor: k.trend.startsWith('+') || k.trend.startsWith('−') ? '#0F766E' : '#64748B' })),
+      revenuePoints, revenueAreaPoints, ordersPoints, revenueDots, monthLabels: MONTHS,
+      uniShare: UNI_SHARE,
+      peakHours,
+      topVendors: TOP_VENDORS, topRiders: TOP_RIDERS,
+      mapDots: MAP_DOTS,
+      orderFilters, orders: filteredOrders,
+      universities: UNIVERSITIES,
+      vendorsList: VENDORS_LIST,
+      ridersList: RIDERS_LIST
+    };
+  }
+}
+
+</script>
+</body>
+</html>

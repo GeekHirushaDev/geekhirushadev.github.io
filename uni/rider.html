@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @keyframes pulseRing { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', -apple-system, sans-serif; background: #E5E7EB; }
+  input, button, select { font-family: 'Inter', sans-serif; }
+  input:focus { outline: none; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px; background:#E5E7EB;">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402,874">
+<div style="height:100%; display:flex; flex-direction:column; background:#F8FAFC; padding-top:54px;">
+
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{true}}">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; padding:28px;">
+    <div style="width:56px; height:56px; border-radius:16px; background:#0F766E; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:24px; margin-bottom:20px;">U</div>
+    <h1 style="font-size:24px; font-weight:800; margin:0 0 6px; letter-spacing:-0.01em;">Ride with UNI Delivery</h1>
+    <p style="color:#64748B; font-size:14px; margin:0 0 28px;">Earn money delivering to students across campus.</p>
+    <label style="font-size:12px; font-weight:700; color:#64748B; margin-bottom:6px; display:block;">Mobile number</label>
+    <input value="{{ phone }}" onChange="{{ onPhoneChange }}" placeholder="07X XXX XXXX" style="width:100%; border:1px solid #E2E8F0; background:#fff; border-radius:12px; padding:14px 16px; font-size:15px; margin-bottom:16px;"/>
+    <button onClick="{{ sendOtp }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer; box-shadow:0 8px 20px rgba(15,118,110,0.25);">Send OTP</button>
+    <p style="color:#94A3B8; font-size:12px; text-align:center; margin-top:20px;">By continuing you agree to the Rider Terms & Safety Policy.</p>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isOtp }}" hint-placeholder-val="{{false}}">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; padding:28px;">
+    <h1 style="font-size:22px; font-weight:800; margin:0 0 6px;">Enter the code</h1>
+    <p style="color:#64748B; font-size:14px; margin:0 0 28px;">We sent a 4-digit code to {{ phone }}</p>
+    <div style="display:flex; gap:12px; margin-bottom:24px;">
+      <sc-for list="{{ otpDigits }}" as="d" hint-placeholder-count="4">
+        <div style="width:56px; height:60px; border:1px solid #E2E8F0; background:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800;">{{ d }}</div>
+      </sc-for>
+    </div>
+    <button onClick="{{ verifyOtp }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Verify</button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isVerify }}" hint-placeholder-val="{{false}}">
+  <div style="flex:1; display:flex; flex-direction:column; padding:28px;">
+    <h1 style="font-size:22px; font-weight:800; margin:0 0 6px;">Verify your documents</h1>
+    <p style="color:#64748B; font-size:14px; margin:0 0 24px;">One-time check to keep the campus safe.</p>
+    <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px; display:flex; align-items:center; justify-content:space-between;">
+        <div><div style="font-weight:700; font-size:14px;">NIC / Student ID</div><div style="color:#64748B; font-size:12px;">Front & back photo</div></div>
+        <span style="color:#10B981; font-weight:700; font-size:12px;">✓ Uploaded</span>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px; display:flex; align-items:center; justify-content:space-between;">
+        <div><div style="font-weight:700; font-size:14px;">Driving licence</div><div style="color:#64748B; font-size:12px;">Valid, class B1</div></div>
+        <span style="color:#10B981; font-weight:700; font-size:12px;">✓ Uploaded</span>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px; display:flex; align-items:center; justify-content:space-between;">
+        <div><div style="font-weight:700; font-size:14px;">Vehicle registration</div><div style="color:#64748B; font-size:12px;">{{ vehicleLabel }}</div></div>
+        <span style="color:#10B981; font-weight:700; font-size:12px;">✓ Uploaded</span>
+      </div>
+    </div>
+    <sc-if value="{{ !verifySubmitted }}" hint-placeholder-val="{{true}}">
+      <button onClick="{{ submitVerification }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Submit for review</button>
+    </sc-if>
+    <sc-if value="{{ verifySubmitted }}" hint-placeholder-val="{{false}}">
+      <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
+        <div style="color:#0F766E; font-weight:800; font-size:15px;">✓ You're verified!</div>
+        <div style="color:#0F766E; font-size:12px; margin-top:2px;">Approved in under a minute — nice.</div>
+      </div>
+      <button onClick="{{ enterApp }}" style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Continue to dashboard</button>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{false}}">
+  <div style="flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative;">
+
+    <sc-if value="{{ isHomeScreen }}" hint-placeholder-val="{{true}}">
+    <div style="flex:1; overflow:auto; padding:16px 18px 90px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <div><div style="font-weight:800; font-size:17px;">Hi, Kasun</div><div style="color:#64748B; font-size:12px;">{{ vehicleLabel }}</div></div>
+        <div onClick="{{ toggleOnline }}" style="display:flex; align-items:center; gap:8px; background:{{ onlinePillBg }}; border-radius:20px; padding:8px 14px; cursor:pointer;">
+          <span style="width:8px; height:8px; border-radius:50%; background:{{ onlineDotColor }};"></span>
+          <span style="font-weight:700; font-size:12px; color:{{ onlineTextColor }};">{{ onlineLabel }}</span>
+        </div>
+      </div>
+
+      <sc-if value="{{ isOffline }}" hint-placeholder-val="{{false}}">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:18px; padding:40px 20px; text-align:center; margin-bottom:16px;">
+          <div style="width:64px; height:64px; border-radius:50%; background:#F1F5F9; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#94A3B8; font-weight:800;">Zz</div>
+          <div style="font-weight:700; font-size:15px; margin-bottom:6px;">You're offline</div>
+          <div style="color:#64748B; font-size:13px; margin-bottom:20px;">Go online to start receiving delivery requests.</div>
+          <button onClick="{{ toggleOnline }}" style="background:#0F766E; color:#fff; border:none; font-weight:700; font-size:14px; padding:12px 24px; border-radius:12px; cursor:pointer;">Go online</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isIdleOnline }}" hint-placeholder-val="{{false}}">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:18px; padding:40px 20px; text-align:center; margin-bottom:16px; position:relative;">
+          <div style="position:relative; width:64px; height:64px; margin:0 auto 16px;">
+            <div style="position:absolute; inset:0; border-radius:50%; background:#0F766E; opacity:0.3; animation:pulseRing 1.8s infinite;"></div>
+            <div style="position:absolute; inset:0; border-radius:50%; background:#ECFDF5; display:flex; align-items:center; justify-content:center; font-weight:800; color:#0F766E;">●</div>
+          </div>
+          <div style="font-weight:700; font-size:15px; margin-bottom:6px;">Looking for orders nearby…</div>
+          <div style="color:#64748B; font-size:13px; margin-bottom:20px;">Stay near campus for faster matches.</div>
+          <button onClick="{{ simulateIncoming }}" style="background:#0F172A; color:#fff; border:none; font-weight:700; font-size:13px; padding:11px 20px; border-radius:12px; cursor:pointer;">Simulate incoming order (demo)</button>
+        </div>
+      </sc-if>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px;"><div style="color:#64748B; font-size:11px; margin-bottom:4px;">Today's earnings</div><div style="font-weight:800; font-size:18px;">Rs. {{ todayEarnings }}</div></div>
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px;"><div style="color:#64748B; font-size:11px; margin-bottom:4px;">Trips today</div><div style="font-weight:800; font-size:18px;">{{ tripsToday }}</div></div>
+      </div>
+
+      <div style="font-weight:800; font-size:14px; margin-bottom:10px;">Recent deliveries</div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden;">
+        <sc-for list="{{ history }}" as="h" hint-placeholder-count="3">
+          <div style="display:flex; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #F1F5F9; gap:10px;">
+            <div><div style="font-weight:700; font-size:13px;">{{ h.shop }}</div><div style="color:#64748B; font-size:11px;">{{ h.drop }} · {{ h.time }}</div></div>
+            <div style="font-weight:700; font-size:13px;">Rs. {{ h.amount }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ showIncomingSheet }}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute; bottom:0; left:0; right:0; background:#fff; border-radius:24px 24px 0 0; padding:20px; box-shadow:0 -10px 30px rgba(0,0,0,0.15); animation:slideUp 0.3s ease;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span style="font-weight:800; font-size:15px;">New delivery request</span>
+          <span style="background:#FEF3C7; color:#B45309; font-weight:700; font-size:11px; padding:4px 9px; border-radius:8px;">{{ order.eta }} away</span>
+        </div>
+        <div style="background:#F8FAFC; border-radius:14px; padding:14px; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:#64748B; font-size:12px;">Pickup</span><span style="font-weight:700; font-size:13px;">{{ order.pickup }}</span></div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="color:#64748B; font-size:12px;">Drop-off</span><span style="font-weight:700; font-size:13px;">{{ order.drop }}</span></div>
+          <div style="display:flex; justify-content:space-between;"><span style="color:#64748B; font-size:12px;">Distance</span><span style="font-weight:700; font-size:13px;">{{ order.distance }}</span></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <span style="color:#64748B; font-size:12px;">You'll earn</span>
+          <span style="font-weight:800; font-size:20px; color:#0F766E;">Rs. {{ order.earnings }}</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button onClick="{{ rejectOrder }}" style="flex:1; background:#F1F5F9; color:#0F172A; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Reject</button>
+          <button onClick="{{ acceptOrder }}" style="flex:2; background:#10B981; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Accept</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showOrderFlow }}" hint-placeholder-val="{{false}}">
+      <div style="position:absolute; inset:0; background:#F8FAFC; display:flex; flex-direction:column;">
+        <div style="height:170px; background:repeating-linear-gradient(45deg,#ECFDF5,#ECFDF5 14px,#D1FAE5 14px,#D1FAE5 28px); display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:12px; color:#0F766E; flex-shrink:0;">navigation map</div>
+        <div style="flex:1; overflow:auto; padding:18px;">
+          <div style="display:inline-block; background:{{ phaseBadgeBg }}; color:{{ phaseBadgeColor }}; font-weight:700; font-size:11px; padding:5px 10px; border-radius:8px; margin-bottom:14px;">{{ phaseLabel }}</div>
+
+          <sc-if value="{{ isPickupPhase }}" hint-placeholder-val="{{true}}">
+            <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:16px; margin-bottom:16px;">
+              <div style="font-weight:800; font-size:16px; margin-bottom:4px;">{{ order.pickup }}</div>
+              <div style="color:#64748B; font-size:13px; margin-bottom:12px;">{{ order.distance }} away · {{ order.eta }}</div>
+              <div style="font-size:13px; color:#334155;">Order: {{ order.items }}</div>
+            </div>
+            <button onClick="{{ confirmPickup }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Confirm pickup</button>
+          </sc-if>
+
+          <sc-if value="{{ isDeliveringPhase }}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:16px; margin-bottom:16px;">
+              <div style="font-weight:800; font-size:16px; margin-bottom:4px;">{{ order.drop }}</div>
+              <div style="color:#64748B; font-size:13px; margin-bottom:12px;">Customer: {{ order.customer }}</div>
+              <div style="font-size:13px; color:#334155;">Order: {{ order.items }}</div>
+            </div>
+            <button onClick="{{ startOtpEntry }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Enter delivery OTP</button>
+          </sc-if>
+
+          <sc-if value="{{ isOtpPhase }}" hint-placeholder-val="{{false}}">
+            <div style="color:#64748B; font-size:13px; margin-bottom:14px;">Ask the customer for their 4-digit delivery code.</div>
+            <div style="display:flex; gap:12px; margin-bottom:20px;">
+              <sc-for list="{{ deliveryOtpDigits }}" as="d" hint-placeholder-count="4">
+                <div style="width:56px; height:60px; border:1px solid #E2E8F0; background:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800;">{{ d }}</div>
+              </sc-for>
+            </div>
+            <button onClick="{{ confirmDelivery }}" style="width:100%; background:#10B981; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Confirm delivery</button>
+          </sc-if>
+
+          <sc-if value="{{ isCompletedPhase }}" hint-placeholder-val="{{false}}">
+            <div style="text-align:center; padding:30px 10px;">
+              <div style="width:56px; height:56px; border-radius:50%; background:#ECFDF5; color:#0F766E; font-weight:800; font-size:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">✓</div>
+              <div style="font-weight:800; font-size:17px; margin-bottom:6px;">Delivery completed!</div>
+              <div style="color:#64748B; font-size:14px; margin-bottom:24px;">You earned Rs. {{ order.earnings }}</div>
+              <button onClick="{{ finishOrder }}" style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:15px; padding:15px; border-radius:12px; cursor:pointer;">Back to home</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isIncomeScreen }}" hint-placeholder-val="{{false}}">
+    <div style="flex:1; overflow:auto; padding:16px 18px 90px;">
+      <h1 style="font-size:18px; font-weight:800; margin:0 0 16px;">Income</h1>
+      <div style="background:linear-gradient(120deg,#0F766E,#115E59); border-radius:16px; padding:18px; color:#fff; margin-bottom:16px;">
+        <div style="font-size:12px; color:#CCFBF1; margin-bottom:4px;">This week</div>
+        <div style="font-size:26px; font-weight:800; margin-bottom:10px;">Rs. {{ weeklyTotal }}</div>
+        <div style="display:flex; gap:16px; font-size:12px; color:#CCFBF1;"><span>{{ weeklyTrips }} trips</span><span>★ {{ rating }} rating</span></div>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:16px; margin-bottom:16px;">
+        <div style="font-weight:700; font-size:13px; margin-bottom:14px;">Last 7 days</div>
+        <div style="display:flex; align-items:flex-end; gap:8px; height:100px;">
+          <sc-for list="{{ weekBars }}" as="b" hint-placeholder-count="7">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;">
+              <div style="width:100%; border-radius:4px; background:{{ b.color }}; height:{{ b.height }}px;"></div>
+              <span style="font-size:10px; color:#94A3B8; font-weight:600;">{{ b.day }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <button style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Cash out to bank</button>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isHistoryScreen }}" hint-placeholder-val="{{false}}">
+    <div style="flex:1; overflow:auto; padding:16px 18px 90px;">
+      <h1 style="font-size:18px; font-weight:800; margin:0 0 16px;">Order history</h1>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden;">
+        <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+          <div style="display:flex; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #F1F5F9; gap:10px;">
+            <div><div style="font-weight:700; font-size:13px;">{{ h.shop }}</div><div style="color:#64748B; font-size:11px;">{{ h.drop }} · {{ h.time }}</div></div>
+            <div style="font-weight:700; font-size:13px; color:#0F766E;">Rs. {{ h.amount }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isProfileScreen }}" hint-placeholder-val="{{false}}">
+    <div style="flex:1; overflow:auto; padding:16px 18px 90px;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px;">
+        <div style="width:56px; height:56px; border-radius:50%; background:#FEF3C7; color:#B45309; font-weight:800; font-size:20px; display:flex; align-items:center; justify-content:center;">KP</div>
+        <div><div style="font-weight:800; font-size:16px;">Kasun Perera</div><div style="color:#64748B; font-size:12px;">★ {{ rating }} · {{ vehicleLabel }}</div></div>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #F1F5F9;"><span style="font-size:13px; color:#64748B;">Phone</span><span style="font-size:13px; font-weight:600;">{{ phone }}</span></div>
+        <div style="display:flex; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #F1F5F9;"><span style="font-size:13px; color:#64748B;">Vehicle</span><span style="font-size:13px; font-weight:600;">{{ vehicleLabel }}</span></div>
+        <div style="display:flex; justify-content:space-between; padding:14px 16px;"><span style="font-size:13px; color:#64748B;">University zone</span><span style="font-size:13px; font-weight:600;">Sabaragamuwa</span></div>
+      </div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid #F1F5F9;"><span style="font-size:14px; font-weight:600;">Notifications</span><div style="width:38px; height:21px; border-radius:11px; background:#0F766E; position:relative;"><div style="width:17px; height:17px; border-radius:50%; background:#fff; position:absolute; top:2px; right:2px;"></div></div></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px;"><span style="font-size:14px; font-weight:600; color:#EF4444;">Log out</span><span style="color:#94A3B8;">→</span></div>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="position:absolute; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #E2E8F0; display:flex; justify-content:space-around; padding:10px 0 6px;">
+      <div onClick="{{ goHomeScreen }}" style="text-align:center; cursor:pointer; color:{{ homeTabColor }}; font-weight:700; font-size:11px;">Home</div>
+      <div onClick="{{ goHistoryScreen }}" style="text-align:center; cursor:pointer; color:{{ historyTabColor }}; font-weight:700; font-size:11px;">Orders</div>
+      <div onClick="{{ goIncomeScreen }}" style="text-align:center; cursor:pointer; color:{{ incomeTabColor }}; font-weight:700; font-size:11px;">Income</div>
+      <div onClick="{{ goProfileScreen }}" style="text-align:center; cursor:pointer; color:{{ profileTabColor }}; font-weight:700; font-size:11px;">Profile</div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;vehicleType&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;scooter&quot;, &quot;options&quot;: [&quot;bicycle&quot;, &quot;scooter&quot;, &quot;tuktuk&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;defaultOnline&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+const VEHICLES = { bicycle: 'Bicycle', scooter: 'Scooter · ABC-4521', tuktuk: 'Tuk-tuk · WP-KL-9012' };
+
+const ORDER_TEMPLATE = {
+  pickup: 'Green Leaf Kottu House',
+  drop: 'Kudaligama Hostel, Room 214',
+  customer: 'Sanduni W.',
+  distance: '1.2 km',
+  eta: '6 min',
+  earnings: 180,
+  items: '2x Chicken Kottu, 1x Milk Tea'
+};
+
+const HISTORY = [
+  { shop: 'Riverside Rice & Curry', drop: 'Faculty of Management Studies', amount: 180, time: '2:40 PM' },
+  { shop: 'FreshMart Grocery', drop: 'Wewalwatta Hostel', amount: 220, time: '1:15 PM' },
+  { shop: 'Hilltop Bakers', drop: 'Uva Hostel Block A', amount: 120, time: '12:05 PM' },
+  { shop: 'Campus Pharmacy', drop: 'Faculty of Applied Sciences', amount: 150, time: '11:30 AM' }
+];
+
+const WEEK_BARS = [
+  { day: 'Mon', val: 820 }, { day: 'Tue', val: 1450 }, { day: 'Wed', val: 990 },
+  { day: 'Thu', val: 2140 }, { day: 'Fri', val: 1680 }, { day: 'Sat', val: 2350 }, { day: 'Sun', val: 1200 }
+];
+
+class Component extends DCLogic {
+  state = {
+    stage: 'login',
+    phone: '',
+    verifySubmitted: false,
+    online: false,
+    orderPhase: 'idle',
+    appScreen: 'home',
+    otp: '____',
+    deliveryOtp: '____'
+  };
+
+  componentDidMount() {
+    this.setState({ online: !!this.props.defaultOnline });
+  }
+
+  render() {}
+
+  renderVals() {
+    const s = this.state;
+    const vehicleKey = this.props.vehicleType || 'scooter';
+    const vehicleLabel = VEHICLES[vehicleKey] || VEHICLES.scooter;
+
+    const weekBars = WEEK_BARS.map((b, i) => ({
+      day: b.day,
+      color: i === 3 ? '#0F766E' : '#CCFBF1',
+      height: Math.round((b.val / 2350) * 90)
+    }));
+    const weeklyTotal = WEEK_BARS.reduce((a, b) => a + b.val, 0);
+
+    return {
+      isLogin: s.stage === 'login',
+      isOtp: s.stage === 'otp',
+      isVerify: s.stage === 'verify',
+      isApp: s.stage === 'app',
+      phone: s.phone || '071 234 5678',
+      onPhoneChange: e => this.setState({ phone: e.target.value }),
+      sendOtp: () => this.setState({ stage: 'otp' }),
+      otpDigits: ['4', '8', '2', '1'],
+      verifyOtp: () => this.setState({ stage: 'verify' }),
+      vehicleLabel,
+      verifySubmitted: s.verifySubmitted,
+      submitVerification: () => this.setState({ verifySubmitted: true }),
+      enterApp: () => this.setState({ stage: 'app', appScreen: 'home' }),
+
+      isHomeScreen: s.appScreen === 'home',
+      isIncomeScreen: s.appScreen === 'income',
+      isHistoryScreen: s.appScreen === 'history',
+      isProfileScreen: s.appScreen === 'profile',
+      goHomeScreen: () => this.setState({ appScreen: 'home' }),
+      goIncomeScreen: () => this.setState({ appScreen: 'income' }),
+      goHistoryScreen: () => this.setState({ appScreen: 'history' }),
+      goProfileScreen: () => this.setState({ appScreen: 'profile' }),
+      homeTabColor: s.appScreen === 'home' ? '#0F766E' : '#334155',
+      historyTabColor: s.appScreen === 'history' ? '#0F766E' : '#334155',
+      incomeTabColor: s.appScreen === 'income' ? '#0F766E' : '#334155',
+      profileTabColor: s.appScreen === 'profile' ? '#0F766E' : '#334155',
+
+      onlinePillBg: s.online ? '#ECFDF5' : '#F1F5F9',
+      onlineDotColor: s.online ? '#10B981' : '#94A3B8',
+      onlineTextColor: s.online ? '#0F766E' : '#64748B',
+      onlineLabel: s.online ? 'Online' : 'Offline',
+      toggleOnline: () => this.setState(st => ({ online: !st.online })),
+      isOffline: !s.online && s.orderPhase === 'idle',
+      isIdleOnline: s.online && s.orderPhase === 'idle',
+      simulateIncoming: () => this.setState({ orderPhase: 'incoming' }),
+      showIncomingSheet: s.orderPhase === 'incoming',
+      rejectOrder: () => this.setState({ orderPhase: 'idle' }),
+      acceptOrder: () => this.setState({ orderPhase: 'pickup' }),
+      showOrderFlow: ['pickup', 'delivering', 'otp', 'completed'].includes(s.orderPhase),
+      order: ORDER_TEMPLATE,
+
+      isPickupPhase: s.orderPhase === 'pickup',
+      isDeliveringPhase: s.orderPhase === 'delivering',
+      isOtpPhase: s.orderPhase === 'otp',
+      isCompletedPhase: s.orderPhase === 'completed',
+      phaseLabel: s.orderPhase === 'pickup' ? 'Heading to pickup' : s.orderPhase === 'delivering' ? 'Delivering order' : s.orderPhase === 'otp' ? 'Confirm delivery' : 'Completed',
+      phaseBadgeBg: s.orderPhase === 'completed' ? '#ECFDF5' : '#FEF3C7',
+      phaseBadgeColor: s.orderPhase === 'completed' ? '#0F766E' : '#B45309',
+      confirmPickup: () => this.setState({ orderPhase: 'delivering' }),
+      startOtpEntry: () => this.setState({ orderPhase: 'otp' }),
+      deliveryOtpDigits: ['7', '3', '0', '5'],
+      confirmDelivery: () => this.setState({ orderPhase: 'completed' }),
+      finishOrder: () => this.setState({ orderPhase: 'idle', appScreen: 'home' }),
+
+      todayEarnings: 2140,
+      tripsToday: 9,
+      history: HISTORY,
+      weeklyTotal, weeklyTrips: 47, rating: 4.9,
+      weekBars
+    };
+  }
+}
+
+</script>
+</body>
+</html>

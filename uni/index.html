@@ -1,1 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', -apple-system, sans-serif; background: #F8FAFC; }
+  input, textarea, select, button { font-family: 'Inter', sans-serif; }
+  input:focus, textarea:focus, select:focus { outline: none; }
+</style>
+</helmet>
 
+<div style="min-height:100vh; background:#F8FAFC; color:#0F172A;">
+
+<sc-if value="{{isLanding}}" hint-placeholder-val="{{true}}">
+<div>
+
+  <header style="position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-bottom:1px solid #E2E8F0;">
+    <div style="max-width:1280px; margin:0 auto; padding:16px clamp(20px,5vw,48px); display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:36px; height:36px; border-radius:10px; background:#0F766E; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:17px;">U</div>
+        <span style="font-weight:800; font-size:19px; letter-spacing:-0.02em;">UNI Delivery</span>
+      </div>
+      <nav style="display:flex; gap:28px; margin-left:8px; flex:1; min-width:200px;">
+        <a href="#how" style="color:#334155; font-weight:500; font-size:15px; text-decoration:none;">How it works</a>
+        <a href="#restaurants" style="color:#334155; font-weight:500; font-size:15px; text-decoration:none;">Restaurants</a>
+        <a href="#riders" style="color:#334155; font-weight:500; font-size:15px; text-decoration:none;">For riders</a>
+        <a href="#vendors" style="color:#334155; font-weight:500; font-size:15px; text-decoration:none;">For vendors</a>
+      </nav>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button onClick="{{ goToApp }}" style="background:none; border:none; color:#0F172A; font-weight:600; font-size:15px; cursor:pointer; padding:10px 16px;">Log in</button>
+        <button onClick="{{ goToApp }}" style="background:#0F766E; border:none; color:#fff; font-weight:600; font-size:15px; cursor:pointer; padding:10px 20px; border-radius:10px; box-shadow:0 4px 14px rgba(15,118,110,0.28);">Get started</button>
+      </div>
+    </div>
+  </header>
+
+  <section style="max-width:1280px; margin:0 auto; padding:clamp(48px,8vw,96px) clamp(20px,5vw,48px) clamp(32px,6vw,64px); display:flex; gap:56px; flex-wrap:wrap; align-items:center;">
+    <div style="flex:1 1 460px;">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:#ECFDF5; color:#0F766E; font-weight:600; font-size:13px; padding:7px 14px; border-radius:20px; margin-bottom:20px;">
+        <span style="width:6px; height:6px; border-radius:50%; background:#10B981;"></span>
+        Now live at 4 universities
+      </div>
+      <h1 style="font-size:clamp(36px,5.2vw,58px); line-height:1.05; font-weight:800; letter-spacing:-0.03em; margin:0 0 20px;">Your campus<br/>delivery partner</h1>
+      <p style="font-size:18px; line-height:1.6; color:#475569; max-width:480px; margin:0 0 32px;">Meals, groceries, medicine, books, printing and parcels — delivered straight to your hostel, faculty or department. Built for Sri Lankan university life.</p>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:8px; display:flex; gap:8px; flex-wrap:wrap; box-shadow:0 8px 30px rgba(15,23,42,0.06); max-width:520px;">
+        <select value="{{ selectedUniversity }}" onChange="{{ onUniversityChange }}" style="border:none; background:#F8FAFC; border-radius:10px; padding:0 14px; font-weight:600; font-size:14px; color:#0F172A; flex:0 0 auto;">
+          <option>Sabaragamuwa University</option>
+          <option>Rajarata University</option>
+          <option>Ruhuna University</option>
+          <option>Uva Wellassa University</option>
+        </select>
+        <input placeholder="Search restaurants, groceries, medicine..." style="flex:1; min-width:160px; border:none; padding:0 12px; font-size:14px; color:#0F172A; background:transparent;"/>
+        <button onClick="{{ goToApp }}" style="background:#0F766E; border:none; color:#fff; font-weight:600; font-size:14px; padding:12px 22px; border-radius:10px; cursor:pointer; white-space:nowrap;">Search</button>
+      </div>
+      <div style="display:flex; gap:32px; margin-top:36px; flex-wrap:wrap;">
+        <div><div style="font-weight:800; font-size:24px;">4</div><div style="color:#64748B; font-size:13px;">Universities live</div></div>
+        <div><div style="font-weight:800; font-size:24px;">180+</div><div style="color:#64748B; font-size:13px;">Campus vendors</div></div>
+        <div><div style="font-weight:800; font-size:24px;">12 min</div><div style="color:#64748B; font-size:13px;">Avg. delivery</div></div>
+      </div>
+    </div>
+    <div style="flex:1 1 380px; min-width:280px;">
+      <div style="aspect-ratio:4/5; border-radius:28px; background:repeating-linear-gradient(135deg,#CCFBF1,#CCFBF1 12px,#99F6E4 12px,#99F6E4 24px); display:flex; align-items:center; justify-content:center; box-shadow:0 24px 60px rgba(15,118,110,0.18); position:relative; overflow:hidden;">
+        <div style="background:rgba(255,255,255,0.9); border-radius:16px; padding:16px 22px; font-family:monospace; font-size:13px; color:#0F766E; font-weight:600;">campus hero photo</div>
+        <div style="position:absolute; bottom:24px; left:24px; right:24px; background:#fff; border-radius:16px; padding:16px; box-shadow:0 12px 30px rgba(15,23,42,0.15); display:flex; align-items:center; gap:12px;">
+          <div style="width:44px; height:44px; border-radius:12px; background:#FEF3C7; display:flex; align-items:center; justify-content:center; font-weight:700; color:#F59E0B;">GL</div>
+          <div style="flex:1;"><div style="font-weight:700; font-size:14px;">Green Leaf Kottu House</div><div style="color:#64748B; font-size:12px;">Arriving in 8 min</div></div>
+          <div style="color:#10B981; font-weight:700; font-size:13px;">On the way</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="max-width:1280px; margin:0 auto; padding:32px clamp(20px,5vw,48px) 64px;">
+    <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.01em; margin:0 0 24px;">What can we deliver?</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px;">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+        <div onClick="{{ cat.onClick }}" style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:24px 16px; text-align:center; cursor:pointer; transition:box-shadow 0.2s; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <div style="width:48px; height:48px; border-radius:14px; background:{{ cat.bg }}; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-weight:800; color:{{ cat.fg }}; font-size:18px;">{{ cat.emoji }}</div>
+          <div style="font-weight:700; font-size:14px;">{{ cat.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="restaurants" style="max-width:1280px; margin:0 auto; padding:0 clamp(20px,5vw,48px) 64px;">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px; flex-wrap:wrap; gap:8px;">
+      <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.01em; margin:0;">Popular near Sabaragamuwa University</h2>
+      <a onClick="{{ goToApp }}" style="color:#0F766E; font-weight:600; font-size:14px; cursor:pointer;">See all →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;">
+      <sc-for list="{{ restaurants }}" as="r" hint-placeholder-count="4">
+        <div onClick="{{ r.onClick }}" style="background:#fff; border-radius:18px; overflow:hidden; border:1px solid #E2E8F0; box-shadow:0 1px 3px rgba(15,23,42,0.04); cursor:pointer;">
+          <div style="height:130px; background:repeating-linear-gradient(135deg,#F1F5F9,#F1F5F9 10px,#E2E8F0 10px,#E2E8F0 20px); display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:12px; color:#94A3B8;">{{ r.name }} photo</div>
+          <div style="padding:16px;">
+            <div style="font-weight:700; font-size:15px; margin-bottom:4px;">{{ r.name }}</div>
+            <div style="color:#64748B; font-size:13px; margin-bottom:10px;">{{ r.cuisine }}</div>
+            <div style="display:flex; gap:12px; font-size:13px; color:#334155;">
+              <span>★ {{ r.rating }}</span>
+              <span>{{ r.time }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1280px; margin:0 auto; padding:0 clamp(20px,5vw,48px) 64px;">
+    <div style="background:linear-gradient(120deg,#0F766E,#115E59); border-radius:24px; padding:clamp(28px,5vw,48px); color:#fff; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;">
+      <div style="flex:1 1 320px;">
+        <div style="display:inline-block; background:#F59E0B; color:#1F2937; font-weight:700; font-size:12px; padding:5px 12px; border-radius:20px; margin-bottom:14px;">STUDENT DISCOUNT</div>
+        <h3 style="font-size:26px; font-weight:800; margin:0 0 8px; letter-spacing:-0.01em;">Rs. 150 off your first 3 orders</h3>
+        <p style="margin:0; color:#CCFBF1; font-size:15px;">Verify your student ID to unlock exclusive campus-only pricing.</p>
+      </div>
+      <button onClick="{{ goToApp }}" style="background:#fff; color:#0F766E; border:none; font-weight:700; font-size:15px; padding:14px 26px; border-radius:12px; cursor:pointer; white-space:nowrap;">Claim discount</button>
+    </div>
+  </section>
+
+  <section style="max-width:1280px; margin:0 auto; padding:0 clamp(20px,5vw,48px) 80px; display:flex; gap:48px; align-items:center; flex-wrap:wrap;">
+    <div style="flex:1 1 380px; min-width:260px;">
+      <div style="aspect-ratio:1/1; max-width:340px; border-radius:24px; background:repeating-linear-gradient(135deg,#FEF3C7,#FEF3C7 12px,#FDE68A 12px,#FDE68A 24px); display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:13px; color:#B45309; font-weight:600;">app screens mockup</div>
+    </div>
+    <div style="flex:1 1 380px;">
+      <h2 style="font-size:28px; font-weight:800; letter-spacing:-0.01em; margin:0 0 14px;">Get the app for faster ordering</h2>
+      <p style="color:#475569; font-size:16px; line-height:1.6; margin:0 0 24px; max-width:420px;">Track your delivery live, chat with your rider, and reorder your favourites in one tap.</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button style="background:#0F172A; color:#fff; border:none; font-weight:600; font-size:14px; padding:13px 22px; border-radius:12px; cursor:pointer;">Download for iOS</button>
+        <button style="background:#0F172A; color:#fff; border:none; font-weight:600; font-size:14px; padding:13px 22px; border-radius:12px; cursor:pointer;">Download for Android</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:840px; margin:0 auto; padding:0 clamp(20px,5vw,48px) 88px;">
+    <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.01em; margin:0 0 24px; text-align:center;">Frequently asked questions</h2>
+    <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="4">
+      <div onClick="{{ f.onClick }}" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:18px 20px; margin-bottom:10px; cursor:pointer;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:15px;">
+          {{ f.q }}
+          <span style="color:#0F766E; font-size:18px;">{{ f.sign }}</span>
+        </div>
+        <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+          <div style="color:#64748B; font-size:14px; line-height:1.6; margin-top:10px;">{{ f.a }}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </section>
+
+  <footer style="background:#0F172A; color:#94A3B8; padding:56px clamp(20px,5vw,48px) 32px;">
+    <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:32px; margin-bottom:40px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <div style="width:28px; height:28px; border-radius:8px; background:#0F766E; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:13px;">U</div>
+          <span style="font-weight:800; color:#fff; font-size:16px;">UNI Delivery</span>
+        </div>
+        <p style="font-size:13px; line-height:1.6; margin:0;">The all-in-one campus delivery platform for Sri Lankan universities.</p>
+      </div>
+      <div><div style="color:#fff; font-weight:700; font-size:14px; margin-bottom:14px;">Company</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px;"><a href="#" style="color:#94A3B8; text-decoration:none;">About</a><a href="#" style="color:#94A3B8; text-decoration:none;">Careers</a><a href="#" style="color:#94A3B8; text-decoration:none;">Press</a></div></div>
+      <div><div style="color:#fff; font-weight:700; font-size:14px; margin-bottom:14px;">Partners</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px;"><a href="#" style="color:#94A3B8; text-decoration:none;">Become a rider</a><a href="#" style="color:#94A3B8; text-decoration:none;">Add your shop</a><a href="#" style="color:#94A3B8; text-decoration:none;">Universities</a></div></div>
+      <div><div style="color:#fff; font-weight:700; font-size:14px; margin-bottom:14px;">Support</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px;"><a href="#" style="color:#94A3B8; text-decoration:none;">Help centre</a><a href="#" style="color:#94A3B8; text-decoration:none;">Safety</a><a href="#" style="color:#94A3B8; text-decoration:none;">Contact</a></div></div>
+    </div>
+    <div style="max-width:1280px; margin:0 auto; border-top:1px solid #1E293B; padding-top:20px; font-size:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <span>© 2026 UNI Delivery. Made for Sri Lankan campuses.</span>
+      <span>Rajarata · Ruhuna · Sabaragamuwa · Uva Wellassa</span>
+    </div>
+  </footer>
+
+</div>
+</sc-if>
+
+<sc-if value="{{!isLanding}}" hint-placeholder-val="{{false}}">
+<div style="padding-bottom:{{ bottomPad }}px;">
+
+  <header style="position:sticky; top:0; z-index:40; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); border-bottom:1px solid #E2E8F0;">
+    <div style="max-width:1280px; margin:0 auto; padding:14px clamp(16px,4vw,40px); display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+      <div onClick="{{ goHome }}" style="display:flex; align-items:center; gap:9px; cursor:pointer;">
+        <div style="width:32px; height:32px; border-radius:9px; background:#0F766E; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">U</div>
+        <span style="font-weight:800; font-size:17px; letter-spacing:-0.02em; display:{{ logoTextDisplay }};">UNI Delivery</span>
+      </div>
+      <div style="flex:1; min-width:120px; max-width:420px; display:flex; align-items:center; background:#F1F5F9; border-radius:10px; padding:9px 14px;">
+        <input placeholder="Search shops, meals, medicine..." style="border:none; background:transparent; font-size:13px; width:100%; color:#0F172A;"/>
+      </div>
+      <nav style="display:{{ deskNavDisplay }}; gap:22px;">
+        <a onClick="{{ goHome }}" style="color:{{ homeNavColor }}; font-weight:600; font-size:14px; cursor:pointer;">Home</a>
+        <a onClick="{{ goProfileOrders }}" style="color:#334155; font-weight:600; font-size:14px; cursor:pointer;">Orders</a>
+        <a onClick="{{ goProfile }}" style="color:{{ profileNavColor }}; font-weight:600; font-size:14px; cursor:pointer;">Profile</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button onClick="{{ goCart }}" style="position:relative; background:#0F766E; border:none; color:#fff; font-weight:600; font-size:13px; padding:10px 16px; border-radius:10px; cursor:pointer;">
+          Cart
+          <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{false}}">
+            <span style="position:absolute; top:-6px; right:-6px; background:#F59E0B; color:#1F2937; font-size:11px; font-weight:800; border-radius:10px; padding:1px 6px; border:2px solid #fff;">{{ cartCount }}</span>
+          </sc-if>
+        </button>
+        <div onClick="{{ goProfile }}" style="width:34px; height:34px; border-radius:50%; background:#CCFBF1; color:#0F766E; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; cursor:pointer;">NP</div>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{isHome}}" hint-placeholder-val="{{false}}">
+  <div style="max-width:1280px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 40px;">
+
+    <sc-if value="{{ showCampusAlert }}" hint-placeholder-val="{{false}}">
+    <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:14px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:24px;">
+      <div style="font-size:14px; color:#92400E;"><b>Exam week notice:</b> Faculty of Applied Sciences building deliveries end at 9:00 PM this week.</div>
+      <button onClick="{{ dismissAlert }}" style="background:none; border:none; color:#92400E; font-weight:700; cursor:pointer; font-size:16px;">×</button>
+    </div>
+    </sc-if>
+
+    <div style="margin-bottom:28px;">
+      <h1 style="font-size:26px; font-weight:800; letter-spacing:-0.01em; margin:0 0 4px;">Good afternoon, Nadeesha</h1>
+      <p style="color:#64748B; font-size:14px; margin:0;">Sabaragamuwa University · Faculty of Applied Sciences</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:14px; margin-bottom:32px;">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+        <div onClick="{{ cat.onClick }}" style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:18px 12px; text-align:center; cursor:pointer;">
+          <div style="width:40px; height:40px; border-radius:12px; background:{{ cat.bg }}; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-weight:800; color:{{ cat.fg }}; font-size:16px;">{{ cat.emoji }}</div>
+          <div style="font-weight:700; font-size:13px;">{{ cat.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px;">
+      <h2 style="font-size:19px; font-weight:800; margin:0;">Nearby shops</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-bottom:36px;">
+      <sc-for list="{{ restaurants }}" as="r" hint-placeholder-count="7">
+        <div onClick="{{ r.onClick }}" style="background:#fff; border-radius:16px; overflow:hidden; border:1px solid #E2E8F0; cursor:pointer; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <div style="height:110px; background:repeating-linear-gradient(135deg,#F1F5F9,#F1F5F9 10px,#E2E8F0 10px,#E2E8F0 20px); display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:11px; color:#94A3B8;">{{ r.name }} photo</div>
+          <div style="padding:14px;">
+            <div style="font-weight:700; font-size:14px; margin-bottom:3px;">{{ r.name }}</div>
+            <div style="color:#64748B; font-size:12px; margin-bottom:8px;">{{ r.cuisine }}</div>
+            <div style="display:flex; gap:10px; font-size:12px; color:#334155;"><span>★ {{ r.rating }}</span><span>{{ r.time }}</span></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px;">
+      <h2 style="font-size:19px; font-weight:800; margin:0;">Quick reorder</h2>
+    </div>
+    <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:8px; margin-bottom:36px;">
+      <sc-for list="{{ recentOrders }}" as="o" hint-placeholder-count="3">
+        <div onClick="{{ o.onClick }}" style="flex:0 0 auto; background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; min-width:220px; cursor:pointer;">
+          <div style="font-weight:700; font-size:13px; margin-bottom:2px;">{{ o.shop }}</div>
+          <div style="color:#64748B; font-size:12px; margin-bottom:10px;">{{ o.item }}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:700; font-size:13px;">Rs. {{ o.total }}</span>
+            <span style="color:#0F766E; font-weight:700; font-size:12px;">Reorder →</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px;">
+      <h2 style="font-size:19px; font-weight:800; margin:0;">Recent orders</h2>
+      <a onClick="{{ goProfileOrders }}" style="color:#0F766E; font-weight:600; font-size:13px; cursor:pointer;">View all →</a>
+    </div>
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden;">
+      <sc-for list="{{ recentOrders }}" as="o" hint-placeholder-count="3">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #F1F5F9; gap:12px; flex-wrap:wrap;">
+          <div><div style="font-weight:700; font-size:14px;">{{ o.shop }}</div><div style="color:#64748B; font-size:12px;">{{ o.item }} · {{ o.date }}</div></div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <span style="background:#ECFDF5; color:#0F766E; font-weight:700; font-size:12px; padding:5px 10px; border-radius:8px;">{{ o.status }}</span>
+            <span style="font-weight:700; font-size:14px;">Rs. {{ o.total }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{isRestaurant}}" hint-placeholder-val="{{false}}">
+  <div style="max-width:960px; margin:0 auto; padding:0 clamp(16px,4vw,40px) 120px;">
+    <div style="height:180px; border-radius:0 0 20px 20px; background:repeating-linear-gradient(135deg,#F1F5F9,#F1F5F9 10px,#E2E8F0 10px,#E2E8F0 20px); display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:12px; color:#94A3B8; margin:0 -8px; border:1px solid #E2E8F0;">{{ activeRestaurant.name }} banner photo</div>
+    <div style="margin-top:20px; margin-bottom:24px;">
+      <h1 style="font-size:24px; font-weight:800; letter-spacing:-0.01em; margin:0 0 6px;">{{ activeRestaurant.name }}</h1>
+      <div style="color:#64748B; font-size:14px; margin-bottom:12px;">{{ activeRestaurant.cuisine }}</div>
+      <div style="display:flex; gap:16px; font-size:13px; color:#334155; flex-wrap:wrap;">
+        <span>★ {{ activeRestaurant.rating }} rating</span>
+        <span>{{ activeRestaurant.time }} delivery</span>
+        <span>Open {{ activeRestaurant.open }}</span>
+      </div>
+    </div>
+    <div style="display:flex; gap:24px; border-bottom:1px solid #E2E8F0; margin-bottom:20px;">
+      <div onClick="{{ setTabMenu }}" style="padding-bottom:12px; font-weight:700; font-size:14px; cursor:pointer; color:{{ menuTabColor }}; border-bottom:2px solid {{ menuTabBorder }};">Menu</div>
+      <div onClick="{{ setTabReviews }}" style="padding-bottom:12px; font-weight:700; font-size:14px; cursor:pointer; color:{{ reviewsTabColor }}; border-bottom:2px solid {{ reviewsTabBorder }};">Reviews</div>
+    </div>
+
+    <sc-if value="{{ isMenuTab }}" hint-placeholder-val="{{true}}">
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <sc-for list="{{ menuItems }}" as="item" hint-placeholder-count="4">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px; display:flex; justify-content:space-between; gap:16px; align-items:center;">
+          <div style="flex:1;">
+            <div style="font-weight:700; font-size:15px; margin-bottom:4px;">{{ item.name }}</div>
+            <div style="color:#64748B; font-size:13px; line-height:1.5; margin-bottom:8px;">{{ item.desc }}</div>
+            <div style="font-weight:700; font-size:14px;">Rs. {{ item.price }}</div>
+          </div>
+          <sc-if value="{{ item.inCart }}" hint-placeholder-val="{{false}}">
+            <div style="display:flex; align-items:center; gap:10px; background:#F1F5F9; border-radius:10px; padding:6px 10px;">
+              <button onClick="{{ item.dec }}" style="width:26px; height:26px; border-radius:8px; border:none; background:#fff; font-weight:800; cursor:pointer; box-shadow:0 1px 2px rgba(15,23,42,0.1);">−</button>
+              <span style="font-weight:700; font-size:14px; min-width:14px; text-align:center;">{{ item.qty }}</span>
+              <button onClick="{{ item.inc }}" style="width:26px; height:26px; border-radius:8px; border:none; background:#0F766E; color:#fff; font-weight:800; cursor:pointer;">+</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ item.notInCart }}" hint-placeholder-val="{{true}}">
+            <button onClick="{{ item.inc }}" style="background:#0F766E; border:none; color:#fff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer; white-space:nowrap;">Add</button>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isReviewsTab }}" hint-placeholder-val="{{false}}">
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <sc-for list="{{ reviews }}" as="rev" hint-placeholder-count="3">
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:14px;">{{ rev.name }}</span><span style="color:#F59E0B; font-weight:700; font-size:13px;">★ {{ rev.rating }}</span></div>
+          <div style="color:#475569; font-size:13px; line-height:1.5;">{{ rev.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{false}}">
+    <div style="position:fixed; bottom:0; left:0; right:0; background:#0F172A; color:#fff; padding:16px clamp(16px,4vw,40px); display:flex; justify-content:space-between; align-items:center; gap:16px; box-shadow:0 -8px 30px rgba(0,0,0,0.15); z-index:50;">
+      <div><div style="font-weight:700; font-size:14px;">{{ cartCount }} item(s) · Rs. {{ cartSubtotal }}</div><div style="color:#94A3B8; font-size:12px;">From {{ activeRestaurant.name }}</div></div>
+      <button onClick="{{ goCart }}" style="background:#10B981; border:none; color:#fff; font-weight:700; font-size:14px; padding:12px 22px; border-radius:12px; cursor:pointer;">View cart →</button>
+    </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{isCart}}" hint-placeholder-val="{{false}}">
+  <div style="max-width:720px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 60px;">
+    <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.01em; margin:0 0 20px;">Your cart</h1>
+
+    <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{false}}">
+    <div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden; margin-bottom:20px;">
+        <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 18px; border-bottom:1px solid #F1F5F9; gap:12px;">
+            <div style="flex:1;"><div style="font-weight:700; font-size:14px;">{{ it.name }}</div><div style="color:#64748B; font-size:12px;">Rs. {{ it.price }} each</div></div>
+            <div style="display:flex; align-items:center; gap:10px; background:#F1F5F9; border-radius:10px; padding:6px 10px;">
+              <button onClick="{{ it.dec }}" style="width:24px; height:24px; border-radius:7px; border:none; background:#fff; font-weight:800; cursor:pointer;">−</button>
+              <span style="font-weight:700; font-size:13px; min-width:12px; text-align:center;">{{ it.qty }}</span>
+              <button onClick="{{ it.inc }}" style="width:24px; height:24px; border-radius:7px; border:none; background:#0F766E; color:#fff; font-weight:800; cursor:pointer;">+</button>
+            </div>
+            <div style="font-weight:700; font-size:14px; min-width:70px; text-align:right;">Rs. {{ it.lineTotal }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+        <div style="font-weight:700; font-size:14px; margin-bottom:10px;">Coupon code</div>
+        <div style="display:flex; gap:10px;">
+          <input value="{{ couponCode }}" onChange="{{ onCouponChange }}" placeholder="e.g. CAMPUS10" style="flex:1; border:1px solid #E2E8F0; border-radius:10px; padding:10px 14px; font-size:13px;"/>
+          <button onClick="{{ applyCoupon }}" style="background:#0F172A; border:none; color:#fff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">Apply</button>
+        </div>
+        <sc-if value="{{ couponApplied }}" hint-placeholder-val="{{false}}">
+          <div style="color:#0F766E; font-size:12px; font-weight:600; margin-top:8px;">✓ CAMPUS10 applied — 10% off</div>
+        </sc-if>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+        <div style="font-weight:700; font-size:14px; margin-bottom:10px;">Delivery notes</div>
+        <textarea value="{{ notes }}" onChange="{{ onNotesChange }}" placeholder="e.g. Leave at the hostel warden's desk" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:12px; font-size:13px; min-height:64px; resize:vertical;"></textarea>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+        <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Delivery address</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;">
+          <div>
+            <label style="font-size:12px; color:#64748B; font-weight:600; display:block; margin-bottom:6px;">Hostel / residence</label>
+            <select value="{{ hostel }}" onChange="{{ onHostelChange }}" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:13px;">
+              <sc-for list="{{ hostels }}" as="h" hint-placeholder-count="4"><option value="{{ h }}">{{ h }}</option></sc-for>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#64748B; font-weight:600; display:block; margin-bottom:6px;">Faculty</label>
+            <select value="{{ faculty }}" onChange="{{ onFacultyChange }}" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:13px;">
+              <sc-for list="{{ faculties }}" as="fac" hint-placeholder-count="6"><option value="{{ fac }}">{{ fac }}</option></sc-for>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#64748B; font-weight:600; display:block; margin-bottom:6px;">Department (optional)</label>
+            <input value="{{ department }}" onChange="{{ onDepartmentChange }}" placeholder="e.g. ICT" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:13px;"/>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#64748B; font-weight:600; display:block; margin-bottom:6px;">Building / room</label>
+            <input value="{{ building }}" onChange="{{ onBuildingChange }}" placeholder="e.g. Room 214" style="width:100%; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:13px;"/>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+        <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Payment method</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px;">
+          <sc-for list="{{ paymentMethods }}" as="pm" hint-placeholder-count="3">
+            <div onClick="{{ pm.onClick }}" style="border:2px solid {{ pm.borderColor }}; background:{{ pm.bg }}; border-radius:12px; padding:14px; text-align:center; cursor:pointer; font-weight:700; font-size:13px; color:{{ pm.color }};">{{ pm.label }}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:24px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>Subtotal</span><span>Rs. {{ cartSubtotal }}</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#475569; margin-bottom:8px;"><span>Delivery fee</span><span>{{ deliveryFeeLabel }}</span></div>
+        <sc-if value="{{ couponApplied }}" hint-placeholder-val="{{false}}">
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:#0F766E; margin-bottom:8px;"><span>Discount</span><span>−Rs. {{ discount }}</span></div>
+        </sc-if>
+        <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:800; margin-top:12px; padding-top:12px; border-top:1px solid #F1F5F9;"><span>Total</span><span>Rs. {{ cartTotal }}</span></div>
+      </div>
+
+      <button onClick="{{ placeOrder }}" style="width:100%; background:#0F766E; border:none; color:#fff; font-weight:700; font-size:16px; padding:16px; border-radius:14px; cursor:pointer; box-shadow:0 8px 24px rgba(15,118,110,0.28);">Place order · Rs. {{ cartTotal }}</button>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ !hasCartItems }}" hint-placeholder-val="{{true}}">
+      <div style="text-align:center; padding:80px 20px;">
+        <div style="font-size:40px; margin-bottom:16px;">🛒</div>
+        <div style="font-weight:700; font-size:16px; margin-bottom:8px;">Your cart is empty</div>
+        <div style="color:#64748B; font-size:14px; margin-bottom:20px;">Browse nearby shops to get started.</div>
+        <button onClick="{{ goHome }}" style="background:#0F766E; border:none; color:#fff; font-weight:700; font-size:14px; padding:12px 22px; border-radius:12px; cursor:pointer;">Browse shops</button>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{isTracking}}" hint-placeholder-val="{{false}}">
+  <div style="max-width:720px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 60px;">
+    <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.01em; margin:0 0 4px;">Order on the way</h1>
+    <div style="color:#64748B; font-size:13px; margin-bottom:20px;">Order #UD-8842 · Rs. {{ lastOrderTotal }}</div>
+
+    <div style="height:220px; border-radius:18px; background:repeating-linear-gradient(45deg,#ECFDF5,#ECFDF5 14px,#D1FAE5 14px,#D1FAE5 28px); position:relative; overflow:hidden; margin-bottom:20px; border:1px solid #E2E8F0;">
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:monospace; font-size:13px; color:#0F766E; font-weight:600;">live map view</div>
+      <div style="position:absolute; width:14px; height:14px; border-radius:50%; background:#0F766E; left:{{ riderMapLeft }}%; top:52%; box-shadow:0 0 0 6px rgba(15,118,110,0.2); animation:pulseDot 1.4s infinite;"></div>
+      <div style="position:absolute; width:12px; height:12px; border-radius:50%; background:#F59E0B; right:16%; top:38%; box-shadow:0 0 0 5px rgba(245,158,11,0.2);"></div>
+    </div>
+
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:46px; height:46px; border-radius:50%; background:#FEF3C7; display:flex; align-items:center; justify-content:center; font-weight:700; color:#B45309;">KP</div>
+        <div><div style="font-weight:700; font-size:14px;">Kasun Perera</div><div style="color:#64748B; font-size:12px;">★ 4.9 · Bajaj CT100 · ABC-4521</div></div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button style="background:#F1F5F9; border:none; color:#0F172A; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; cursor:pointer;">Chat</button>
+        <button style="background:#0F766E; border:none; color:#fff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; cursor:pointer;">Call</button>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:18px; margin-bottom:20px;">
+      <div><div style="color:#64748B; font-size:12px; margin-bottom:2px;">Estimated arrival</div><div style="font-weight:800; font-size:22px;">{{ etaMinutes }} min</div></div>
+      <div style="background:#ECFDF5; color:#0F766E; font-weight:800; font-size:20px; letter-spacing:0.1em; padding:10px 16px; border-radius:10px;">{{ deliveryOtp }}</div>
+    </div>
+
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; padding:20px; margin-bottom:20px;">
+      <sc-for list="{{ trackingSteps }}" as="step" hint-placeholder-count="5">
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="width:22px; height:22px; border-radius:50%; background:{{ step.dotBg }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">{{ step.check }}</div>
+            <div style="width:2px; flex:1; background:{{ step.lineBg }}; min-height:24px; display:{{ step.lineDisplay }};"></div>
+          </div>
+          <div style="padding-bottom:24px;">
+            <div style="font-weight:700; font-size:14px; color:{{ step.textColor }};">{{ step.label }}</div>
+            <div style="color:#94A3B8; font-size:12px;">{{ step.time }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ !isDelivered }}" hint-placeholder-val="{{true}}">
+      <button onClick="{{ advanceTracking }}" style="width:100%; background:#0F172A; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Simulate next update (demo)</button>
+    </sc-if>
+    <sc-if value="{{ isDelivered }}" hint-placeholder-val="{{false}}">
+      <button onClick="{{ goHome }}" style="width:100%; background:#0F766E; color:#fff; border:none; font-weight:700; font-size:14px; padding:14px; border-radius:12px; cursor:pointer;">Back to home</button>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{isProfile}}" hint-placeholder-val="{{false}}">
+  <div style="max-width:720px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 60px;">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+      <div style="width:64px; height:64px; border-radius:50%; background:#CCFBF1; color:#0F766E; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px;">NP</div>
+      <div>
+        <div style="font-weight:800; font-size:18px; display:flex; align-items:center; gap:8px;">Nadeesha Perera <span style="background:#ECFDF5; color:#0F766E; font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px;">Verified student</span></div>
+        <div style="color:#64748B; font-size:13px;">Sabaragamuwa University · Faculty of Applied Sciences</div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(120deg,#0F766E,#115E59); border-radius:16px; padding:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; gap:12px;">
+      <div><div style="font-size:12px; color:#CCFBF1; margin-bottom:4px;">UNI Wallet balance</div><div style="font-size:26px; font-weight:800;">Rs. 2,450</div></div>
+      <button style="background:#fff; color:#0F766E; border:none; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">Top up</button>
+    </div>
+
+    <div style="font-weight:800; font-size:16px; margin-bottom:14px;">Order history</div>
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden; margin-bottom:28px;">
+      <sc-for list="{{ recentOrders }}" as="o" hint-placeholder-count="3">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #F1F5F9; gap:12px; flex-wrap:wrap;">
+          <div><div style="font-weight:700; font-size:14px;">{{ o.shop }}</div><div style="color:#64748B; font-size:12px;">{{ o.item }} · {{ o.date }}</div></div>
+          <div style="display:flex; align-items:center; gap:14px;"><span style="background:#ECFDF5; color:#0F766E; font-weight:700; font-size:12px; padding:5px 10px; border-radius:8px;">{{ o.status }}</span><span style="font-weight:700; font-size:14px;">Rs. {{ o.total }}</span></div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="font-weight:800; font-size:16px; margin-bottom:14px;">Saved addresses</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:28px;">
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px;"><div style="font-weight:700; font-size:14px; margin-bottom:4px;">Kudaligama Hostel</div><div style="color:#64748B; font-size:12px;">Room 214 · Block B</div></div>
+      <div style="background:#fff; border:1px solid #E2E8F0; border-radius:14px; padding:16px;"><div style="font-weight:700; font-size:14px; margin-bottom:4px;">Faculty of Applied Sciences</div><div style="color:#64748B; font-size:12px;">Dept. of ICT, 2nd floor</div></div>
+    </div>
+
+    <div style="font-weight:800; font-size:16px; margin-bottom:14px;">Settings</div>
+    <div style="background:#fff; border:1px solid #E2E8F0; border-radius:16px; overflow:hidden; margin-bottom:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #F1F5F9;"><span style="font-size:14px; font-weight:600;">Push notifications</span><div style="width:40px; height:22px; border-radius:11px; background:#0F766E; position:relative;"><div style="width:18px; height:18px; border-radius:50%; background:#fff; position:absolute; top:2px; right:2px;"></div></div></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #F1F5F9;"><span style="font-size:14px; font-weight:600;">Help & support</span><span style="color:#94A3B8;">→</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px;"><span style="font-size:14px; font-weight:600; color:#EF4444;">Log out</span><span style="color:#94A3B8;">→</span></div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{false}}">
+  <div style="position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #E2E8F0; display:flex; justify-content:space-around; padding:10px 0; z-index:45;">
+    <div onClick="{{ goHome }}" style="text-align:center; cursor:pointer; color:{{ homeNavColor }}; font-weight:700; font-size:11px;">Home</div>
+    <div onClick="{{ goProfileOrders }}" style="text-align:center; cursor:pointer; color:#334155; font-weight:700; font-size:11px;">Orders</div>
+    <div onClick="{{ goCart }}" style="text-align:center; cursor:pointer; color:{{ cartNavColor }}; font-weight:700; font-size:11px;">Cart{{ cartBadgeSuffix }}</div>
+    <div onClick="{{ goProfile }}" style="text-align:center; cursor:pointer; color:{{ profileNavColor }}; font-weight:700; font-size:11px;">Profile</div>
+  </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showCampusAlert&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;deliveryFeeWaived&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;defaultPaymentMethod&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;card&quot;, &quot;options&quot;: [&quot;card&quot;, &quot;cash&quot;, &quot;wallet&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
+const CATS = [
+  { key: 'food', label: 'Food', emoji: 'F', bg: '#FEF3C7', fg: '#B45309' },
+  { key: 'groceries', label: 'Groceries', emoji: 'G', bg: '#D1FAE5', fg: '#0F766E' },
+  { key: 'pharmacy', label: 'Medicine', emoji: 'M', bg: '#FEE2E2', fg: '#DC2626' },
+  { key: 'books', label: 'Books', emoji: 'B', bg: '#DBEAFE', fg: '#1D4ED8' },
+  { key: 'printing', label: 'Printing', emoji: 'P', bg: '#EDE9FE', fg: '#7C3AED' }
+];
+
+const RESTAURANTS = [
+  { id: 'r1', name: 'Green Leaf Kottu House', cuisine: 'Sri Lankan · Kottu', rating: 4.7, time: '20-30 min', category: 'food', open: '8:00 AM – 10:00 PM' },
+  { id: 'r2', name: 'Riverside Rice & Curry', cuisine: 'Sri Lankan · Rice & Curry', rating: 4.5, time: '25-35 min', category: 'food', open: '9:00 AM – 9:00 PM' },
+  { id: 'r3', name: 'Hilltop Bakers', cuisine: 'Bakery · Short Eats', rating: 4.8, time: '15-20 min', category: 'food', open: '6:30 AM – 8:00 PM' },
+  { id: 'r4', name: 'Campus Pharmacy', cuisine: 'Pharmacy · Health', rating: 4.6, time: '15-25 min', category: 'pharmacy', open: '8:00 AM – 11:00 PM' },
+  { id: 'r5', name: 'Uni Book Nook', cuisine: 'Books & Stationery', rating: 4.9, time: '30-40 min', category: 'books', open: '9:00 AM – 6:00 PM' },
+  { id: 'r6', name: 'QuickPrint Studio', cuisine: 'Printing · Documents', rating: 4.4, time: '10-15 min', category: 'printing', open: '8:00 AM – 8:00 PM' },
+  { id: 'r7', name: 'FreshMart Grocery', cuisine: 'Groceries · Essentials', rating: 4.6, time: '20-30 min', category: 'groceries', open: '7:00 AM – 10:00 PM' }
+];
+
+const MENU_DATA = {
+  r1: [
+    { id: 'm1', name: 'Chicken Kottu', price: 650, desc: 'Shredded roti wok-tossed with chicken, egg and spicy gravy' },
+    { id: 'm2', name: 'Vegetable Kottu', price: 480, desc: 'Classic veggie kottu with a mild curry sauce' },
+    { id: 'm3', name: 'Cheese Kottu', price: 750, desc: 'Loaded with melted cheese and extra chilli' },
+    { id: 'm4', name: 'Milk Tea', price: 100, desc: 'Hot Ceylon milk tea, just how canteen aunty makes it' }
+  ],
+  r2: [
+    { id: 'm5', name: 'Chicken Rice & Curry', price: 550, desc: 'Steamed rice with chicken curry and three sides' },
+    { id: 'm6', name: 'Fish Rice & Curry', price: 600, desc: 'Rice with spicy fish curry and dhal' },
+    { id: 'm7', name: 'Egg Rice & Curry', price: 420, desc: 'Rice with egg curry, potato and mallung' },
+    { id: 'm8', name: 'Papadam (extra)', price: 50, desc: 'Crispy lentil crackers, pack of 4' }
+  ],
+  r3: [
+    { id: 'm9', name: 'Fish Bun', price: 60, desc: 'Soft bun stuffed with spiced fish filling' },
+    { id: 'm10', name: 'Chicken Roll', price: 90, desc: 'Crispy fried roll with chicken filling' },
+    { id: 'm11', name: 'Vanilla Cake Slice', price: 150, desc: 'Soft vanilla sponge with butter icing' },
+    { id: 'm12', name: 'String Hoppers Pack', price: 250, desc: '10 string hoppers with coconut sambol' }
+  ],
+  r4: [
+    { id: 'm13', name: 'Paracetamol 500mg', price: 120, desc: 'Strip of 10 tablets' },
+    { id: 'm14', name: 'ORS Sachet', price: 45, desc: 'Oral rehydration salts, single sachet' },
+    { id: 'm15', name: 'Multivitamin Tablets', price: 890, desc: 'Bottle of 30 tablets' },
+    { id: 'm16', name: 'Antiseptic Cream', price: 320, desc: '20g tube for cuts and scrapes' }
+  ],
+  r5: [
+    { id: 'm17', name: 'A4 Ruled Notebook', price: 180, desc: '200 pages, hardcover' },
+    { id: 'm18', name: 'Engineering Drawing Set', price: 950, desc: 'Full geometry + drafting set' },
+    { id: 'm19', name: 'Scientific Calculator', price: 3200, desc: 'Casio fx-991 or equivalent' },
+    { id: 'm20', name: 'Sabaragamuwa Uni Hoodie', price: 2800, desc: 'Official campus hoodie, unisex' }
+  ],
+  r6: [
+    { id: 'm21', name: 'B&W Print (per page)', price: 5, desc: 'Standard A4 black & white' },
+    { id: 'm22', name: 'Color Print (per page)', price: 25, desc: 'Standard A4 full colour' },
+    { id: 'm23', name: 'Spiral Binding', price: 150, desc: 'Up to 100 pages' },
+    { id: 'm24', name: 'Thesis Hardbound', price: 1200, desc: 'Hardcover binding with gold lettering' }
+  ],
+  r7: [
+    { id: 'm25', name: 'Rice 5kg', price: 1450, desc: 'Local white rice, 5kg bag' },
+    { id: 'm26', name: 'Milk Powder 400g', price: 890, desc: 'Full cream milk powder' },
+    { id: 'm27', name: 'Eggs (12)', price: 480, desc: 'Farm fresh eggs, tray of 12' },
+    { id: 'm28', name: 'Instant Noodles Pack', price: 350, desc: 'Pack of 5' }
+  ]
+};
+
+const REVIEWS = [
+  { name: 'Sanduni W.', rating: 5, text: 'Fastest kottu delivery on campus, always hot when it arrives.' },
+  { name: 'Tharindu J.', rating: 4, text: 'Great portions, sometimes a bit spicy for me but still good.' },
+  { name: 'Ishara P.', rating: 5, text: 'My go-to order between lectures. Never disappoints.' }
+];
+
+const FACULTIES = ['Faculty of Applied Sciences', 'Faculty of Agricultural Sciences', 'Faculty of Management Studies', 'Faculty of Geomatics', 'Faculty of Medicine', 'Faculty of Technology'];
+const HOSTELS = ['Kudaligama Hostel', 'Wewalwatta Hostel', 'Uva Hostel Block A', 'Uva Hostel Block B', 'Off-campus – Belihuloya Town'];
+
+const RECENT_ORDERS = [
+  { id: 'o1', shop: 'Green Leaf Kottu House', item: 'Chicken Kottu +1 more', total: 750, status: 'Delivered', date: 'Aug 3', restId: 'r1' },
+  { id: 'o2', shop: 'FreshMart Grocery', item: 'Rice 5kg, Milk Powder', total: 2340, status: 'Delivered', date: 'Aug 1', restId: 'r7' },
+  { id: 'o3', shop: 'Uni Book Nook', item: 'Scientific Calculator', total: 3200, status: 'Delivered', date: 'Jul 28', restId: 'r5' }
+];
+
+const FAQS = [
+  { q: 'Which universities are supported?', a: 'UNI Delivery currently operates at Rajarata, Ruhuna, Sabaragamuwa and Uva Wellassa universities, with more campuses being added every semester.' },
+  { q: "How do I verify I'm a student?", a: 'Upload a photo of your student ID during sign up — verification usually takes under an hour.' },
+  { q: 'Can I pay with cash?', a: 'Yes — pay by cash, card, or your UNI Wallet balance at checkout.' },
+  { q: 'Where can my order be delivered?', a: 'Straight to your hostel room, faculty building, or department office — just pick it at checkout.' }
+];
+
+const TRACK_LABELS = ['Order placed', 'Preparing your order', 'Picked up by rider', 'On the way', 'Delivered'];
+
+class Component extends DCLogic {
+  state = {
+    view: 'landing',
+    isMobile: false,
+    selectedUniversity: 'Sabaragamuwa University',
+    cart: [],
+    activeRestId: null,
+    activeTab: 'menu',
+    faqOpen: null,
+    couponCode: '',
+    couponApplied: false,
+    notes: '',
+    hostel: HOSTELS[0],
+    faculty: FACULTIES[0],
+    department: '',
+    building: '',
+    payment: null,
+    trackingStep: 1,
+    lastOrderTotal: 0,
+    campusAlertDismissed: false
+  };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ isMobile: window.innerWidth < 860 });
+    this._onResize();
+    window.addEventListener('resize', this._onResize);
+    this.setState({ payment: this.props.defaultPaymentMethod || 'card' });
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+
+  setView = (view, restId) => {
+    window.scrollTo(0, 0);
+    this.setState(s => ({ view, activeRestId: restId !== undefined ? restId : s.activeRestId, activeTab: 'menu' }));
+  };
+
+  addToCart = (rest, item) => {
+    this.setState(s => {
+      let cart = s.cart;
+      if (cart.length > 0 && cart[0].restId !== rest.id) cart = [];
+      const idx = cart.findIndex(c => c.itemId === item.id);
+      if (idx >= 0) {
+        cart = cart.map((c, i) => i === idx ? { ...c, qty: c.qty + 1 } : c);
+      } else {
+        cart = [...cart, { key: rest.id + '-' + item.id, restId: rest.id, itemId: item.id, name: item.name, price: item.price, qty: 1 }];
+      }
+      return { cart };
+    });
+  };
+
+  changeQty = (itemId, delta) => {
+    this.setState(s => {
+      let cart = s.cart.map(c => c.itemId === itemId ? { ...c, qty: c.qty + delta } : c);
+      cart = cart.filter(c => c.qty > 0);
+      return { cart };
+    });
+  };
+
+  render() {}
+
+  renderVals() {
+    const s = this.state;
+    const isLanding = s.view === 'landing';
+    const isHome = s.view === 'home';
+    const isRestaurant = s.view === 'restaurant';
+    const isCart = s.view === 'cart';
+    const isTracking = s.view === 'tracking';
+    const isProfile = s.view === 'profile';
+
+    const activeRestaurant = RESTAURANTS.find(r => r.id === s.activeRestId) || RESTAURANTS[0];
+    const rawMenu = MENU_DATA[activeRestaurant.id] || [];
+    const cartCount = s.cart.reduce((a, c) => a + c.qty, 0);
+    const cartSubtotal = s.cart.reduce((a, c) => a + c.qty * c.price, 0);
+    const hasCartItems = s.cart.length > 0;
+
+    const menuItems = rawMenu.map(item => {
+      const inCartItem = s.cart.find(c => c.itemId === item.id);
+      return {
+        ...item,
+        inCart: !!inCartItem,
+        notInCart: !inCartItem,
+        qty: inCartItem ? inCartItem.qty : 0,
+        inc: () => this.addToCart(activeRestaurant, item),
+        dec: () => this.changeQty(item.id, -1)
+      };
+    });
+
+    const cartItems = s.cart.map(c => ({
+      ...c,
+      lineTotal: c.qty * c.price,
+      inc: () => this.changeQty(c.itemId, 1),
+      dec: () => this.changeQty(c.itemId, -1)
+    }));
+
+    const deliveryFee = this.props.deliveryFeeWaived ? 0 : 150;
+    const discount = s.couponApplied ? Math.round(cartSubtotal * 0.1) : 0;
+    const cartTotal = Math.max(cartSubtotal + deliveryFee - discount, 0);
+
+    const categories = CATS.map(c => ({ ...c, onClick: () => this.setView('home') }));
+    const restaurants = RESTAURANTS.map(r => ({ ...r, onClick: () => this.setView('restaurant', r.id) }));
+    const recentOrders = RECENT_ORDERS.map(o => ({ ...o, onClick: () => this.setView('restaurant', o.restId) }));
+    const faqs = FAQS.map((f, i) => ({ ...f, open: s.faqOpen === i, sign: s.faqOpen === i ? '−' : '+', onClick: () => this.setState(st => ({ faqOpen: st.faqOpen === i ? null : i })) }));
+
+    const paymentDefs = [
+      { key: 'card', label: 'Card' },
+      { key: 'cash', label: 'Cash' },
+      { key: 'wallet', label: 'UNI Wallet' }
+    ];
+    const paymentMethods = paymentDefs.map(pm => {
+      const active = s.payment === pm.key;
+      return { ...pm, borderColor: active ? '#0F766E' : '#E2E8F0', bg: active ? '#ECFDF5' : '#fff', color: active ? '#0F766E' : '#0F172A', onClick: () => this.setState({ payment: pm.key }) };
+    });
+
+    const trackingStep = s.trackingStep;
+    const trackingSteps = TRACK_LABELS.map((label, i) => {
+      const done = i < trackingStep;
+      const current = i === trackingStep;
+      return {
+        label,
+        time: done ? 'Completed' : current ? 'In progress' : 'Pending',
+        dotBg: done || current ? '#0F766E' : '#CBD5E1',
+        check: done ? '✓' : '',
+        textColor: done || current ? '#0F172A' : '#94A3B8',
+        lineBg: i < trackingStep ? '#0F766E' : '#E2E8F0',
+        lineDisplay: i === TRACK_LABELS.length - 1 ? 'none' : 'block'
+      };
+    });
+    const isDelivered = trackingStep >= TRACK_LABELS.length - 1;
+
+    return {
+      isLanding, isHome, isRestaurant, isCart, isTracking, isProfile,
+      isMobile: s.isMobile,
+      bottomPad: s.isMobile ? 76 : 0,
+      logoTextDisplay: s.isMobile ? 'none' : 'inline',
+      deskNavDisplay: s.isMobile ? 'none' : 'flex',
+      selectedUniversity: s.selectedUniversity,
+      onUniversityChange: e => this.setState({ selectedUniversity: e.target.value }),
+      goToApp: () => this.setView('home'),
+      goHome: () => this.setView('home'),
+      goCart: () => this.setView('cart'),
+      goProfile: () => this.setView('profile'),
+      goProfileOrders: () => this.setView('profile'),
+      homeNavColor: isHome ? '#0F766E' : '#334155',
+      profileNavColor: isProfile ? '#0F766E' : '#334155',
+      cartNavColor: isCart ? '#0F766E' : '#334155',
+      cartBadgeSuffix: cartCount > 0 ? ' (' + cartCount + ')' : '',
+      categories, restaurants, recentOrders, faqs,
+      showCampusAlert: !!this.props.showCampusAlert && !s.campusAlertDismissed,
+      dismissAlert: () => this.setState({ campusAlertDismissed: true }),
+      hasCartItems, cartCount, cartSubtotal, cartItems, cartTotal,
+      activeRestaurant, menuItems, reviews: REVIEWS,
+      isMenuTab: s.activeTab === 'menu', isReviewsTab: s.activeTab === 'reviews',
+      setTabMenu: () => this.setState({ activeTab: 'menu' }),
+      setTabReviews: () => this.setState({ activeTab: 'reviews' }),
+      menuTabColor: s.activeTab === 'menu' ? '#0F766E' : '#94A3B8',
+      menuTabBorder: s.activeTab === 'menu' ? '#0F766E' : 'transparent',
+      reviewsTabColor: s.activeTab === 'reviews' ? '#0F766E' : '#94A3B8',
+      reviewsTabBorder: s.activeTab === 'reviews' ? '#0F766E' : 'transparent',
+      couponCode: s.couponCode,
+      onCouponChange: e => this.setState({ couponCode: e.target.value }),
+      applyCoupon: () => this.setState({ couponApplied: true }),
+      couponApplied: s.couponApplied,
+      discount,
+      deliveryFeeLabel: deliveryFee === 0 ? 'Free' : 'Rs. ' + deliveryFee,
+      notes: s.notes, onNotesChange: e => this.setState({ notes: e.target.value }),
+      hostel: s.hostel, onHostelChange: e => this.setState({ hostel: e.target.value }), hostels: HOSTELS,
+      faculty: s.faculty, onFacultyChange: e => this.setState({ faculty: e.target.value }), faculties: FACULTIES,
+      department: s.department, onDepartmentChange: e => this.setState({ department: e.target.value }),
+      building: s.building, onBuildingChange: e => this.setState({ building: e.target.value }),
+      paymentMethods,
+      placeOrder: () => {
+        if (cartTotal <= 0) return;
+        this.setState({ view: 'tracking', trackingStep: 0, lastOrderTotal: cartTotal, cart: [], couponApplied: false, couponCode: '' });
+        window.scrollTo(0, 0);
+      },
+      lastOrderTotal: s.lastOrderTotal,
+      riderMapLeft: 20 + trackingStep * 15,
+      etaMinutes: Math.max(15 - trackingStep * 3, 2),
+      deliveryOtp: '4821',
+      trackingSteps, isDelivered,
+      advanceTracking: () => this.setState(st => ({ trackingStep: Math.min(st.trackingStep + 1, TRACK_LABELS.length - 1) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
