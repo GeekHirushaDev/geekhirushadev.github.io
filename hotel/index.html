@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: oklch(0.96 0.006 85); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: oklch(0.50 0.12 150); text-decoration: none; border-bottom: 1px solid oklch(0.85 0.05 150); }
+  a:hover { color: oklch(0.42 0.13 150); }
+</style>
+</helmet>
+
+<section style="padding: 56px 64px 96px; display: flex; flex-direction: column; gap: 40px;">
+
+  <div style="display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; max-width: 1100px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Turn 1 · UI/UX Blueprint</div>
+      <h1 style="margin: 0; font-size: 40px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; color: oklch(0.22 0.01 60);">Sumi Hema Holiday Resort — Room Board</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: oklch(0.45 0.01 60); max-width: 62ch; text-wrap: pretty;">Internal-only real-time booking. Mobile app for owners/staff (React Native), web dashboard for the super admin (Next.js). One rule drives every decision: the paper logbook, but live — readable from arm's length, bookable in two taps.</p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid oklch(0.88 0.01 60); border-radius: 999px; background: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: oklch(0.35 0.01 60);">ID 1a</div>
+  </div>
+
+  <div id="1a" style="display: flex; flex-direction: column; gap: 64px;">
+
+    <!-- FOUNDATIONS -->
+    <sc-if value="{{ showFoundations }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid oklch(0.88 0.01 60); padding-bottom: 10px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.60 0.14 150);">01</span>
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">Foundations</h2>
+        <span style="font-size: 14px; color: oklch(0.55 0.01 60);">Colour, type, spacing, state language</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1400px;">
+
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Status palette — the whole product</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150);"></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 14px; font-weight: 700; color: oklch(0.22 0.01 60);">Available</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.50 0.01 60);">fill oklch(.96 .04 150) · line oklch(.70 .14 150)</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: oklch(0.58 0.19 25);"></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 14px; font-weight: 700; color: oklch(0.22 0.01 60);">Booked</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.50 0.01 60);">fill oklch(.58 .19 25) · text #fff</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: oklch(0.78 0.16 68);"></div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 14px; font-weight: 700; color: oklch(0.22 0.01 60);">Locked by another user</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.50 0.01 60);">fill oklch(.78 .16 68) · text oklch(.30 .07 68)</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.55; color: oklch(0.45 0.01 60); text-wrap: pretty;">Only three fills exist. Booked and Locked are <strong>solid</strong> so occupied rooms read as mass; Available is light so free rooms read as holes in the board. Shape backs up colour for colour-blind staff: locked cells carry a padlock dot, booked cells carry a filled bar.</div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Neutrals & surfaces</div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;"><div style="height: 40px; border-radius: 8px; background: oklch(0.96 0.006 85); border: 1px solid oklch(0.90 0.01 60);"></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.50 0.01 60);">App bg .96/.006/85</div></div>
+            <div style="display: flex; flex-direction: column; gap: 6px;"><div style="height: 40px; border-radius: 8px; background: #ffffff; border: 1px solid oklch(0.90 0.01 60);"></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.50 0.01 60);">Surface #fff</div></div>
+            <div style="display: flex; flex-direction: column; gap: 6px;"><div style="height: 40px; border-radius: 8px; background: oklch(0.22 0.01 60);"></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.50 0.01 60);">Ink .22/.01/60</div></div>
+            <div style="display: flex; flex-direction: column; gap: 6px;"><div style="height: 40px; border-radius: 8px; background: oklch(0.55 0.01 60);"></div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.50 0.01 60);">Muted .55/.01/60</div></div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.55; color: oklch(0.45 0.01 60); text-wrap: pretty;">Warm off-white ground, no gradients, no shadows except the booking sheet (0 -8px 32px rgba(0,0,0,.18)). Radius scale: 10px cells, 14px cards, 18px sheet top, 999px pills.</div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Type & spacing</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.58 0.01 60); width: 92px;">Screen title</span><span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">Helvetica 24/700</span></div>
+            <div style="display: flex; align-items: baseline; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.58 0.01 60); width: 92px;">Date / section</span><span style="font-size: 18px; font-weight: 600; color: oklch(0.22 0.01 60);">Helvetica 18/600</span></div>
+            <div style="display: flex; align-items: baseline; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.58 0.01 60); width: 92px;">Body / label</span><span style="font-size: 15px; font-weight: 500; color: oklch(0.22 0.01 60);">Helvetica 15/500</span></div>
+            <div style="display: flex; align-items: baseline; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.58 0.01 60); width: 92px;">Phone</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">0719169720</span></div>
+            <div style="display: flex; align-items: baseline; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.58 0.01 60); width: 92px;">Amount</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: oklch(0.22 0.01 60);">2,500</span></div>
+          </div>
+          <div style="font-size: 13px; line-height: 1.55; color: oklch(0.45 0.01 60); text-wrap: pretty;">Two faces only: Helvetica Neue for words, IBM Plex Mono for every number (phones and money align digit-for-digit and never get misread). Nothing below 13px anywhere in the app. Spacing is a 4px scale used at 8 / 12 / 16 / 24 / 32. Tap targets ≥ 48px; cells are 96px tall.</div>
+        </div>
+
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- MOBILE -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid oklch(0.88 0.01 60); padding-bottom: 10px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.60 0.14 150);">02</span>
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">Mobile app — Hotel owner / staff</h2>
+        <span style="font-size: 14px; color: oklch(0.55 0.01 60);">React Native · 390 × 844 · 3 screens, 1 flow</span>
+      </div>
+
+      <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+
+        <!-- SCREEN 1: LOGIN -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">M1</span>
+            <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Login</span>
+          </div>
+          <div style="width: 390px; height: 844px; border-radius: 44px; border: 10px solid oklch(0.20 0.01 60); background: #fff; overflow: hidden; display: flex; flex-direction: column; box-sizing: content-box;">
+            <div style="height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: oklch(0.35 0.01 60);"><span>9:41</span><span>▮▮▮ ▲ ▰</span></div>
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px; padding: 0 28px 80px;">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+                <div style="width: 84px; height: 84px; border-radius: 20px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 30px; font-weight: 700; color: oklch(0.42 0.12 150);">SH</div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                  <div style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60); text-align: center;">Sumi Hema Holiday Resort</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: oklch(0.55 0.01 60);">Katharagama · Staff Login</div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Username</label>
+                  <div style="height: 56px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; padding: 0 16px; font-size: 17px; color: oklch(0.22 0.01 60);">sumihema.owner</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Password</label>
+                  <div style="height: 56px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 20px; letter-spacing: 0.18em; color: oklch(0.22 0.01 60);">••••••••</span>
+                    <span style="font-size: 13px; font-weight: 600; color: oklch(0.50 0.12 150);">SHOW</span>
+                  </div>
+                </div>
+                <div style="height: 58px; border-radius: 12px; background: oklch(0.50 0.14 150); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 0.01em; margin-top: 8px;">Login</div>
+                <div style="text-align: center; font-size: 13px; color: oklch(0.58 0.01 60);">Trouble logging in? Call the office.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 2: GRID -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">M2</span>
+            <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Main grid — the whole product</span>
+          </div>
+          <div style="width: 390px; height: 844px; border-radius: 44px; border: 10px solid oklch(0.20 0.01 60); background: oklch(0.96 0.006 85); overflow: hidden; display: flex; flex-direction: column; box-sizing: content-box;">
+            <div style="height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: oklch(0.35 0.01 60); background: #fff;"><span>9:41</span><span>▮▮▮ ▲ ▰</span></div>
+
+            <div style="background: #fff; border-bottom: 1px solid oklch(0.90 0.01 60); padding: 10px 16px 14px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 28px; height: 28px; border-radius: 8px; background: oklch(0.96 0.04 150); border: 1.5px solid oklch(0.70 0.14 150); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: oklch(0.42 0.12 150);">SH</div>
+                  <span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">Room Board</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: oklch(0.45 0.13 150);">
+                    <span style="width: 7px; height: 7px; border-radius: 999px; background: oklch(0.65 0.16 150); display: inline-block;"></span>LIVE
+                  </div>
+                  <div style="height: 34px; padding: 0 14px; border-radius: 999px; border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; font-size: 13px; font-weight: 700; color: oklch(0.30 0.01 60);">History</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 48px; height: 48px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 600; color: oklch(0.35 0.01 60);">‹</div>
+                <div style="flex: 1; height: 48px; border-radius: 12px; background: oklch(0.22 0.01 60); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;">
+                  <span style="font-size: 17px; font-weight: 700; color: #fff;">Today · Thu 27 Aug</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: oklch(0.78 0.01 60);">TAP TO PICK A DATE</span>
+                </div>
+                <div style="width: 48px; height: 48px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 600; color: oklch(0.35 0.01 60);">›</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <div style="flex: 1; height: 44px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 1px solid oklch(0.82 0.07 150); display: flex; align-items: center; justify-content: center; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: oklch(0.40 0.12 150);">5</span><span style="font-size: 12px; font-weight: 600; color: oklch(0.40 0.10 150);">Free</span></div>
+                <div style="flex: 1; height: 44px; border-radius: 10px; background: oklch(0.94 0.05 25); border: 1px solid oklch(0.82 0.10 25); display: flex; align-items: center; justify-content: center; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: oklch(0.48 0.18 25);">5</span><span style="font-size: 12px; font-weight: 600; color: oklch(0.48 0.16 25);">Booked</span></div>
+                <div style="flex: 1.5; height: 44px; border-radius: 10px; background: oklch(0.22 0.01 60); display: flex; align-items: center; justify-content: center; gap: 8px;"><span style="font-size: 11px; font-weight: 600; color: oklch(0.78 0.01 60);">TONIGHT</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 700; color: #fff;">15,000</span></div>
+              </div>
+              <div style="text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: oklch(0.55 0.01 60);">FULL DAY ONLY · IN 2:00 PM · OUT 11:00 AM</div>
+            </div>
+
+            <div style="flex: 1; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden;">
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: oklch(0.45 0.01 60);">BLOCK A</span><span style="flex: 1; height: 1px; background: oklch(0.90 0.01 60);"></span></div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: #fff;">A-12</span><span style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,.92);">Sunil R.</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #fff;">0719169720</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.9);">2,500 · N2/3</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 700; color: oklch(0.35 0.10 150);">A-11</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span><span style="font-size: 11px; font-weight: 500; color: oklch(0.52 0.06 150);">Tap to book</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: #fff;">A-10</span><span style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,.92);">Ravi F.</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #fff;">0771234567</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.9);">3,000 · 1N</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.78 0.16 68); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: oklch(0.28 0.07 68);">A-09</span><span style="width: 8px; height: 8px; border-radius: 999px; border: 2.5px solid oklch(0.28 0.07 68);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">LOCKED</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: oklch(0.34 0.07 68);">Nimal · 0:38</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 700; color: oklch(0.35 0.10 150);">A-8</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span><span style="font-size: 11px; font-weight: 500; color: oklch(0.52 0.06 150);">Tap to book</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: #fff;">A-7</span><span style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,.92);">Ajith K.</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #fff;">0762223344</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.9);">2,500 · N1/2</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: oklch(0.45 0.01 60);">BLOCK B</span><span style="flex: 1; height: 1px; background: oklch(0.90 0.01 60);"></span></div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: #fff;">B-1</span><span style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,.92);">Malini J.</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #fff;">0705556677</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.9);">4,500 · 1N</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 700; color: oklch(0.35 0.10 150);">B-2</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span><span style="font-size: 11px; font-weight: 500; color: oklch(0.52 0.06 150);">Tap to book</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 700; color: oklch(0.35 0.10 150);">B-3</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span><span style="font-size: 11px; font-weight: 500; color: oklch(0.52 0.06 150);">Tap to book</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: #fff;">B-4</span><span style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,.92);">Saman W.</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: #fff;">0718889900</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.9);">2,500 · 1N</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.78 0.16 68); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 14px; font-weight: 700; color: oklch(0.28 0.07 68);">B-5</span><span style="width: 8px; height: 8px; border-radius: 999px; border: 2.5px solid oklch(0.28 0.07 68);"></span></div>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">LOCKED</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: oklch(0.34 0.07 68);">You · 0:52</span></div>
+                  </div>
+                  <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 700; color: oklch(0.35 0.10 150);">B-6</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span><span style="font-size: 11px; font-weight: 500; color: oklch(0.52 0.06 150);">Tap to book</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 18px; padding: 4px 0 0;">
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150);"></span><span style="font-size: 12px; font-weight: 600; color: oklch(0.45 0.01 60);">Free</span></div>
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.58 0.19 25);"></span><span style="font-size: 12px; font-weight: 600; color: oklch(0.45 0.01 60);">Booked</span></div>
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.78 0.16 68);"></span><span style="font-size: 12px; font-weight: 600; color: oklch(0.45 0.01 60);">In use</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: BOOKING SHEET -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">M3</span>
+            <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Quick booking sheet</span>
+          </div>
+          <div style="width: 390px; height: 844px; border-radius: 44px; border: 10px solid oklch(0.20 0.01 60); background: oklch(0.96 0.006 85); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; position: relative; box-sizing: content-box;">
+            <div style="position: absolute; inset: 0; background: oklch(0.96 0.006 85);"></div>
+            <div style="position: absolute; top: 44px; left: 16px; right: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; opacity: 0.5;">
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25);"></div>
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150);"></div>
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25);"></div>
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.78 0.16 68);"></div>
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150);"></div>
+              <div style="height: 96px; border-radius: 10px; background: oklch(0.58 0.19 25);"></div>
+            </div>
+            <div style="position: absolute; inset: 0; background: rgba(28,27,25,0.45);"></div>
+            <div style="position: relative; background: #fff; border-radius: 22px 22px 0 0; padding: 12px 20px 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 -8px 32px rgba(0,0,0,0.18);">
+              <div style="width: 44px; height: 5px; border-radius: 999px; background: oklch(0.88 0.01 60); align-self: center;"></div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">Book B-2</span>
+                  <span style="font-size: 14px; font-weight: 500; color: oklch(0.55 0.01 60);">Thu 27 Aug</span>
+                </div>
+                <div style="width: 44px; height: 44px; border-radius: 999px; background: oklch(0.95 0.006 85); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: oklch(0.45 0.01 60);">✕</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Customer name</label>
+                  <div style="height: 56px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; padding: 0 16px; font-size: 19px; font-weight: 600; color: oklch(0.22 0.01 60);">Sunil Rathnayake</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Phone number</label>
+                  <div style="height: 60px; border-radius: 12px; border: 2px solid oklch(0.50 0.14 150); background: #fff; display: flex; align-items: center; padding: 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; letter-spacing: 0.02em; color: oklch(0.22 0.01 60);">0719169720</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Amount per night (LKR)</label>
+                  <div style="height: 60px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; padding: 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; color: oklch(0.22 0.01 60);">2500</div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <div style="flex: 1; height: 44px; border-radius: 999px; background: oklch(0.95 0.006 85); border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: oklch(0.30 0.01 60);">2,500</div>
+                  <div style="flex: 1; height: 44px; border-radius: 999px; background: oklch(0.95 0.006 85); border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: oklch(0.30 0.01 60);">3,000</div>
+                  <div style="flex: 1; height: 44px; border-radius: 999px; background: oklch(0.95 0.006 85); border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600; color: oklch(0.30 0.01 60);">4,500</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <label style="font-size: 14px; font-weight: 600; color: oklch(0.35 0.01 60);">Nights</label>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 56px; height: 56px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600; color: oklch(0.35 0.01 60);">–</div>
+                    <div style="flex: 1; height: 56px; border-radius: 12px; background: oklch(0.95 0.006 85); border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; justify-content: center; gap: 8px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: oklch(0.22 0.01 60);">3</span><span style="font-size: 15px; font-weight: 600; color: oklch(0.45 0.01 60);">nights</span></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600; color: oklch(0.35 0.01 60);">+</div>
+                  </div>
+                </div>
+                <div style="border-radius: 12px; background: oklch(0.97 0.006 85); border: 1px solid oklch(0.90 0.01 60); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);">CHECK IN</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">Thu 27 Aug · 2:00 PM</span></div>
+                    <span style="font-size: 18px; color: oklch(0.55 0.01 60);">→</span>
+                    <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);">CHECK OUT</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">Sun 30 Aug · 11:00 AM</span></div>
+                  </div>
+                  <div style="height: 1px; background: oklch(0.92 0.01 60);"></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 14px; font-weight: 600; color: oklch(0.40 0.01 60);">Total · 2,500 × 3 nights</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: oklch(0.22 0.01 60);">7,500</span>
+                  </div>
+                </div>
+              </div>
+              <div style="height: 62px; border-radius: 14px; background: oklch(0.50 0.14 150); display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; color: #fff;">Confirm Booking</div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.55 0.01 60);"><span style="width: 7px; height: 7px; border-radius: 999px; background: oklch(0.78 0.16 68); display: inline-block;"></span>ROOM HELD FOR YOU · 0:52 LEFT</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 4: BOOKING HISTORY -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">M4</span>
+            <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Booking history</span>
+          </div>
+          <div style="width: 390px; height: 844px; border-radius: 44px; border: 10px solid oklch(0.20 0.01 60); background: oklch(0.96 0.006 85); overflow: hidden; display: flex; flex-direction: column; box-sizing: content-box;">
+            <div style="height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: oklch(0.35 0.01 60); background: #fff;"><span>9:41</span><span>▮▮▮ ▲ ▰</span></div>
+
+            <div style="background: #fff; border-bottom: 1px solid oklch(0.90 0.01 60); padding: 6px 16px 14px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 24px; font-weight: 600; color: oklch(0.35 0.01 60);">‹</span>
+                <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">History</span>
+              </div>
+              <div style="height: 50px; border-radius: 12px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; gap: 10px; padding: 0 16px;">
+                <span style="font-size: 16px; color: oklch(0.55 0.01 60);">⌕</span>
+                <span style="font-size: 16px; color: oklch(0.55 0.01 60);">Search name or phone</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <div style="flex: 1; height: 40px; border-radius: 999px; background: oklch(0.22 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff;">7 days</div>
+                <div style="flex: 1; height: 40px; border-radius: 999px; border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: oklch(0.35 0.01 60);">This month</div>
+                <div style="flex: 1; height: 40px; border-radius: 999px; border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: oklch(0.35 0.01 60);">Pick dates</div>
+              </div>
+              <div style="height: 56px; border-radius: 12px; background: oklch(0.22 0.01 60); display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
+                <span style="font-size: 13px; font-weight: 600; color: oklch(0.78 0.01 60);">21–27 AUG · 19 STAYS · COLLECTED</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: #fff;">57,500</span>
+              </div>
+            </div>
+
+            <div style="flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: oklch(0.45 0.01 60);">TODAY · THU 27</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: oklch(0.30 0.01 60);">15,000 COLLECTED</span>
+                </div>
+                <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 12px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid oklch(0.95 0.01 60);">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.94 0.05 25); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.17 25);">A-12</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Sunil Rathnayake</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.50 0.01 60);">0719169720 · 3 NIGHTS · 27→30 AUG · Nimal</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.22 0.01 60);">7,500</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid oklch(0.95 0.01 60);">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.94 0.05 25); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.17 25);">A-10</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Ravi Fernando</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.50 0.01 60);">0771234567 · 1 NIGHT · 27→28 AUG · Kumari</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.22 0.01 60);">3,000</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid oklch(0.95 0.01 60);">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.94 0.05 25); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.17 25);">B-1</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Malini Jayawardena</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.50 0.01 60);">0705556677 · 1 NIGHT · 27→28 AUG · Kumari</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.22 0.01 60);">4,500</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.93 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.01 60);">B-3</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.50 0.01 60); text-decoration: line-through;">Chamara Silva</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.55 0.01 60);">0716667788 · CANCELLED 12:20</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.58 0.01 60); text-decoration: line-through;">2,500</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: oklch(0.45 0.01 60);">WED 26</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: oklch(0.30 0.01 60);">7,500 COLLECTED</span>
+                </div>
+                <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 12px; overflow: hidden;">
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid oklch(0.95 0.01 60);">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.94 0.05 25); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.17 25);">A-11</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Nadeeka Perera</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.50 0.01 60);">0723334455 · 2 NIGHTS · 26→28 AUG · Nimal</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.22 0.01 60);">3,500</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
+                    <span style="width: 48px; height: 40px; border-radius: 8px; background: oklch(0.94 0.05 25); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: oklch(0.45 0.17 25);">B-6</span>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Ajith Kumara</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.50 0.01 60);">0762223344 · 1 NIGHT · 26→27 AUG · Kumari</span>
+                    </div>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: oklch(0.22 0.01 60);">4,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="text-align: center; font-size: 13px; font-weight: 600; color: oklch(0.50 0.12 150); padding-top: 4px;">Load older days</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MOBILE NOTES -->
+        <sc-if value="{{ showAnnotations }}" hint-placeholder-val="{{ true }}">
+        <div style="width: 380px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Why 3-across, not 6-across</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Six cells across a 390pt phone gives each cell ~55pt of width — a 10-digit phone number cannot be legible there at any size a 50-year-old owner can read. So the paper logbook's two rows become two labelled <strong>blocks</strong> (A on top, B below), each block wrapping to 2 rows of 3 in the exact paper order (A-12 → A-7, B-1 → B-6). Cell width becomes 114pt: phone at 14pt mono, amount at 13pt, both readable at arm's length. The whole 12-room board still fits one screen with no scrolling.</p>
+          </div>
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Cell anatomy</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Every cell is the same 3-line skeleton, so the eye learns one shape: <strong>room label</strong> top-left · <strong>state glyph</strong> top-right (bar = booked, ring = locked, nothing = free) · <strong>two data lines</strong> bottom-left. Booked = phone then amount. Free = "FREE" then "Tap to book". Locked = "LOCKED" then who holds it and the countdown. Nothing is hidden behind a detail view.</p>
+          </div>
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Tap budget</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: oklch(0.35 0.01 60);">
+              <div style="display: flex; gap: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: oklch(0.45 0.13 150);">2</span><span>New booking: tap green cell → type phone + amount → Confirm.</span></div>
+              <div style="display: flex; gap: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: oklch(0.45 0.13 150);">1</span><span>Next / previous day: the ‹ › arrows flanking the date.</span></div>
+              <div style="display: flex; gap: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: oklch(0.45 0.13 150);">1</span><span>Cancel / edit a booking: long-press a red cell → Release · Edit amount.</span></div>
+              <div style="display: flex; gap: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: oklch(0.45 0.13 150);">0</span><span>Revenue: the black chip in the header, always on screen.</span></div>
+            </div>
+          </div>
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Name field & history (M3 / M4)</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">The sheet is now three fields — <strong>name, phone, amount</strong> — name first because that's how staff greet the guest. Amount pre-fills from the room's default rate (set in W3), so the common case stays one tap on a chip. The cell then shows a short name above the phone number; the full name lives in History.</p>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">History opens from the pill in the app bar — one tap from the board. Grouped by day, newest first, each day showing its own total; search matches name or phone as you type. Cancelled bookings stay in the list struck through, so the owner can see what was released and by whom. Admins see all staff bookings; nothing is per-user hidden.</p>
+          </div>
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Multi-night stays · full-day rule</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Rooms are sold by the whole day only: <strong>check-in 2:00 PM, check-out 11:00 AM</strong>, so a stay is always a whole number of nights and one room can never be held by two guests on the same date. Confirming a 3-night booking writes the same guest to all three dates in one action — the sheet shows the check-in → check-out dates and the running total (rate × nights) before the button, so there is nothing to calculate by hand.</p>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Two money figures, each labelled so they never get confused: the board and dashboard show <strong>TONIGHT</strong> — the sum of per-night rates for rooms occupied on the selected date (15,000 across 5 rooms) — while History shows <strong>COLLECTED</strong> per day, the stay totals of bookings taken that day. Average rate follows the tonight figure.</p>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">On the board a multi-night cell reads <span style="font-family: 'IBM Plex Mono', monospace;">N2/3</span> under the amount — night 2 of 3 — so the owner can see at a glance which guests are mid-stay and which check out tomorrow. Amounts on cells are always <em>per night</em>; History and the dashboard log show nights and the stay total. Shortening a stay releases only the freed dates.</p>
+          </div>
+          <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Real-time locking</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Tapping a green cell claims a 60-second lock server-side. Every other device turns that cell orange instantly with the holder's name and a live countdown — no dialog, no error message, nothing to dismiss. Lock expires or Confirm lands, and the cell resolves to green or red for everyone. A locked cell is not tappable; the orange fill plus ring reads as "someone's hand is on it".</p>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+    <!-- WEB -->
+    <sc-if value="{{ showWeb }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid oklch(0.88 0.01 60); padding-bottom: 10px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.60 0.14 150);">03</span>
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.22 0.01 60);">Web dashboard — Super admin</h2>
+        <span style="font-size: 14px; color: oklch(0.55 0.01 60);">Next.js · 1440 × 900 · 2 screens, one sidebar</span>
+      </div>
+
+      <!-- W1 USER MANAGEMENT -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">W1</span>
+          <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">User management</span>
+        </div>
+        <div style="width: 1440px; height: 820px; border-radius: 12px; border: 1px solid oklch(0.86 0.01 60); background: oklch(0.97 0.006 85); overflow: hidden; display: flex;">
+          <div style="width: 240px; background: oklch(0.20 0.01 60); padding: 22px 16px; display: flex; flex-direction: column; gap: 26px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 34px; height: 34px; border-radius: 9px; background: oklch(0.96 0.04 150); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.40 0.12 150);">SH</div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 14px; font-weight: 700; color: #fff;">Sumi Hema</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.65 0.01 60);">SUPER ADMIN</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="height: 44px; border-radius: 9px; background: oklch(0.28 0.01 60); display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 600; color: #fff;">Users</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Master overview</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Bookings log</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Rooms</div>
+            </div>
+            <div style="margin-top: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.6; color: oklch(0.58 0.01 60);">v1.0 · Katharagama<br>engineer@sumihema</div>
+          </div>
+          <div style="flex: 1; padding: 32px 36px; display: flex; flex-direction: column; gap: 24px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <h3 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.015em; color: oklch(0.22 0.01 60);">Admin accounts</h3>
+                <span style="font-size: 14px; color: oklch(0.50 0.01 60);">4 accounts · 3 active · 1 disabled</span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <div style="height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid oklch(0.86 0.01 60); background: #fff; display: flex; align-items: center; font-size: 14px; font-weight: 600; color: oklch(0.30 0.01 60);">Export CSV</div>
+                <div style="height: 44px; padding: 0 20px; border-radius: 10px; background: oklch(0.50 0.14 150); display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #fff;">＋ Add admin</div>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; overflow: hidden;">
+              <div style="display: grid; grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1.4fr 200px; padding: 14px 20px; background: oklch(0.98 0.004 85); border-bottom: 1px solid oklch(0.92 0.01 60); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.50 0.01 60);">
+                <span>Name</span><span>Username</span><span>Phone</span><span>Status</span><span>Last active</span><span style="text-align: right;">Actions</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1.4fr 200px; align-items: center; padding: 16px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);">
+                <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Sumith Hemapala</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">sumihema.owner</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">0719169720</span>
+                <span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">Active</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.50 0.01 60);">2 min ago</span>
+                <div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Disable</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1.4fr 200px; align-items: center; padding: 16px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);">
+                <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Nimal Perera</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">nimal.front</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">0771234567</span>
+                <span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">Active</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.50 0.01 60);">Now</span>
+                <div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Disable</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1.4fr 200px; align-items: center; padding: 16px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);">
+                <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Kumari Silva</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">kumari.desk</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.35 0.01 60);">0705556677</span>
+                <span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">Active</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.50 0.01 60);">Yesterday</span>
+                <div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Disable</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1.4fr 200px; align-items: center; padding: 16px 20px; background: oklch(0.98 0.004 85);">
+                <span style="font-size: 15px; font-weight: 600; color: oklch(0.55 0.01 60);">Ajith Bandara</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.58 0.01 60);">ajith.night</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.58 0.01 60);">0762223344</span>
+                <span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.93 0.01 60); font-size: 12px; font-weight: 700; color: oklch(0.45 0.01 60);">Disabled</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">12 Aug</span>
+                <div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 7px 14px; border-radius: 8px; border: 1px solid oklch(0.82 0.07 150); font-size: 13px; font-weight: 600; color: oklch(0.45 0.13 150);">Enable</span></div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 20px;">
+              <div style="flex: 1; background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.55 0.01 60);">Add admin — inline drawer, 4 fields</span>
+                <span style="font-size: 14px; line-height: 1.55; color: oklch(0.38 0.01 60);">Name · Username · Phone · temporary password (auto-generated, copyable). Slides in from the right; no separate page, no confirmation screen. Disable is a single click with an undo toast — never a hard delete, so booking history stays intact.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- W2 MASTER OVERVIEW -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">W2</span>
+          <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Master overview — logbook at full width</span>
+        </div>
+        <div style="width: 1440px; height: 1010px; border-radius: 12px; border: 1px solid oklch(0.86 0.01 60); background: oklch(0.97 0.006 85); overflow: hidden; display: flex;">
+          <div style="width: 240px; background: oklch(0.20 0.01 60); padding: 22px 16px; display: flex; flex-direction: column; gap: 26px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 34px; height: 34px; border-radius: 9px; background: oklch(0.96 0.04 150); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.40 0.12 150);">SH</div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 14px; font-weight: 700; color: #fff;">Sumi Hema</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.65 0.01 60);">SUPER ADMIN</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Users</div>
+              <div style="height: 44px; border-radius: 9px; background: oklch(0.28 0.01 60); display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 600; color: #fff;">Master overview</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Bookings log</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Rooms</div>
+            </div>
+          </div>
+          <div style="flex: 1; padding: 30px 36px; display: flex; flex-direction: column; gap: 22px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <h3 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.015em; color: oklch(0.22 0.01 60);">Thursday, 27 August 2026</h3>
+                <div style="display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;"><span style="display: flex; align-items: center; gap: 8px; color: oklch(0.45 0.13 150);"><span style="width: 7px; height: 7px; border-radius: 999px; background: oklch(0.65 0.16 150); display: inline-block;"></span>LIVE · SYNCED 2s AGO</span><span style="color: oklch(0.55 0.01 60);">FULL DAY ONLY · IN 2:00 PM · OUT 11:00 AM</span></div>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid oklch(0.86 0.01 60); background: #fff; display: flex; align-items: center; font-size: 20px; color: oklch(0.35 0.01 60);">‹</div>
+                <div style="height: 44px; padding: 0 20px; border-radius: 10px; border: 1px solid oklch(0.86 0.01 60); background: #fff; display: flex; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">2026-08-27</div>
+                <div style="height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid oklch(0.86 0.01 60); background: #fff; display: flex; align-items: center; font-size: 20px; color: oklch(0.35 0.01 60);">›</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+              <div style="background: oklch(0.22 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: oklch(0.75 0.01 60);">REVENUE TONIGHT</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 34px; font-weight: 700; color: #fff; letter-spacing: -0.01em;">15,000</span>
+                <span style="font-size: 13px; color: oklch(0.75 0.01 60);">LKR · 5 rooms occupied</span>
+              </div>
+              <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);">OCCUPANCY</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 34px; font-weight: 700; color: oklch(0.22 0.01 60);">5/12</span>
+                <span style="font-size: 13px; color: oklch(0.52 0.01 60);">42% of rooms</span>
+              </div>
+              <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);">AVG. RATE</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 34px; font-weight: 700; color: oklch(0.22 0.01 60);">3,000</span>
+                <span style="font-size: 13px; color: oklch(0.52 0.01 60);">LKR per occupied room</span>
+              </div>
+              <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);">IN PROGRESS</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 34px; font-weight: 700; color: oklch(0.55 0.15 68);">2</span>
+                <span style="font-size: 13px; color: oklch(0.52 0.01 60);">cells locked by staff</span>
+              </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 17px; font-weight: 700; color: oklch(0.22 0.01 60);">Room board — exact paper layout</span>
+                <div style="display: flex; gap: 16px;">
+                  <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150);"></span><span style="font-size: 13px; color: oklch(0.45 0.01 60);">Available</span></div>
+                  <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.58 0.19 25);"></span><span style="font-size: 13px; color: oklch(0.45 0.01 60);">Booked</span></div>
+                  <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 4px; background: oklch(0.78 0.16 68);"></span><span style="font-size: 13px; color: oklch(0.45 0.01 60);">Locked by staff</span></div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: #fff;">A-12</span><span style="width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92);">Sunil Rathnayake</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff;">0719169720</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: rgba(255,255,255,.9);">2,500 · N2/3 · Nimal</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.35 0.10 150);">A-11</span><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: #fff;">A-10</span><span style="width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92);">Ravi Fernando</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff;">0771234567</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: rgba(255,255,255,.9);">3,000 · 1N · Kumari</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.78 0.16 68); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">A-09</span><span style="width: 9px; height: 9px; border-radius: 999px; border: 2.5px solid oklch(0.28 0.07 68);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">LOCKED</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.34 0.07 68);">Nimal · 0:38</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.35 0.10 150);">A-8</span><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: #fff;">A-7</span><span style="width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92);">Ajith Kumara</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff;">0762223344</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: rgba(255,255,255,.9);">2,500 · N1/2 · Nimal</span></div></div>
+
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: #fff;">B-1</span><span style="width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92);">Malini Jayawardena</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff;">0705556677</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: rgba(255,255,255,.9);">4,500 · 1N · Kumari</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.35 0.10 150);">B-2</span><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.35 0.10 150);">B-3</span><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.58 0.19 25); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: #fff;">B-4</span><span style="width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.85);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92);">Saman Weera</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #fff;">0718889900</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: rgba(255,255,255,.9);">2,500 · 1N · Nimal</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.78 0.16 68); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">B-5</span><span style="width: 9px; height: 9px; border-radius: 999px; border: 2.5px solid oklch(0.28 0.07 68);"></span></div><div style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.28 0.07 68);">LOCKED</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.34 0.07 68);">Kumari · 0:52</span></div></div>
+                <div style="height: 118px; border-radius: 10px; background: oklch(0.96 0.04 150); border: 2px solid oklch(0.70 0.14 150); padding: 12px; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-size: 15px; font-weight: 700; color: oklch(0.35 0.10 150);">B-6</span><span style="font-size: 16px; font-weight: 700; color: oklch(0.42 0.13 150);">FREE</span></div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; flex: 1;">
+              <div style="flex: 1.4; background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                <span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">Rooms occupied tonight · rate per night</span>
+                <div style="display: flex; flex-direction: column; gap: 0;">
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding-bottom: 8px; border-bottom: 1px solid oklch(0.92 0.01 60); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.55 0.01 60);"><span>ROOM</span><span>NAME</span><span>PHONE</span><span>AMT/N</span><span>NIGHTS</span><span>BY</span><span>TIME</span></div>
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding: 10px 0; border-bottom: 1px solid oklch(0.95 0.01 60); font-size: 14px; color: oklch(0.28 0.01 60);"><span style="font-weight: 700;">A-12</span><span style="font-weight: 500;">Sunil Rathnayake</span><span style="font-family: 'IBM Plex Mono', monospace;">0719169720</span><span style="font-family: 'IBM Plex Mono', monospace;">2,500</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">3N</span><span>Nimal</span><span style="font-family: 'IBM Plex Mono', monospace; color: oklch(0.50 0.01 60);">08:14</span></div>
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding: 10px 0; border-bottom: 1px solid oklch(0.95 0.01 60); font-size: 14px; color: oklch(0.28 0.01 60);"><span style="font-weight: 700;">A-10</span><span style="font-weight: 500;">Ravi Fernando</span><span style="font-family: 'IBM Plex Mono', monospace;">0771234567</span><span style="font-family: 'IBM Plex Mono', monospace;">3,000</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">1N</span><span>Kumari</span><span style="font-family: 'IBM Plex Mono', monospace; color: oklch(0.50 0.01 60);">09:02</span></div>
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding: 10px 0; border-bottom: 1px solid oklch(0.95 0.01 60); font-size: 14px; color: oklch(0.28 0.01 60);"><span style="font-weight: 700;">A-7</span><span style="font-weight: 500;">Ajith Kumara</span><span style="font-family: 'IBM Plex Mono', monospace;">0762223344</span><span style="font-family: 'IBM Plex Mono', monospace;">2,500</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">2N</span><span>Nimal</span><span style="font-family: 'IBM Plex Mono', monospace; color: oklch(0.50 0.01 60);">10:31</span></div>
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding: 10px 0; border-bottom: 1px solid oklch(0.95 0.01 60); font-size: 14px; color: oklch(0.28 0.01 60);"><span style="font-weight: 700;">B-1</span><span style="font-weight: 500;">Malini Jayaw.</span><span style="font-family: 'IBM Plex Mono', monospace;">0705556677</span><span style="font-family: 'IBM Plex Mono', monospace;">4,500</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">1N</span><span>Kumari</span><span style="font-family: 'IBM Plex Mono', monospace; color: oklch(0.50 0.01 60);">11:47</span></div>
+                  <div style="display: grid; grid-template-columns: 56px 1.1fr 1.05fr 74px 62px 0.8fr 62px; padding: 10px 0; font-size: 14px; color: oklch(0.28 0.01 60);"><span style="font-weight: 700;">B-4</span><span style="font-weight: 500;">Saman Weera</span><span style="font-family: 'IBM Plex Mono', monospace;">0718889900</span><span style="font-family: 'IBM Plex Mono', monospace;">2,500</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">1N</span><span>Nimal</span><span style="font-family: 'IBM Plex Mono', monospace; color: oklch(0.50 0.01 60);">13:05</span></div>
+                </div>
+              </div>
+              <div style="flex: 1; background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                <span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">Last 7 days revenue</span>
+                <div style="flex: 1; display: flex; align-items: flex-end; gap: 10px;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 52px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">21</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 72px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">22</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 44px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">23</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 96px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">24</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 64px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">25</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 80px; border-radius: 6px 6px 0 0; background: oklch(0.88 0.03 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.55 0.01 60);">26</span></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><div style="width: 100%; height: 112px; border-radius: 6px 6px 0 0; background: oklch(0.50 0.14 150);"></div><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; color: oklch(0.30 0.01 60);">27</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- W3 ROOMS -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: oklch(0.22 0.01 60); color: #fff;">W3</span>
+          <span style="font-size: 15px; font-weight: 600; color: oklch(0.22 0.01 60);">Rooms — super admin only</span>
+        </div>
+        <div style="width: 1440px; height: 900px; border-radius: 12px; border: 1px solid oklch(0.86 0.01 60); background: oklch(0.97 0.006 85); overflow: hidden; display: flex;">
+          <div style="width: 240px; background: oklch(0.20 0.01 60); padding: 22px 16px; display: flex; flex-direction: column; gap: 26px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 34px; height: 34px; border-radius: 9px; background: oklch(0.96 0.04 150); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; color: oklch(0.40 0.12 150);">SH</div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 14px; font-weight: 700; color: #fff;">Sumi Hema</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: oklch(0.65 0.01 60);">SUPER ADMIN</span></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Users</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Master overview</div>
+              <div style="height: 44px; border-radius: 9px; display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 500; color: oklch(0.72 0.01 60);">Bookings log</div>
+              <div style="height: 44px; border-radius: 9px; background: oklch(0.28 0.01 60); display: flex; align-items: center; padding: 0 14px; font-size: 15px; font-weight: 600; color: #fff;">Rooms</div>
+            </div>
+          </div>
+          <div style="flex: 1; padding: 32px 36px; display: flex; flex-direction: column; gap: 22px; overflow: hidden;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <h3 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.015em; color: oklch(0.22 0.01 60);">Rooms</h3>
+                <span style="font-size: 14px; color: oklch(0.50 0.01 60);">12 rooms · 11 in service · 1 out of service · order matches the paper book</span>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <div style="height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid oklch(0.86 0.01 60); background: #fff; display: flex; align-items: center; font-size: 14px; font-weight: 600; color: oklch(0.30 0.01 60);">Reorder</div>
+                <div style="height: 44px; padding: 0 20px; border-radius: 10px; background: oklch(0.50 0.14 150); display: flex; align-items: center; font-size: 15px; font-weight: 700; color: #fff;">＋ Add room</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+              <div style="flex: 1.55; background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; padding: 14px 20px; background: oklch(0.98 0.004 85); border-bottom: 1px solid oklch(0.92 0.01 60); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.50 0.01 60);">
+                  <span>#</span><span>Room</span><span>Block</span><span>Default rate</span><span>Status</span><span style="text-align: right;">Actions</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">1</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-12</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">2</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-11</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">3</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-10</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">3,000</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">4</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-09</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">5</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-8</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">6</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">A-7</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block A</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">7</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">B-1</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">4,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">8</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">B-2</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">4,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">9</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">B-3</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">10</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">B-4</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; border-bottom: 1px solid oklch(0.94 0.01 60);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">11</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.22 0.01 60);">B-5</span><span style="font-size: 14px; color: oklch(0.40 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.30 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.94 0.05 150); font-size: 12px; font-weight: 700; color: oklch(0.40 0.12 150);">In service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.05 25); font-size: 13px; font-weight: 600; color: oklch(0.52 0.17 25);">Hide</span></div></div>
+                <div style="display: grid; grid-template-columns: 40px 1fr 1fr 1.1fr 1.1fr 150px; align-items: center; padding: 13px 20px; background: oklch(0.98 0.004 85);"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: oklch(0.58 0.01 60);">12</span><span style="font-size: 15px; font-weight: 700; color: oklch(0.50 0.01 60);">B-6</span><span style="font-size: 14px; color: oklch(0.55 0.01 60);">Block B</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: oklch(0.55 0.01 60);">2,500</span><span style="justify-self: start; padding: 4px 10px; border-radius: 999px; background: oklch(0.93 0.01 60); font-size: 12px; font-weight: 700; color: oklch(0.45 0.01 60);">Out of service</span><div style="display: flex; gap: 8px; justify-content: flex-end;"><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.88 0.01 60); font-size: 13px; font-weight: 600; color: oklch(0.30 0.01 60);">Edit</span><span style="padding: 6px 12px; border-radius: 8px; border: 1px solid oklch(0.82 0.07 150); font-size: 13px; font-weight: 600; color: oklch(0.45 0.13 150);">Restore</span></div></div>
+              </div>
+
+              <div style="flex: 1; background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 19px; font-weight: 700; color: oklch(0.22 0.01 60);">Add room</span>
+                  <span style="font-size: 18px; color: oklch(0.50 0.01 60);">✕</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                  <div style="display: flex; flex-direction: column; gap: 7px;">
+                    <label style="font-size: 13px; font-weight: 600; color: oklch(0.40 0.01 60);">Room label — exactly as on the paper book</label>
+                    <div style="height: 52px; border-radius: 10px; border: 2px solid oklch(0.50 0.14 150); background: #fff; display: flex; align-items: center; padding: 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 600; color: oklch(0.22 0.01 60);">B-7</div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 7px;">
+                    <label style="font-size: 13px; font-weight: 600; color: oklch(0.40 0.01 60);">Block</label>
+                    <div style="display: flex; gap: 8px;">
+                      <div style="flex: 1; height: 48px; border-radius: 10px; border: 1px solid oklch(0.88 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: oklch(0.35 0.01 60);">Block A</div>
+                      <div style="flex: 1; height: 48px; border-radius: 10px; background: oklch(0.22 0.01 60); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff;">Block B</div>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 7px;">
+                    <label style="font-size: 13px; font-weight: 600; color: oklch(0.40 0.01 60);">Default rate (LKR) — pre-fills the booking sheet</label>
+                    <div style="height: 52px; border-radius: 10px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; padding: 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 600; color: oklch(0.22 0.01 60);">2500</div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 7px;">
+                    <label style="font-size: 13px; font-weight: 600; color: oklch(0.40 0.01 60);">Position in the grid</label>
+                    <div style="height: 52px; border-radius: 10px; border: 1.5px solid oklch(0.86 0.01 60); background: oklch(0.98 0.004 85); display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 15px; color: oklch(0.30 0.01 60);"><span>After B-6 (last)</span><span style="color: oklch(0.55 0.01 60);">▾</span></div>
+                  </div>
+                </div>
+                <div style="height: 54px; border-radius: 12px; background: oklch(0.50 0.14 150); display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; color: #fff;">Save room</div>
+                <div style="font-size: 13px; line-height: 1.55; color: oklch(0.45 0.01 60); text-wrap: pretty;">Every room is sold as a full day — check-in 2:00 PM, check-out 11:00 AM — so a stay is counted in whole nights and no room is ever split across two guests in one day. The board renders whatever this list says — add a room and every phone shows it on next sync. "Out of service" greys the cell and blocks tapping; it never deletes past bookings.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ showAnnotations }}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1440px;">
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Web ≠ more features</div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">The dashboard is the same board with the space to show more per cell: the staff member who took each booking, and locks attributed by name. Nothing the owner needs on mobile is web-only, and nothing web-only leaks into mobile.</p>
+        </div>
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Grid spec (web)</div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">Sidebar 240px fixed · content max 1200px, 36px gutters · 6 equal columns, 12px gap, 118px cell height. Row 1 = A-12 → A-7, row 2 = B-1 → B-6, matching the paper book left-to-right. Below 1100px the grid falls back to the mobile 3-across blocks.</p>
+        </div>
+        <div style="background: #fff; border: 1px solid oklch(0.90 0.01 60); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.58 0.01 60);">Build notes</div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.35 0.01 60); text-wrap: pretty;">One socket channel per date; the client subscribes on date change and unsubscribes on leave. Cell state is a single enum (<span style="font-family: 'IBM Plex Mono', monospace;">free | locked | booked</span>) plus optional <span style="font-family: 'IBM Plex Mono', monospace;">{phone, amount, byUser, lockExpiresAt}</span> — the same payload drives both platforms, so one component contract covers React Native and Next.js.</p>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showFoundations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Blueprint sections&quot;},&quot;showWeb&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Blueprint sections&quot;},&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Blueprint sections&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showFoundations: this.props.showFoundations ?? true,
+      showWeb: this.props.showWeb ?? true,
+      showAnnotations: this.props.showAnnotations ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>
